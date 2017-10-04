@@ -23,5 +23,8 @@ public class MainActivity extends AppCompatActivity {
         //call method that vibrates the phone
         vibrator.vibrate();
 
+        Flashlight flashlight = new Flashlight(this);
+        flashlight.startLight();
+
     }
 }
