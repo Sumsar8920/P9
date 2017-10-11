@@ -4,6 +4,9 @@ import android.app.Activity;
 import android.content.Context;
 import android.os.Vibrator;
 
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.TimeUnit;
+
 /**
  * Created by Rasmus on 04-10-2017.
  */
@@ -21,7 +24,8 @@ public class Vibration {
     public void vibrate(){
         Vibrator v = (Vibrator) context.getSystemService(Context.VIBRATOR_SERVICE);
         // Vibrate for 500 milliseconds
-        v.vibrate(500);
+            v.vibrate(500);
+
     }
 
 }

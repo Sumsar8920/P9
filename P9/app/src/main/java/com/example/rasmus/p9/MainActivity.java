@@ -11,6 +11,16 @@ import android.view.View;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.Toast;
+import android.graphics.Color;
+import android.os.PowerManager;
+import android.support.v7.app.AppCompatActivity;
+import android.os.Bundle;
+import android.view.Display;
+import android.view.Surface;
+import android.view.View;
+import android.view.WindowManager;
+import android.widget.Button;
+
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.Status;
@@ -37,6 +47,9 @@ public class MainActivity extends AppCompatActivity implements
     protected GoogleApiClient mGoogleApiClient;
     private Button mAddGeofencesButton;
 
+    public Vibration vibrator;
+    Button button;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,14 +57,19 @@ public class MainActivity extends AppCompatActivity implements
 
         /*
         //create lightsensor object and pass this activity to it
-        LightSensor lightSensor = new LightSensor(this);
+        // LightSensor lightSensor = new LightSensor(this);
         //call method from LightSensor Class that changes the screen brightness
-        lightSensor.lightIntensity();
+        // lightSensor.lightIntensity();
+
+        button = (Button)findViewById(R.id.button2);
 
         //create vibrator object and pass the context
         Vibration vibrator = new Vibration(this);
         //call method that vibrates the phone
-        vibrator.vibrate();
+        // vibrator.vibrate();
+
+        //Flashlight flashlight = new Flashlight(this);
+        // flashlight.startLight();
 
         Flashlight flashlight = new Flashlight(this);
         flashlight.startLight(); */
@@ -157,6 +175,7 @@ public class MainActivity extends AppCompatActivity implements
         return builder.build();
     }
 
+
     private PendingIntent getGeofencePendingIntent() {
         Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling addgeoFences()
@@ -177,5 +196,13 @@ public class MainActivity extends AppCompatActivity implements
               //     status.getStatusCode());
         }
     }
+
+    public void Start (View view){
+
+        Intent intent = new Intent(this, Accelerometer.class);
+        startActivity(intent);
+
+    };
+
 
 }
