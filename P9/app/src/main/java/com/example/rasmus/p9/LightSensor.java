@@ -21,6 +21,7 @@ public class LightSensor {
         WindowManager.LayoutParams layout = activity.getWindow().getAttributes();
         layout.screenBrightness = 0.1F;
         activity.getWindow().setAttributes(layout);
+
     }
 
 
