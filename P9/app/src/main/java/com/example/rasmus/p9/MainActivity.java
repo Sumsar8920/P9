@@ -177,6 +177,7 @@ public class MainActivity extends AppCompatActivity implements
 
 
     private PendingIntent getGeofencePendingIntent() {
+        //GeofenceTransitionsIntentService geo = new GeofenceTransitionsIntentService(this);
         Intent intent = new Intent(this, GeofenceTransitionsIntentService.class);
         // We use FLAG_UPDATE_CURRENT so that we get the same pending intent back when calling addgeoFences()
         return PendingIntent.getService(this, 0, intent, PendingIntent.FLAG_UPDATE_CURRENT);
@@ -197,7 +198,7 @@ public class MainActivity extends AppCompatActivity implements
         }
     }
 
-    public void Start (View view){
+    public void start (){
 
         Intent intent = new Intent(this, Accelerometer.class);
         startActivity(intent);

@@ -19,7 +19,7 @@ public class Location {
         LANDMARKS.put("CREATE", new LatLng(57.048424, 9.930262));
 
         // Googleplex.
-        //LANDMARKS.put("Friis", new LatLng(57.048417, 9.930250));
+        LANDMARKS.put("Home", new LatLng(57.044801, 9.926398));
 
         // Test
         //LANDMARKS.put("SFO", new LatLng(37.621313,-122.378955));

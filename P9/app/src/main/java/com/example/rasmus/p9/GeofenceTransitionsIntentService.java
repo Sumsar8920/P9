@@ -11,6 +11,7 @@ import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
+import com.example.rasmus.p9.MainActivity;
 
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
@@ -25,6 +26,7 @@ import java.util.List;
 
 public class GeofenceTransitionsIntentService extends IntentService {
     protected static final String TAG = "GeofenceTransitionsIS";
+
 
     public GeofenceTransitionsIntentService() {
         super(TAG);  // use TAG to name the IntentService worker thread
@@ -90,7 +92,16 @@ public class GeofenceTransitionsIntentService extends IntentService {
         catch(Exception e){
             e.printStackTrace();
         }
+
+        try {
+            Intent intent = new Intent(getApplicationContext(), Accelerometer.class);
+            intent.setFlags(Intent.FLAG_ACTIVITY_NEW_TASK);
+            getApplicationContext().startActivity(intent);
+        }
+        catch (Exception e){
+            e.printStackTrace();
         }
 
+        }
 
 }
