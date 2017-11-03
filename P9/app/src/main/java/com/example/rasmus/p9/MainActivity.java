@@ -1,13 +1,24 @@
 package com.example.rasmus.p9;
 
 import android.Manifest;
+import android.app.Activity;
 import android.app.PendingIntent;
+import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
-import android.graphics.Color;
+import android.hardware.Sensor;
+import android.hardware.SensorEvent;
+import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.hardware.camera2.CameraAccessException;
+import android.hardware.camera2.CameraManager;
 import android.location.Location;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Build;
+import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.v4.app.ActivityCompat;
@@ -18,7 +29,9 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
+import android.view.View;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
@@ -34,15 +47,29 @@ import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.MapFragment;
 import com.google.android.gms.maps.OnMapReadyCallback;
-import com.google.android.gms.maps.model.BitmapDescriptorFactory;
-import com.google.android.gms.maps.model.Circle;
-import com.google.android.gms.maps.model.CircleOptions;
 import com.google.android.gms.maps.model.LatLng;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
+
+
 public class MainActivity extends AppCompatActivity
         implements
+        /*SensorEventListener,*/
         GoogleApiClient.ConnectionCallbacks,
         GoogleApiClient.OnConnectionFailedListener,
         LocationListener,
@@ -56,8 +83,11 @@ public class MainActivity extends AppCompatActivity
     private GoogleMap map;
     private GoogleApiClient googleApiClient;
     private Location lastLocation;
+    public static float distance;
+    public float oldDistance;
 
     private TextView textLat, textLong;
+    TextView textDistance;
 
     private MapFragment mapFragment;
 
@@ -70,13 +100,63 @@ public class MainActivity extends AppCompatActivity
     }
 
     private static final float GEOFENCE_RADIUS2 = 500.0f;
+    String latitude;
+    String longitude;
+    String radius;
+    Double latitudeDouble;
+    Double longitudeDouble;
+    Float radiusFloat;
+    String playerRole;
+    public Sensor accelerometer;
+    public SensorManager smAccelerometer;
+    Boolean screenDown = false;
+    Boolean screenUp = true;
+    String cameraId;
+    CameraManager camManager;
+    Boolean booStatus = false;
+    private static Activity contextTest = null;
+
+
+    //new
+    private float mGZ = 0;//gravity acceleration along the z axis
+    private int mEventCountSinceGZChanged = 0;
+    private static final int MAX_COUNT_GZ_CHANGE = 10;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
+        contextTest = this;
+
         textLat = (TextView) findViewById(R.id.lat);
         textLong = (TextView) findViewById(R.id.lon);
+        textDistance = (TextView) findViewById(R.id.distance);
+
+        Intent mServiceIntent = new Intent(this, Accelerometer.class);
+        this.startService(mServiceIntent);
+
+        //Get latitude and longitude from former activity
+        Intent intent = getIntent();
+        latitude = intent.getStringExtra("LATITUDE");
+        longitude = intent.getStringExtra("LONGITUDE");
+        radius = intent.getStringExtra("RADIUS");
+        latitudeDouble = Double.parseDouble(latitude);
+        longitudeDouble = Double.parseDouble(longitude);
+        radiusFloat = Float.parseFloat(radius);
+
+        SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
+        playerRole = (shared.getString("PLAYERROLE", ""));
+
+
+        /*//initialize sensor manager for accelerometer/navigation method
+        smAccelerometer = (SensorManager) getSystemService(SENSOR_SERVICE);
+        // MiniGameDrink sensor
+        accelerometer = smAccelerometer.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
+        // Register sensor listener
+        smAccelerometer.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL); */
+
+
 
         // initialize GoogleMaps
         /* REMOVED
@@ -92,6 +172,98 @@ public class MainActivity extends AppCompatActivity
         }*/
         //createGeofence(GEOFENCE_RADIUS2);
     }
+
+   /* @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+
+    }
+
+    @Override
+    public void onSensorChanged(SensorEvent event) {
+        float zFloat = event.values[2];
+        float change;
+
+          if (zFloat < 0) {
+                //screen down
+                screenDown = true;
+                screenUp = false;
+            } else {
+                //screen up
+                screenUp = true;
+                screenDown = false;
+            }
+
+    }
+    */
+   /*
+   @Override
+    protected void onResume() {
+        super.onResume();
+        smAccelerometer.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //smAccelerometer.unregisterListener(this);
+    }
+
+
+        @Override
+        public void onSensorChanged (SensorEvent event){
+            try {
+                int type = event.sensor.getType();
+                if (type == Sensor.TYPE_ACCELEROMETER) {
+                    float gz = event.values[2];
+                    if (mGZ == 0) {
+                        mGZ = gz;
+                    } else {
+                        if ((mGZ * gz) < 0) {
+                            mEventCountSinceGZChanged++;
+                            if (mEventCountSinceGZChanged == MAX_COUNT_GZ_CHANGE) {
+                                mGZ = gz;
+                                mEventCountSinceGZChanged = 0;
+                                if (gz > 0) {
+                                    Log.d(TAG, "now screen is facing up.");
+                                    Toast toast = Toast.makeText(MainActivity.this, "Up", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                    screenUp = true;
+                                    screenDown = false;
+                                    changeBrightness();
+                                    flashlightFrequency();
+                                } else if (gz < 0) {
+                                    Log.d(TAG, "now screen is facing down.");
+                                    Toast toast = Toast.makeText(MainActivity.this, "Down", Toast.LENGTH_SHORT);
+                                    toast.show();
+                                    screenUp = false;
+                                    screenDown = true;
+                                    changeBrightness();
+                                }
+                            }
+                        } else {
+                            if (mEventCountSinceGZChanged > 0) {
+                                mGZ = gz;
+                                mEventCountSinceGZChanged = 0;
+                            }
+                        }
+                    }
+                }
+            }
+            catch (Exception e){
+                e.printStackTrace();
+            }
+    }
+
+
+    @Override
+    public void onAccuracyChanged(Sensor sensor, int accuracy) {
+        // TODO Auto-generated method stub
+    }
+    */
+
+   public void stopLight(View v){
+       Flashlight obj = new Flashlight();
+       obj.stopLight();
+   }
 
     // Create GoogleApiClient instance
     private void createGoogleApi() {
@@ -240,6 +412,8 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "onLocationChanged ["+location+"]");
         lastLocation = location;
         writeActualLocation(location);
+        //calculate distance to meteor, when user's location is changed.
+        calculateDistanceToMeteor();
     }
 
     // GoogleApiClient.ConnectionCallbacks connected
@@ -260,6 +434,183 @@ public class MainActivity extends AppCompatActivity
     @Override
     public void onConnectionFailed(@NonNull ConnectionResult connectionResult) {
         Log.w(TAG, "onConnectionFailed()");
+    }
+
+    public void calculateDistanceToMeteor(){
+
+        Location locationA = new Location("User location");
+
+        locationA.setLatitude(lastLocation.getLatitude());
+        locationA.setLongitude(lastLocation.getLongitude());
+
+        Location locationB = new Location("Meteor location");
+
+        locationB.setLatitude(latitudeDouble);
+        locationB.setLongitude(longitudeDouble);
+
+        //locationB.setLatitude(57.046595);
+        //locationB.setLongitude(9.928749);
+
+        distance = locationA.distanceTo(locationB);
+        textDistance.setText(Float.toString(distance));
+        if(Math.round(oldDistance) < Math.round(distance)){
+            //Red screen
+            //Toast toast = Toast.makeText(MainActivity.this, "Wrong way", Toast.LENGTH_SHORT);
+            //toast.show();
+        }
+        else{
+            //green screen
+        }
+        oldDistance = distance;
+
+        if(screenUp == true) {
+            //flashlightFrequency();
+            //Toast toast = Toast.makeText(MainActivity.this, "Screen up", Toast.LENGTH_SHORT);
+            //toast.show();
+        }
+        if(screenDown == true) {
+            //Toast toast = Toast.makeText(MainActivity.this, "Screen down", Toast.LENGTH_SHORT);
+            //toast.show();
+            //changeBrightness();
+            //Flashlight obj = new Flashlight(this,0);
+            //obj.stopLight();
+        }
+
+
+    }
+
+    public void storeUserLocation(){
+        final Handler handler = new Handler();
+        final int delay = 15000; //milliseconds
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                //do something
+                new AsyncStoreCoordinates(playerRole,lastLocation.getLatitude(),lastLocation.getLongitude()).execute();
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
+    }
+
+    public static void changeBrightness(Boolean screenDown){
+        if(screenDown == true) {
+
+            int distanceInt = Math.round(distance);
+            float brightness = 0.0f;
+
+            if (distanceInt < 200 && distanceInt > 180) {
+                brightness = 0.1f;
+            }
+            if (distanceInt < 180 && distanceInt > 160) {
+                brightness = 0.2f;
+            }
+            if (distanceInt < 160 && distanceInt > 140) {
+                brightness = 0.3f;
+            }
+            if (distanceInt < 140 && distanceInt > 120) {
+                brightness = 0.4f;
+            }
+            if (distanceInt < 120 && distanceInt > 100) {
+                brightness = 0.5f;
+            }
+            if (distanceInt < 100 && distanceInt > 80) {
+                brightness = 0.6f;
+            }
+            if (distanceInt < 80 && distanceInt > 60) {
+                brightness = 0.7f;
+            }
+            if (distanceInt < 60 && distanceInt > 40) {
+                brightness = 0.8f;
+            }
+            if (distanceInt < 40 && distanceInt > 20) {
+                brightness = 0.9f;
+            }
+            if (distanceInt < 20) {
+                brightness = 1f;
+            }
+            LightSensor obj = new LightSensor(contextTest);
+            obj.lightIntensity(brightness);
+        }
+        if(screenDown == false){
+            LightSensor obj = new LightSensor(contextTest);
+            obj.lightIntensity(1f);
+        }
+    }
+
+    public void flashlightFrequency(){
+
+        int distanceInt = Math.round(distance);
+        int frequency = 2000;
+
+        if(distanceInt < 200 && distanceInt > 180){
+            frequency = 1800;
+        }
+        if(distanceInt < 180 && distanceInt > 160){
+            frequency = 1600;
+        }
+        if(distanceInt < 160 && distanceInt > 140){
+            frequency = 1400;
+        }
+        if(distanceInt < 140 && distanceInt > 120){
+            frequency = 1200;
+        }
+        if(distanceInt < 120 && distanceInt > 100){
+            frequency = 1000;
+        }
+        if(distanceInt < 100 && distanceInt > 80){
+            frequency = 800;
+        }
+        if(distanceInt < 80 && distanceInt > 60){
+            frequency = 600;
+        }
+        if(distanceInt < 60 && distanceInt > 40){
+            frequency = 400;
+        }
+        if(distanceInt < 40 && distanceInt > 20){
+            frequency = 200;
+        }
+        if(distanceInt < 20){
+            frequency = 50;
+        }
+
+        String myString = "0101010101";
+        //int blinkDelay; //Delay in ms
+        CameraManager camManager;
+        String cameraId = null; // Usually front camera is at 0 position.
+
+        camManager = (CameraManager) getApplicationContext().getSystemService(Context.CAMERA_SERVICE);
+        try {
+            cameraId = camManager.getCameraIdList()[0];
+        } catch (CameraAccessException e) {
+            e.printStackTrace();
+        }
+        if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.M) {
+            for (int i = 0; i <= myString.length(); i++) {
+                if(i == myString.length()){
+                    flashlightFrequency();
+                }
+
+                if (myString.charAt(i) == '0') {
+                    try {
+                        camManager.setTorchMode(cameraId, true);
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+                else {
+                    try {
+                        camManager.setTorchMode(cameraId, false);
+                    } catch (CameraAccessException e) {
+                        e.printStackTrace();
+                    }
+                }
+                try {
+                    Thread.sleep(frequency);
+                } catch (InterruptedException e) {
+                    e.printStackTrace();
+                }
+            }
+        }
     }
 
     // Get last known location
@@ -333,7 +684,7 @@ public class MainActivity extends AppCompatActivity
     private void startGeofence() {
         Log.i(TAG, "startGeofence()");
         //if( geoFenceMarker != null ) {
-        Geofence geofence = createGeofence(GEOFENCE_RADIUS );
+        Geofence geofence = createGeofence(radiusFloat);
         GeofencingRequest geofenceRequest = createGeofenceRequest( geofence );
         addGeofence( geofenceRequest );
         //} else {
@@ -350,8 +701,8 @@ public class MainActivity extends AppCompatActivity
         Log.d(TAG, "createGeofence");
         return new Geofence.Builder()
                 .setRequestId(GEOFENCE_REQ_ID)
-                .setCircularRegion(57.048363, 9.930183, radius)
-                //.setCircularRegion( latLng.latitude, latLng.longitude, radius)
+                .setCircularRegion(latitudeDouble, longitudeDouble, radius)
+                //.setCircularRegion(57.046595, 9.928749,radius)
                 .setExpirationDuration( GEO_DURATION )
                 .setTransitionTypes( Geofence.GEOFENCE_TRANSITION_ENTER
                         | Geofence.GEOFENCE_TRANSITION_EXIT )
@@ -398,6 +749,7 @@ public class MainActivity extends AppCompatActivity
     public void onResult(@NonNull Status status) {
         Log.i(TAG, "onResult: " + status);
         if ( status.isSuccess() ) {
+            storeUserLocation();
             //saveGeofence();
             //drawGeofence();
         } else {
@@ -473,5 +825,173 @@ public class MainActivity extends AppCompatActivity
         if ( geoFenceLimits != null )
             geoFenceLimits.remove();
     } */
+
+    private class AsyncStoreCoordinates extends AsyncTask<String, String, String> {
+        ProgressDialog pdLoading = new ProgressDialog(MainActivity.this);
+        HttpURLConnection conn;
+        URL url = null;
+
+        String playerID;
+        Double latitude;
+        Double longitude;
+
+        public AsyncStoreCoordinates(String playerID, Double latitude, Double longitude){
+            this.playerID = playerID;
+            this.latitude = latitude;
+            this.longitude = longitude;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //this method will be running on UI thread
+            pdLoading.setMessage("\tLoading...");
+            pdLoading.setCancelable(false);
+            pdLoading.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                // Enter URL address where your php file resides
+                url = new URL("http://rasmuslundrosenqvist.000webhostapp.com/P9/storeCoordinatesGetStatus.php");
+
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return "exception";
+            }
+            try {
+                // Setup HttpURLConnection class to send and receive data from php and mysql
+                conn = (HttpURLConnection) url.openConnection();
+                //conn.setReadTimeout(READ_TIMEOUT);
+                //conn.setConnectTimeout(CONNECTION_TIMEOUT);
+                conn.setRequestMethod("POST");
+
+                // setDoInput and setDoOutput method depict handling of both send and receive
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                // Append parameters to URL
+                Uri.Builder builder = new Uri.Builder()
+                        .appendQueryParameter("playerRole", playerRole)
+                        .appendQueryParameter("latitude", String.valueOf(latitude))
+                        .appendQueryParameter("longitude", String.valueOf(longitude));
+                String query = builder.build().getEncodedQuery();
+
+                // Open connection for sending data
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+                conn.connect();
+
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+                return "exception";
+            }
+
+            try {
+
+                int response_code = conn.getResponseCode();
+
+                // Check if successful connection made
+                if (response_code == HttpURLConnection.HTTP_OK) {
+
+                    // Read data sent from server
+                    InputStream input = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                    StringBuilder result = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        result.append(line);
+                    }
+
+                    // Pass data to onPostExecute method
+                    return (result.toString());
+
+                } else {
+
+                    return ("unsuccessful");
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "exception";
+            } finally {
+                conn.disconnect();
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            //this method will be running on UI thread
+
+            pdLoading.dismiss();
+
+            if (result.equalsIgnoreCase("failure")) {
+
+                Toast toast = Toast.makeText(getApplicationContext(), "Could not insert. Try again", Toast.LENGTH_LONG);
+                toast.show();
+
+
+            } else if (result.equalsIgnoreCase("exception") || result.equalsIgnoreCase("unsuccessful")) {
+
+                Context context = getApplicationContext();
+                CharSequence text = "Connection failed. Try again";
+                int duration = Toast.LENGTH_LONG;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+
+            }
+
+            else{
+                //Try to parse the coordinates from JSON
+                //Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
+                //toast.show();
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+                    for (int i = 0; i < jsonArray.length(); i++){
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        String status = obj.getString("status");
+
+                        if(booStatus == false) {
+                            if (status.equals("active")) {
+                                //this makes sure that mini game only starts, if it's not started already.
+                                booStatus = true;
+                                //start mini game!
+                                Toast toast = Toast.makeText(getApplicationContext(), "mini game started", Toast.LENGTH_SHORT);
+                                toast.show();
+
+                                Intent intent = new Intent(MainActivity.this, MiniGameDrink.class);
+                                startActivity(intent);
+                            }
+                        }
+
+                    }
+
+                }
+                catch (JSONException e){
+
+                }
+
+
+            }
+
+
+        }
+    }
 
 }

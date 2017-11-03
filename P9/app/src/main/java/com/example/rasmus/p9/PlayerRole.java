@@ -34,6 +34,9 @@ public class PlayerRole extends AppCompatActivity {
     EditText editPlayerRole;
     Button addPlayer;
     String strPlayerRole;
+    String latitude;
+    String longitude;
+    String radius;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -42,6 +45,9 @@ public class PlayerRole extends AppCompatActivity {
 
         editPlayerRole = (EditText) findViewById(R.id.playerRole);
         addPlayer = (Button) findViewById(R.id.addPlayer);
+
+        //Flashlight obj = new Flashlight(this, 1000);
+        //obj.startLight();
 
     }
 
@@ -242,18 +248,18 @@ public class PlayerRole extends AppCompatActivity {
                 conn.setDoOutput(true);
 
                 // Append parameters to URL
-                Uri.Builder builder = new Uri.Builder();
-                        //.appendQueryParameter("playerRole", strPlayerRole);
+                Uri.Builder builder = new Uri.Builder()
+                        .appendQueryParameter("playerRole", strPlayerRole);
                 String query = builder.build().getEncodedQuery();
 
                 // Open connection for sending data
-                /*OutputStream os = conn.getOutputStream();
+                OutputStream os = conn.getOutputStream();
                 BufferedWriter writer = new BufferedWriter(
                         new OutputStreamWriter(os, "UTF-8"));
                 writer.write(query);
                 writer.flush();
                 writer.close();
-                os.close(); */
+                os.close();
                 conn.connect();
 
             } catch (IOException e1) {
@@ -322,10 +328,25 @@ public class PlayerRole extends AppCompatActivity {
             }
 
             else{
-                //If inserted successfully
+                //Try to parse the coordinates from JSON
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+                    for (int i = 0; i < jsonArray.length(); i++){
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        latitude = obj.getString("latitude");
+                        longitude = obj.getString("longitude");
+                        radius = obj.getString("radius");
+                    }
+
+                }
+                catch (JSONException e){
+
+                }
 
                 Intent intent = new Intent(PlayerRole.this, MainActivity.class);
-                intent.putExtra("COORDINATES", result);
+                intent.putExtra("LATITUDE", latitude );
+                intent.putExtra("LONGITUDE", longitude);
+                intent.putExtra("RADIUS", radius);
                 startActivity(intent);
 
             }

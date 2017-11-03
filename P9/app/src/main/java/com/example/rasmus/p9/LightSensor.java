@@ -17,10 +17,11 @@ public class LightSensor {
     }
 
     //method that changes the screen brightness. The maximum value is 1F and minimum is 0.1F
-    public void lightIntensity(){
+    public void lightIntensity(Float brightness){
         WindowManager.LayoutParams layout = activity.getWindow().getAttributes();
-        layout.screenBrightness = 0.1F;
+        layout.screenBrightness = brightness;
         activity.getWindow().setAttributes(layout);
+
 
     }
 

@@ -10,6 +10,7 @@ import android.app.PendingIntent;
 import android.app.TaskStackBuilder;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.graphics.Color;
 import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
@@ -64,8 +65,16 @@ public class GeofenceTransitionService extends IntentService {
         }
 
         String status = null;
-        if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER )
+        if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_ENTER ) {
             status = "Entering ";
+            //set status to active in database so game can start for the other players
+            //create object from Asynctask class from GameTrigger class which changes status in database
+
+            SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
+            GameTrigger obj = new GameTrigger();
+            obj.new AsyncChangeStatus((shared.getString("PLAYERROLE", ""))).execute();
+        }
+
         else if ( geoFenceTransition == Geofence.GEOFENCE_TRANSITION_EXIT )
             status = "Exiting ";
         return status + TextUtils.join( ", ", triggeringGeofencesList);

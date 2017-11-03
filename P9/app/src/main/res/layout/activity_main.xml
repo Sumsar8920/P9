@@ -4,6 +4,7 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical"
+    android:background="@android:color/holo_green_light"
     tools:context="com.example.rasmus.p9.MainActivity">
 
     <!-- Line with Latitude and Longitude -->
@@ -32,7 +33,21 @@
             android:layout_height="wrap_content"
             android:layout_weight="0.5"
             android:text="Long: " />
+
     </LinearLayout>
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="100dp"
+        android:layout_height="wrap_content"
+        />
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Stop Light"
+        android:onClick="stopLight"/>
+
 
     <!--GoogleMap fragment-->
     <!--
