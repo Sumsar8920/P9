@@ -6,8 +6,10 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.flash" />
+
     <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <meta-data
@@ -28,14 +30,17 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity">
-        </activity>
+        <activity android:name=".MainActivity" />
         <activity android:name=".MiniGameDrink" />
 
         <service android:name=".GeofenceTransitionService" />
         <service android:name=".Accelerometer" />
         <service android:name=".Flashlight" />
 
+        <activity android:name=".LiftMeteor" />
+        <activity android:name=".ShakeHands" />
+        <activity android:name=".SwordFight" />
+        <activity android:name=".MrMime"></activity>
     </application>
 
 </manifest>

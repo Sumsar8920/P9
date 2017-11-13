@@ -87,7 +87,8 @@ public class Accelerometer extends IntentService implements SensorEventListener 
                                 Toast toast = Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT);
                                 toast.show();
                                 //start flashlight service
-                                getApplicationContext().startService(intent);
+                                //getApplicationContext().startService(intent);
+                                MainActivity.flashlightFrequency();
                                 screenUp = true;
                                 screenDown = false;
                                 MainActivity.changeBrightness(screenDown);

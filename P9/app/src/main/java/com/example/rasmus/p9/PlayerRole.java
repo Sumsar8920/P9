@@ -66,6 +66,8 @@ public class PlayerRole extends AppCompatActivity {
 
         //get coordinates
         new AsyncGetCoordinates().execute();
+        //Intent intent = new Intent(PlayerRole.this, MainActivity.class);
+        //startActivity(intent);
 
     }
 

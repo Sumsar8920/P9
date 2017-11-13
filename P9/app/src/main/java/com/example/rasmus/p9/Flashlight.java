@@ -44,7 +44,9 @@ public class Flashlight extends IntentService {
         } catch (CameraAccessException e) {
             e.printStackTrace();
         } */
-        startLight(2000, "0101010101");
+
+        int frequency = intent.getIntExtra("FREQUENCY", 0);
+        startLight(frequency, "0101010101");
     }
 
     public void startLight (int blinkDelay, String myString){
