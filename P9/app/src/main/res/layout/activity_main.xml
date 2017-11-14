@@ -73,6 +73,12 @@
         android:text="Mr. Mime"
         android:onClick="mrMime"/>
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="scout game"
+        android:onClick="scoutGame"/>
+
     <!--GoogleMap fragment-->
     <!--
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"

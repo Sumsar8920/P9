@@ -1,10 +1,17 @@
 package com.example.rasmus.p9;
 
+import android.app.ProgressDialog;
+import android.content.Context;
+import android.content.Intent;
+import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
+import android.os.AsyncTask;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -12,7 +19,22 @@ import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
+import android.widget.Toast;
 
+import org.json.JSONArray;
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.io.BufferedReader;
+import java.io.BufferedWriter;
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.InputStreamReader;
+import java.io.OutputStream;
+import java.io.OutputStreamWriter;
+import java.net.HttpURLConnection;
+import java.net.MalformedURLException;
+import java.net.URL;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -30,11 +52,24 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
     int counter = 0;
     int average = 0;
     int sum = 0;
+    String playerRole;
+    String player1X, player1Y, player1Z;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_mr_mime);
+        guide = (TextView) findViewById(R.id.guide);
+
+        //get number of player
+        SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
+        playerRole = (shared.getString("PLAYERROLE", ""));
+
+        if(playerRole.equals("2")){
+            guide.setText("Wait for other player");
+            checkMotion();
+        }
 
         xList = new ArrayList<>();
         yList = new ArrayList<>();
@@ -42,7 +77,7 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
 
         player1 = (TextView) findViewById(R.id.player1);
         player2 = (TextView) findViewById(R.id.player2);
-        guide = (TextView) findViewById(R.id.guide);
+
 
         button1 = (ImageButton)findViewById(R.id.button1);
 
@@ -57,8 +92,7 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
-                        player1Ready = true;
-                        if (player1Ready == true){
+                        if (playerRole.equals("1")){
                             // Register sensor listener
                             SM.registerListener(MrMime.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
                             guide.setText("Do motion!");
@@ -67,9 +101,39 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
                     case MotionEvent.ACTION_UP:
                         // End
                         SM.unregisterListener(MrMime.this);
+                        if(playerRole.equals("1")) {
+                            new AsyncStoreMotion(String.valueOf(xAverage()), String.valueOf(yAverage()), String.valueOf(zAverage())).execute();
+                        }
+
+                        if(playerRole.equals("2")){
+                            int rangeMinusX = Integer.parseInt(player1X) - 3;
+                            int rangePlusX = Integer.parseInt(player1X) + 3;
+                            int rangeMinusY = Integer.parseInt(player1Y) - 3;
+                            int rangePlusY = Integer.parseInt(player1Y) + 3;
+                            int rangeMinusZ = Integer.parseInt(player1Z) - 3;
+                            int rangePlusZ = Integer.parseInt(player1Z) + 3;
+                            int player2X = xAverage();
+                            int player2Y = yAverage();
+                            int player2Z = zAverage();
+                            player2.setText(String.valueOf(player2X) + " " + String.valueOf(player2Y) + " " + String.valueOf(player2Z));
+
+                           if(player2X > rangeMinusX && player2X < rangePlusX &&
+                                   player2Y > rangeMinusY && player2Y < rangePlusY
+                            && player2Z > rangeMinusZ && player2Z < rangePlusZ){
+
+                               Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
+                               toast.show();
+
+                           }
+                        }
                         counter++;
-                        guide.setText("Place thumb on marker");
-                        if(counter == 1){
+                        xList.clear();
+                        sum = 0;
+                        yList.clear();
+                        sum = 0;
+                        zList.clear();
+                        sum = 0;
+                        /*if(counter == 1){
                             String averageScore = "X: " + String.valueOf(xAverage()) + " Y: " +String.valueOf(yAverage()) + " Z: " + String.valueOf(zAverage());
                             player1.setText(averageScore);
                             xList.clear();
@@ -90,7 +154,7 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
                             zList.clear();
                             sum = 0;
                             counter = 0;
-                        }
+                        } */
                         break;
                 }
                 return false;
@@ -146,5 +210,301 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
 
         return average;
     }
+
+    public void checkMotion(){
+        final Handler handler = new Handler();
+        final int delay = 10000; //milliseconds
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                //do something
+                new AsyncCheckMotion().execute();
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
+    }
+
+    private class AsyncStoreMotion extends AsyncTask<String, String, String> {
+        ProgressDialog pdLoading = new ProgressDialog(MrMime.this);
+        HttpURLConnection conn;
+        URL url = null;
+
+        String X;
+        String Y;
+        String Z;
+
+        public AsyncStoreMotion(String X, String Y, String Z){
+            this.X = X;
+            this.Y = Y;
+            this.Z = Z;
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //this method will be running on UI thread
+            pdLoading.setMessage("\tLoading...");
+            pdLoading.setCancelable(false);
+            pdLoading.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                // Enter URL address where your php file resides
+                url = new URL("http://rasmuslundrosenqvist.000webhostapp.com/P9/storeMotion.php");
+
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return "exception";
+            }
+            try {
+                // Setup HttpURLConnection class to send and receive data from php and mysql
+                conn = (HttpURLConnection) url.openConnection();
+                //conn.setReadTimeout(READ_TIMEOUT);
+                //conn.setConnectTimeout(CONNECTION_TIMEOUT);
+                conn.setRequestMethod("POST");
+
+                // setDoInput and setDoOutput method depict handling of both send and receive
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                // Append parameters to URL
+                Uri.Builder builder = new Uri.Builder()
+                        .appendQueryParameter("X", X)
+                        .appendQueryParameter("Y", Y)
+                        .appendQueryParameter("Z", Z);
+                String query = builder.build().getEncodedQuery();
+
+                // Open connection for sending data
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+                conn.connect();
+
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+                return "exception";
+            }
+
+            try {
+
+                int response_code = conn.getResponseCode();
+
+                // Check if successful connection made
+                if (response_code == HttpURLConnection.HTTP_OK) {
+
+                    // Read data sent from server
+                    InputStream input = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                    StringBuilder result = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        result.append(line);
+                    }
+
+                    // Pass data to onPostExecute method
+                    return (result.toString());
+
+                } else {
+
+                    return ("unsuccessful");
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "exception";
+            } finally {
+                conn.disconnect();
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            //this method will be running on UI thread
+
+            pdLoading.dismiss();
+
+            if (result.equalsIgnoreCase("failure")) {
+
+                Toast toast = Toast.makeText(getApplicationContext(), "Could not insert. Try again", Toast.LENGTH_LONG);
+                toast.show();
+
+
+            } else if (result.equalsIgnoreCase("exception") || result.equalsIgnoreCase("unsuccessful")) {
+
+                Context context = getApplicationContext();
+                CharSequence text = "Connection failed. Try again";
+                int duration = Toast.LENGTH_LONG;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+
+            }
+
+            else{
+                guide.setText("Wait for other player to mimic");
+            }
+
+
+        }
+    }
+
+    private class AsyncCheckMotion extends AsyncTask<String, String, String> {
+        ProgressDialog pdLoading = new ProgressDialog(MrMime.this);
+        HttpURLConnection conn;
+        URL url = null;
+
+        public AsyncCheckMotion(){
+        }
+
+        @Override
+        protected void onPreExecute() {
+            super.onPreExecute();
+
+            //this method will be running on UI thread
+            pdLoading.setMessage("\tLoading...");
+            pdLoading.setCancelable(false);
+            pdLoading.show();
+
+        }
+
+        @Override
+        protected String doInBackground(String... params) {
+            try {
+
+                // Enter URL address where your php file resides
+                url = new URL("http://rasmuslundrosenqvist.000webhostapp.com/P9/checkMotion.php");
+
+            } catch (MalformedURLException e) {
+                // TODO Auto-generated catch block
+                e.printStackTrace();
+                return "exception";
+            }
+            try {
+                // Setup HttpURLConnection class to send and receive data from php and mysql
+                conn = (HttpURLConnection) url.openConnection();
+                //conn.setReadTimeout(READ_TIMEOUT);
+                //conn.setConnectTimeout(CONNECTION_TIMEOUT);
+                conn.setRequestMethod("POST");
+
+                // setDoInput and setDoOutput method depict handling of both send and receive
+                conn.setDoInput(true);
+                conn.setDoOutput(true);
+
+                // Append parameters to URL
+                Uri.Builder builder = new Uri.Builder()
+                .appendQueryParameter("X", playerRole);
+                String query = builder.build().getEncodedQuery();
+
+                // Open connection for sending data
+                OutputStream os = conn.getOutputStream();
+                BufferedWriter writer = new BufferedWriter(
+                        new OutputStreamWriter(os, "UTF-8"));
+                writer.write(query);
+                writer.flush();
+                writer.close();
+                os.close();
+                conn.connect();
+
+            } catch (IOException e1) {
+                // TODO Auto-generated catch block
+                e1.printStackTrace();
+                return "exception";
+            }
+
+            try {
+
+                int response_code = conn.getResponseCode();
+
+                // Check if successful connection made
+                if (response_code == HttpURLConnection.HTTP_OK) {
+
+                    // Read data sent from server
+                    InputStream input = conn.getInputStream();
+                    BufferedReader reader = new BufferedReader(new InputStreamReader(input));
+                    StringBuilder result = new StringBuilder();
+                    String line;
+
+                    while ((line = reader.readLine()) != null) {
+                        result.append(line);
+                    }
+
+                    // Pass data to onPostExecute method
+                    return (result.toString());
+
+                } else {
+
+                    return ("unsuccessful");
+                }
+
+            } catch (IOException e) {
+                e.printStackTrace();
+                return "exception";
+            } finally {
+                conn.disconnect();
+            }
+
+
+        }
+
+        @Override
+        protected void onPostExecute(String result) {
+
+            //this method will be running on UI thread
+
+            pdLoading.dismiss();
+
+            if (result.equalsIgnoreCase("false")) {
+
+
+            } else if (result.equalsIgnoreCase("exception") || result.equalsIgnoreCase("unsuccessful")) {
+
+                Context context = getApplicationContext();
+                CharSequence text = "Connection failed. Try again";
+                int duration = Toast.LENGTH_LONG;
+
+                Toast toast = Toast.makeText(context, text, duration);
+                toast.show();
+
+            }
+
+            else {
+                try {
+                    JSONArray jsonArray = new JSONArray(result);
+                    for (int i = 0; i < jsonArray.length(); i++) {
+                        JSONObject obj = jsonArray.getJSONObject(i);
+                        player1X = obj.getString("X");
+                        player1Y = obj.getString("Y");
+                        player1Z = obj.getString("Z");
+                    }
+                } catch (JSONException e) {
+
+                }
+
+                if(playerRole.equals("2")){
+                    guide.setText("Place thumb on marker and mimic");
+                    player1.setText(player1X + " " + player1Y + " " + player1Z);
+                    SM.registerListener(MrMime.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
+                }
+            }
+
+
+        }
+    }
+
 
 }

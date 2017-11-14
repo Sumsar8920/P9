@@ -2,6 +2,7 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.rasmus.p9">
 
+    <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
@@ -40,7 +41,18 @@
         <activity android:name=".LiftMeteor" />
         <activity android:name=".ShakeHands" />
         <activity android:name=".SwordFight" />
-        <activity android:name=".MrMime"></activity>
+        <activity android:name=".MrMime" />
+        <activity android:name=".Countdown" />
+        <activity android:name=".NFC">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/vnd.com.example.android.beam" />
+            </intent-filter>
+        </activity>
+        <activity android:name=".ScoutGame"></activity>
     </application>
 
 </manifest>

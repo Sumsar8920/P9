@@ -35,7 +35,7 @@ public class SwordFight extends AppCompatActivity implements SensorEventListener
         // MiniGameDrink sensor
         mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        mMediaPlayer = MediaPlayer.create(this, R.raw.lift);
+        mMediaPlayer = MediaPlayer.create(this, R.raw.batterycharge);
 
         button1.setOnTouchListener(new View.OnTouchListener() {
             @Override

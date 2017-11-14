@@ -119,26 +119,26 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
         float yFloat = event.values[1];
         float zFloat = event.values[2];
 
-        if(zFloat > 11 && yFloat > -2 && yFloat < 2) {
+        if(zFloat > 10 && yFloat > -3 && yFloat < 3) {
             counter ++;
         }
 
-        if(counter == 8){
+        if(counter == 4){
             bar.setImageResource(R.drawable.battery21);
             mediaPlayer.start();
         }
 
-        if(counter == 16){
+        if(counter == 10){
             bar.setImageResource(R.drawable.battery31);
             mediaPlayer.start();
         }
 
-        if(counter == 32){
+        if(counter == 20){
             bar.setImageResource(R.drawable.battery41);
             mediaPlayer.start();
         }
 
-        if(counter == 48){
+        if(counter == 30){
             bar.setImageResource(R.drawable.battery51);
             mediaPlayer.start();
         }

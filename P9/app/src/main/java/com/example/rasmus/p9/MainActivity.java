@@ -560,6 +560,11 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    public void scoutGame(View v){
+        Intent intent = new Intent(MainActivity.this, ScoutGame.class);
+        startActivity(intent);
+    }
+
     private PendingIntent geoFencePendingIntent;
     private final int GEOFENCE_REQ_CODE = 0;
     private PendingIntent createGeofencePendingIntent() {
