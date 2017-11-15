@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">P9</string>
+    <string name="title_activity_bomb_squad">BombSquad</string>
 </resources>

@@ -7,6 +7,7 @@
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.flash" />
@@ -52,7 +53,11 @@
                 <data android:mimeType="application/vnd.com.example.android.beam" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScoutGame"></activity>
+        <activity android:name=".ScoutGame" />
+        <activity
+            android:name=".BombSquad"
+            android:label="@string/title_activity_bomb_squad"
+            android:theme="@style/AppTheme.NoActionBar"></activity>
     </application>
 
 </manifest>
