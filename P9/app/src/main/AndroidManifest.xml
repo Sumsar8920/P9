@@ -58,6 +58,8 @@
             android:name=".BombSquad"
             android:label="@string/title_activity_bomb_squad"
             android:theme="@style/AppTheme.NoActionBar"></activity>
+        <activity android:name=".ShuffleGame" />
+        <activity android:name=".BlowMic"></activity>
     </application>
 
 </manifest>

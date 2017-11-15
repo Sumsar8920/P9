@@ -565,8 +565,17 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+
     public void bombSquad(View v){
         Intent intent = new Intent(MainActivity.this, BombSquad.class);
+
+    public void shuffleGame(View v){
+        Intent intent = new Intent(MainActivity.this, ShuffleGame.class);
+        startActivity(intent);
+    }
+
+    public void blowMic(View v){
+        Intent intent = new Intent(MainActivity.this, BlowMic.class);
         startActivity(intent);
     }
 

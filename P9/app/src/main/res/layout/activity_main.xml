@@ -82,8 +82,23 @@
     <Button
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+
         android:text="Bomb squad"
         android:onClick="bombSquad"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="shuffle game"
+        android:onClick="shuffleGame"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="blow microphone"
+        android:onClick="blowMic"/>
+
 
     <!--GoogleMap fragment-->
     <!--

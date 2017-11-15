@@ -133,35 +133,12 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
                         sum = 0;
                         zList.clear();
                         sum = 0;
-                        /*if(counter == 1){
-                            String averageScore = "X: " + String.valueOf(xAverage()) + " Y: " +String.valueOf(yAverage()) + " Z: " + String.valueOf(zAverage());
-                            player1.setText(averageScore);
-                            xList.clear();
-                            sum = 0;
-                            yList.clear();
-                            sum = 0;
-                            zList.clear();
-                            sum = 0;
-                        }
 
-                        if(counter == 2){
-                            String averageScore = "X: " + String.valueOf(xAverage()) + " Y: " +String.valueOf(yAverage()) + " Z: " + String.valueOf(zAverage());
-                            player2.setText(averageScore);
-                            xList.clear();
-                            sum = 0;
-                            yList.clear();
-                            sum = 0;
-                            zList.clear();
-                            sum = 0;
-                            counter = 0;
-                        } */
                         break;
                 }
                 return false;
             }
         });
-
-
     }
 
     @Override
