@@ -565,6 +565,16 @@ public class MainActivity extends AppCompatActivity
         startActivity(intent);
     }
 
+    public void shuffleGame(View v){
+        Intent intent = new Intent(MainActivity.this, ShuffleGame.class);
+        startActivity(intent);
+    }
+
+    public void blowMic(View v){
+        Intent intent = new Intent(MainActivity.this, BlowMic.class);
+        startActivity(intent);
+    }
+
     private PendingIntent geoFencePendingIntent;
     private final int GEOFENCE_REQ_CODE = 0;
     private PendingIntent createGeofencePendingIntent() {

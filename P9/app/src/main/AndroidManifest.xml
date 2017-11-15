@@ -52,7 +52,9 @@
                 <data android:mimeType="application/vnd.com.example.android.beam" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScoutGame"></activity>
+        <activity android:name=".ScoutGame" />
+        <activity android:name=".ShuffleGame" />
+        <activity android:name=".BlowMic"></activity>
     </application>
 
 </manifest>
