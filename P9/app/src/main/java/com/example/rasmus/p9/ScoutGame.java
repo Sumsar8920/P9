@@ -56,13 +56,13 @@ public class ScoutGame extends AppCompatActivity implements SensorEventListener 
                             mGZ = gz;
                             mEventCountSinceGZChanged = 0;
                             if (gz > 0) {
-                                Log.d(TAG, "now screen is facing up.");
-                                Toast toast = Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT);
-                                toast.show();
+                                //Log.d(TAG, "now screen is facing up.");
+                                //Toast toast = Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT);
+                                //toast.show();
                             } else if (gz < 0) {
-                                Log.d(TAG, "now screen is facing down.");
-                                Toast toast = Toast.makeText(getApplicationContext(), "Down", Toast.LENGTH_SHORT);
-                                toast.show();
+                                //Log.d(TAG, "now screen is facing down.");
+                                //Toast toast = Toast.makeText(getApplicationContext(), "Down", Toast.LENGTH_SHORT);
+                                //toast.show();
 
                                 if (playerRole.equals("1")){
                                     media = MediaPlayer.create(this, R.raw.first);

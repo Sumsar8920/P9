@@ -535,52 +535,6 @@ public class MainActivity extends AppCompatActivity
                 .build();
     }
 
-    public void stopLight(View v){
-        Intent intent = new Intent(MainActivity.this, MiniGameDrink.class);
-        startActivity(intent);
-    }
-
-    public void liftMeteor(View v){
-        Intent intent = new Intent(MainActivity.this, LiftMeteor.class);
-        startActivity(intent);
-    }
-
-    public void chargeBattery(View v){
-        Intent intent = new Intent(MainActivity.this, ShakeHands.class);
-        startActivity(intent);
-    }
-
-    public void swordFight(View v){
-        Intent intent = new Intent(MainActivity.this, SwordFight.class);
-        startActivity(intent);
-    }
-
-    public void mrMime(View v){
-        Intent intent = new Intent(MainActivity.this, MrMime.class);
-        startActivity(intent);
-    }
-
-    public void scoutGame(View v){
-        Intent intent = new Intent(MainActivity.this, ScoutGame.class);
-        startActivity(intent);
-    }
-
-
-    public void bombSquad(View v) {
-        Intent intent = new Intent(MainActivity.this, BombSquad.class);
-        startActivity(intent);
-    }
-
-    public void shuffleGame(View v){
-        Intent intent = new Intent(MainActivity.this, ShuffleGame.class);
-        startActivity(intent);
-    }
-
-    public void blowMic(View v){
-        Intent intent = new Intent(MainActivity.this, BlowMic.class);
-        startActivity(intent);
-    }
-
     private PendingIntent geoFencePendingIntent;
     private final int GEOFENCE_REQ_CODE = 0;
     private PendingIntent createGeofencePendingIntent() {

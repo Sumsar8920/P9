@@ -25,26 +25,35 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".PlayerRole">
+        <activity android:name=".PlayerRole"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-        <activity android:name=".MainActivity" />
-        <activity android:name=".MiniGameDrink" />
+        <activity android:name=".MainActivity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MiniGameDrink"
+            android:screenOrientation="portrait"/>
 
         <service android:name=".GeofenceTransitionService" />
         <service android:name=".Accelerometer" />
         <service android:name=".Flashlight" />
 
-        <activity android:name=".LiftMeteor" />
-        <activity android:name=".ShakeHands" />
-        <activity android:name=".SwordFight" />
-        <activity android:name=".MrMime" />
-        <activity android:name=".Countdown" />
-        <activity android:name=".NFC">
+        <activity android:name=".LiftMeteor"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".ShakeHands"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".SwordFight"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".MrMime"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Countdown"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".NFC"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
 
@@ -53,13 +62,21 @@
                 <data android:mimeType="application/vnd.com.example.android.beam" />
             </intent-filter>
         </activity>
-        <activity android:name=".ScoutGame" />
+        <activity android:name=".ScoutGame"
+            android:screenOrientation="portrait"/>
         <activity
             android:name=".BombSquad"
+            android:screenOrientation="portrait"
             android:label="@string/title_activity_bomb_squad"
-            android:theme="@style/AppTheme.NoActionBar"></activity>
-        <activity android:name=".ShuffleGame" />
-        <activity android:name=".BlowMic"></activity>
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity android:name=".ShuffleGame"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".BlowMic"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".Proximity"
+            android:screenOrientation="portrait"/>
+        <activity android:name=".GameScreen"
+            android:screenOrientation="portrait"></activity>
     </application>
 
 </manifest>

@@ -1,5 +1,6 @@
 package com.example.rasmus.p9;
 
+import android.content.DialogInterface;
 import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -7,6 +8,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -14,6 +16,7 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 public class ShakeHands extends AppCompatActivity implements SensorEventListener {
 
@@ -25,7 +28,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
     Boolean player2Ready = false;
     int counter = 0;
     ImageView bar;
-    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer, mediaPlayer2;
     TextView txt1, txt2;
 
 
@@ -33,6 +36,27 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_shake_hands);
+
+        CharSequence colors[] = new CharSequence[] {"1", "2"};
+
+        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        builder.setTitle("How many players?");
+        builder.setItems(colors, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                // the user clicked on colors[which]
+                if(which == 0){
+                    //1 player
+
+                }
+                if (which == 1){
+                    // 2 player
+
+
+                }
+            }
+        });
+        builder.show();
 
         button1 = (ImageButton)findViewById(R.id.button1);
         button2 = (ImageButton)findViewById(R.id.button2);
@@ -45,6 +69,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
         bar = (ImageView) findViewById(R.id.bar);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.batterycharge);
+
 
         // Create sensor manager
         SM = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -119,7 +144,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
         float yFloat = event.values[1];
         float zFloat = event.values[2];
 
-        if(zFloat > 10 && yFloat > -3 && yFloat < 3) {
+        if(zFloat > 20 && yFloat > -2 && yFloat < 2) {
             counter ++;
         }
 

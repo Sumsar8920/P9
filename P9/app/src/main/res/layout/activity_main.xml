@@ -100,6 +100,13 @@
         android:onClick="blowMic"/>
 
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="proximity"
+        android:onClick="proximity"/>
+
+
     <!--GoogleMap fragment-->
     <!--
     <fragment xmlns:android="http://schemas.android.com/apk/res/android"

@@ -25,6 +25,7 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
     int counter = 0;
     String playerRole;
     ImageView image;
+    MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -33,6 +34,8 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
 
         SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
         playerRole = (shared.getString("PLAYERROLE", ""));
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.shuffle);
 
         //initialize sensor manager for accelerometer/navigation method
         smAccelerometer = (SensorManager) getSystemService(SENSOR_SERVICE);
@@ -60,16 +63,17 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
                             mGZ = gz;
                             mEventCountSinceGZChanged = 0;
                             if (gz > 0) {
-                                Log.d(TAG, "now screen is facing up.");
-                                Toast toast = Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT);
-                                toast.show();
+                                //Log.d(TAG, "now screen is facing up.");
+                                //Toast toast = Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT);
+                                //toast.show();
                                 displayImage();
+                                mediaPlayer.start();
 
 
                             } else if (gz < 0) {
-                                Log.d(TAG, "now screen is facing down.");
-                                Toast toast = Toast.makeText(getApplicationContext(), "Down", Toast.LENGTH_SHORT);
-                                toast.show();
+                                //Log.d(TAG, "now screen is facing down.");
+                                //Toast toast = Toast.makeText(getApplicationContext(), "Down", Toast.LENGTH_SHORT);
+                                //toast.show();
                                 counter ++;
 
 

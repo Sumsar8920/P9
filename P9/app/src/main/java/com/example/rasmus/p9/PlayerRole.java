@@ -345,7 +345,7 @@ public class PlayerRole extends AppCompatActivity {
 
                 }
 
-                Intent intent = new Intent(PlayerRole.this, MainActivity.class);
+                Intent intent = new Intent(PlayerRole.this, GameScreen.class);
                 intent.putExtra("LATITUDE", latitude );
                 intent.putExtra("LONGITUDE", longitude);
                 intent.putExtra("RADIUS", radius);
