@@ -4,7 +4,6 @@ package com.example.rasmus.p9;
 import android.content.DialogInterface;
 
 
-import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -23,7 +22,7 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-public class ShakeHands extends AppCompatActivity implements SensorEventListener {
+public class ShakeHands1Player extends AppCompatActivity implements SensorEventListener {
 
     public Sensor mySensor;
     public SensorManager SM;
@@ -43,29 +42,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shake_hands);
-
-        CharSequence colors[] = new CharSequence[] {"1", "2"};
-
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
-        builder.setTitle("How many players?");
-        builder.setItems(colors, new DialogInterface.OnClickListener() {
-            @Override
-            public void onClick(DialogInterface dialog, int which) {
-                // the user clicked on colors[which]
-                if(which == 0){
-                    //1 player
-                    Intent intent = new Intent(ShakeHands.this, ShakeHands1Player.class);
-                    startActivity(intent);
-                }
-                if (which == 1){
-                    // 2 player
-
-
-                }
-            }
-        });
-        builder.show();
+        setContentView(R.layout.activity_shake_hands_1player);
 
         button1 = (ImageButton)findViewById(R.id.button1);
         button2 = (ImageButton)findViewById(R.id.button2);
@@ -98,7 +75,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                         button1.setBackgroundResource(R.drawable.greenthumb);
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
-                            SM.registerListener(ShakeHands.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
+                            SM.registerListener(ShakeHands1Player.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
                             middleImage.setImageResource(R.drawable.battery11);
                             txt1.setText("SHAKE!");
                             txt2.setText("SHAKE!");
@@ -106,7 +83,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                         return true;
                     case MotionEvent.ACTION_UP:
                         // End
-                        SM.unregisterListener(ShakeHands.this);
+                        SM.unregisterListener(ShakeHands1Player.this);
                         counter = 0;
                         txt1.setText("");
                         txt2.setText("");
@@ -129,7 +106,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                         button2.setBackgroundResource(R.drawable.greenthumb);
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
-                            SM.registerListener(ShakeHands.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
+                            SM.registerListener(ShakeHands1Player.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
                             middleImage.setImageResource(R.drawable.battery11);
                             txt1.setText("SHAKE!");
                             txt2.setText("SHAKE!");
@@ -137,7 +114,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                         return true;
                     case MotionEvent.ACTION_UP:
                         // End
-                        SM.unregisterListener(ShakeHands.this);
+                        SM.unregisterListener(ShakeHands1Player.this);
                         counter = 0;
                         txt1.setText("");
                         txt2.setText("");
@@ -227,4 +204,4 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
     }
 
 
-    }
+}
