@@ -1,12 +1,11 @@
 package com.example.rasmus.p9;
 
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-import android.os.CountDownTimer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
@@ -24,9 +23,12 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
     Boolean player1Ready = false;
     Boolean player2Ready = false;
     int counter = 0;
-    ImageView bar;
+    int imageCounter = 0;
+    ImageView middleImage;
     MediaPlayer mediaPlayer;
     TextView txt1, txt2;
+    public Handler handler = new Handler();
+    public int delay = 1000; //milliseconds
 
 
     @Override
@@ -39,10 +41,10 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
         txt1 = (TextView) findViewById(R.id.txt1);
         txt2 = (TextView) findViewById(R.id.txt2);
 
-        txt1.setText("Place thumb on marker");
-        txt2.setText("Place thumb on marker");
+       /* txt1.setText("Place thumb on marker");
+        txt2.setText("Place thumb on marker");*/
 
-        bar = (ImageView) findViewById(R.id.bar);
+        middleImage = (ImageView) findViewById(R.id.animationDown);
 
         mediaPlayer = MediaPlayer.create(this, R.raw.batterycharge);
 
@@ -52,16 +54,20 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
         // MiniGameDrink sensor
         mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
+        changeImage();
+        //changeThumbImg();
+
         button1.setOnTouchListener(new View.OnTouchListener() {
             @Override
             public boolean onTouch(View v, MotionEvent event) {
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         player1Ready = true;
+                        button1.setBackgroundResource(R.drawable.greenthumb);
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
                             SM.registerListener(ShakeHands.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
-                            bar.setImageResource(R.drawable.battery11);
+                            middleImage.setImageResource(R.drawable.battery11);
                             txt1.setText("SHAKE!");
                             txt2.setText("SHAKE!");
                         }
@@ -71,8 +77,9 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                         SM.unregisterListener(ShakeHands.this);
                         counter = 0;
                         //so the players can start over if someone fails. They just have to release the button and press it again.
-                        txt1.setText("Place thumb on marker");
+                        //txt1.setText("Place thumb on marker");
                         player1Ready = false;
+                        button1.setBackgroundResource(R.drawable.thumb_scanner);
                         return true;
                 }
                 return false;
@@ -85,10 +92,11 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         player2Ready = true;
+                        button2.setBackgroundResource(R.drawable.greenthumb);
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
                             SM.registerListener(ShakeHands.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
-                            bar.setImageResource(R.drawable.battery11);
+                            middleImage.setImageResource(R.drawable.battery11);
                             txt1.setText("SHAKE!");
                             txt2.setText("SHAKE!");
                         }
@@ -98,8 +106,9 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                         SM.unregisterListener(ShakeHands.this);
                         counter = 0;
                         //so the players can start over if someone fails. They just have to release the button and press it again.
-                        txt2.setText("Place thumb on marker");
+                        //txt2.setText("Place thumb on marker");
                         player2Ready = false;
+                        button2.setBackgroundResource(R.drawable.thumb_scanner);
                         return true;
                 }
                 return false;
@@ -124,26 +133,57 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
         }
 
         if(counter == 4){
-            bar.setImageResource(R.drawable.battery21);
+            middleImage.setImageResource(R.drawable.battery21);
             mediaPlayer.start();
         }
 
         if(counter == 10){
-            bar.setImageResource(R.drawable.battery31);
+            middleImage.setImageResource(R.drawable.battery31);
             mediaPlayer.start();
         }
 
         if(counter == 20){
-            bar.setImageResource(R.drawable.battery41);
+            middleImage.setImageResource(R.drawable.battery41);
             mediaPlayer.start();
         }
 
         if(counter == 30){
-            bar.setImageResource(R.drawable.battery51);
+            middleImage.setImageResource(R.drawable.battery51);
             mediaPlayer.start();
         }
 
 
+    }
+
+    public void changeImage(){
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                //do something
+                imageCounter ++;
+                if(player1Ready == false || player2Ready == false) {
+                    if (imageCounter == 1) {
+                        middleImage.setImageResource(R.drawable.battery_singleplayerdown);
+                    }
+                    if (imageCounter == 2) {
+                        middleImage.setImageResource(R.drawable.battery_singleplayerup);
+                        imageCounter = 0;
+                    }
+                }
+
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
+    }
+
+    public void changeThumbImg() {
+        if (player1Ready == true) {
+            button1.setImageResource(R.drawable.greenthumb);
+        }
+
+        if (player2Ready == true) {
+            button2.setImageResource(R.drawable.greenthumb);
+
+        }
     }
 
 
