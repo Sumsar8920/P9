@@ -77,7 +77,7 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
                             SM.registerListener(ShakeHands1Player.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
-                            middleImage.setImageResource(R.drawable.battery11);
+                            middleImage.setImageResource(R.drawable.battery11player);
                             txt1.setText("SHAKE!");
                             txt2.setText("SHAKE!");
                         }
@@ -108,7 +108,7 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
                             SM.registerListener(ShakeHands1Player.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
-                            middleImage.setImageResource(R.drawable.battery11);
+                            middleImage.setImageResource(R.drawable.battery11player);
                             txt1.setText("SHAKE!");
                             txt2.setText("SHAKE!");
                         }
@@ -142,32 +142,32 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
         float yFloat = event.values[1];
         float zFloat = event.values[2];
 
-        if(zFloat > 20 && yFloat > -2 && yFloat < 2) {
+        if(zFloat > 16 && yFloat > -2 && yFloat < 2) {
             counter ++;
         }
 
         if(counter == 4){
             counter ++;
-            middleImage.setImageResource(R.drawable.battery21);
+            middleImage.setImageResource(R.drawable.battery21player);
             mediaPlayer.start();
             victory();
         }
 
         if(counter == 10){
             counter ++;
-            middleImage.setImageResource(R.drawable.battery31);
+            middleImage.setImageResource(R.drawable.battery31player);
             mediaPlayer.start();
         }
 
         if(counter == 20){
             counter ++;
-            middleImage.setImageResource(R.drawable.battery41);
+            middleImage.setImageResource(R.drawable.battery41player);
             mediaPlayer.start();
         }
 
         if(counter == 30){
             counter ++;
-            middleImage.setImageResource(R.drawable.battery51);
+            middleImage.setImageResource(R.drawable.battery51player);
             mediaPlayer.start();
         }
 

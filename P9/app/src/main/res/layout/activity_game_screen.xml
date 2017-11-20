@@ -72,4 +72,11 @@
         android:onClick="proximity"
         android:text="proximity" />
 
+    <Button
+        android:layout_width="220dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:onClick="drinkingGame"
+        android:text="Drinking game" />
+
 </LinearLayout>

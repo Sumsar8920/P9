@@ -7,9 +7,5 @@
     android:layout_height="match_parent"
     tools:context="com.example.rasmus.p9.Proximity">
 
-    <TextView
-        android:id="@+id/test"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent" />
 
 </android.support.constraint.ConstraintLayout>
