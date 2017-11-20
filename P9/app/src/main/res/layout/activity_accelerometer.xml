@@ -45,7 +45,7 @@
         app:layout_constraintVertical_chainStyle="packed"
         app:layout_constraintTop_toBottomOf="@id/greenbar2"/>
 
-<!--
+
     <TextView
         android:id="@+id/xText"
         android:layout_width="wrap_content"
@@ -91,7 +91,6 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/zText" />
--->
 
     <android.support.constraint.Guideline
         android:layout_width="wrap_content"

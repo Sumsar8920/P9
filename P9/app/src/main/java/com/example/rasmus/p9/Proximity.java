@@ -1,7 +1,9 @@
 package com.example.rasmus.p9;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -21,19 +23,19 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
     private SensorManager mSensorManager;
     private Sensor mProximity;
     private static final int SENSOR_SENSITIVITY = 4;
-    TextView test;
     int counter = 0;
     String playerRole;
     ConstraintLayout background;
     Boolean near = false;
     Vibration vibration;
+    MediaPlayer mediaPlayer;
+    int totalCounter = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_proximity);
 
-        test = (TextView) findViewById(R.id.test);
         background = (ConstraintLayout) findViewById(R.id.background);
 
         SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
@@ -45,6 +47,8 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
 
         vibration = new Vibration(this);
         timer();
+
+        mediaPlayer = MediaPlayer.create(this, R.raw.proximity);
 
     }
 
@@ -67,11 +71,9 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 //near
                 near = true;
                 changeColor();
-                test.setText("near");
             } else {
                 //far
                 near = false;
-                test.setText("far");
             }
         }
     }
@@ -108,6 +110,7 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 if(near == true){
                     background.setBackgroundColor(Color.WHITE);
                     vibration.vibrate();
+                    mediaPlayer.start();
                 }
             }
 
@@ -118,6 +121,7 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 if(near == true){
                     background.setBackgroundColor(Color.WHITE);
                     vibration.vibrate();
+                    mediaPlayer.start();
                 }
             }
         }
@@ -130,6 +134,7 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 if(near == true){
                     background.setBackgroundColor(Color.WHITE);
                     vibration.vibrate();
+                    mediaPlayer.start();
                 }
             }
 
@@ -141,6 +146,7 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 if(near == true){
                     background.setBackgroundColor(Color.WHITE);
                     vibration.vibrate();
+                    mediaPlayer.start();
                 }
             }
         }
@@ -153,6 +159,7 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 if(near == true){
                     background.setBackgroundColor(Color.WHITE);
                     vibration.vibrate();
+                    mediaPlayer.start();
                 }
             }
 
@@ -164,6 +171,8 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 if(near == true){
                     background.setBackgroundColor(Color.WHITE);
                     vibration.vibrate();
+                    mediaPlayer.start();
+
                 }
             }
         }
@@ -176,6 +185,7 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 if(near == true){
                     background.setBackgroundColor(Color.WHITE);
                     vibration.vibrate();
+                    mediaPlayer.start();
                 }
             }
 
@@ -187,6 +197,7 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 if(near == true){
                     background.setBackgroundColor(Color.WHITE);
                     vibration.vibrate();
+                    mediaPlayer.start();
                 }
             }
         }
@@ -199,6 +210,7 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 if(near == true){
                     background.setBackgroundColor(Color.WHITE);
                     vibration.vibrate();
+                    mediaPlayer.start();
                 }
             }
 
@@ -210,9 +222,18 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 if(near == true){
                     background.setBackgroundColor(Color.WHITE);
                     vibration.vibrate();
+                    mediaPlayer.start();
                 }
-            }
 
+            }
+            totalCounter = totalCounter + counter;
+            counter = 0;
+        }
+
+        if(totalCounter == 10){
+            counter = 11;
+            Intent intent = new Intent(Proximity.this, Victory.class);
+            startActivity(intent);
 
         }
 

@@ -64,5 +64,10 @@ public class GameScreen extends AppCompatActivity {
         startActivity(intent);
     }
 
+    public void drinkingGame(View v){
+        Intent intent = new Intent(GameScreen.this, MiniGameDrink.class);
+        startActivity(intent);
+    }
+
 
 }

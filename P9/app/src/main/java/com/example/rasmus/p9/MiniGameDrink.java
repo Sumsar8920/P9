@@ -29,8 +29,6 @@ public class MiniGameDrink extends AppCompatActivity implements SensorEventListe
     public MediaPlayer drunkMediaPlayer;
     public Toast toast;
 
-
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,10 +44,10 @@ public class MiniGameDrink extends AppCompatActivity implements SensorEventListe
         SM.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Assign TextViews
-       /* xText = (TextView) findViewById(R.id.xText);
+        xText = (TextView) findViewById(R.id.xText);
         yText = (TextView) findViewById(R.id.yText);
         zText = (TextView) findViewById(R.id.zText);
-        timer = (TextView) findViewById(R.id.timer);*/
+        timer = (TextView) findViewById(R.id.timer);
 
         // Set timer to not running
         timerRunning = false;
@@ -78,23 +76,22 @@ public class MiniGameDrink extends AppCompatActivity implements SensorEventListe
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        /*xText.setText("X: " + event.values[0]);
-        yText.setText("Y: " + event.values[1]);
-        zText.setText("Z: " + event.values[2]);*/
-
         float xFloat = event.values[0];
         float yFloat = event.values[1];
         float zFloat = event.values[2];
 
+        xText.setText("X: " + event.values[0]);
+        yText.setText("Y: " + event.values[1]);
+        zText.setText("Z: " + event.values[2]);
 
 
         if(zFloat > 7){
           //  timer.setText("10");
-            timerRunning = false;
+            /*timerRunning = false;
             greenbar1.setVisibility(View.VISIBLE);
             greenbar2.setVisibility(View.VISIBLE);
             greenbar3.setVisibility(View.VISIBLE);
-            cancel();
+            cancel(); */
         }
 
         else{

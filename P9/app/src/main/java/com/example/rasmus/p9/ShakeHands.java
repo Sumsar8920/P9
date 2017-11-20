@@ -164,7 +164,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
         float yFloat = event.values[1];
         float zFloat = event.values[2];
 
-        if(zFloat > 20 && yFloat > -2 && yFloat < 2) {
+        if(zFloat > 16 && yFloat > -2 && yFloat < 2) {
             counter ++;
         }
 
@@ -190,6 +190,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
             counter ++;
             middleImage.setImageResource(R.drawable.battery51);
             mediaPlayer.start();
+
         }
 
 
