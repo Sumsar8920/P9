@@ -6,11 +6,14 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.widget.ImageView;
 import android.widget.Toast;
 
+import static android.R.attr.delay;
 import static com.google.android.gms.internal.zzs.TAG;
 
 public class ScoutGame extends AppCompatActivity implements SensorEventListener {
@@ -22,6 +25,10 @@ public class ScoutGame extends AppCompatActivity implements SensorEventListener 
     private static final int MAX_COUNT_GZ_CHANGE = 1;
     MediaPlayer media;
     String playerRole;
+    public Handler handler = new Handler();
+    public int delay = 1000; //milliseconds
+    int imageCounter = 0;
+    ImageView scoutImage;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -38,6 +45,9 @@ public class ScoutGame extends AppCompatActivity implements SensorEventListener 
         // Register sensor listener
         smAccelerometer.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
+        scoutImage = (ImageView) findViewById(R.id.scoutImage);
+
+        changeImage();
 
     }
 
@@ -97,6 +107,24 @@ public class ScoutGame extends AppCompatActivity implements SensorEventListener 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
+    }
+
+    public void changeImage(){
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                //do something
+                imageCounter ++;
+                    if (imageCounter == 1) {
+                        scoutImage.setImageResource(R.drawable.scoutfront);
+                    }
+                    if (imageCounter == 2) {
+                        scoutImage.setImageResource(R.drawable.scoutback);
+                        imageCounter = 0;
+                    }
+
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
 }

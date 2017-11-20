@@ -11,6 +11,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 
+import android.content.Intent;
+
 import android.support.v7.app.AlertDialog;
 
 import android.os.Handler;
@@ -22,6 +24,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import java.util.concurrent.TimeUnit;
 
 public class ShakeHands extends AppCompatActivity implements SensorEventListener {
 
@@ -190,7 +194,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
             counter ++;
             middleImage.setImageResource(R.drawable.battery51);
             mediaPlayer.start();
-
+            victory();
         }
 
 
@@ -216,15 +220,10 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
         }, delay);
     }
 
-    public void changeThumbImg() {
-        if (player1Ready == true) {
-            button1.setImageResource(R.drawable.greenthumb);
-        }
 
-        if (player2Ready == true) {
-            button2.setImageResource(R.drawable.greenthumb);
-
-        }
+    public void victory(){
+        Intent intent = new Intent(ShakeHands.this, Victory.class);
+        startActivity(intent);
     }
 
 
