@@ -6,4 +6,15 @@
     android:layout_height="match_parent"
     tools:context="com.example.rasmus.p9.ScoutGame">
 
+    <ImageView
+        android:id="@+id/scoutImage"
+        android:layout_width="211dp"
+        android:layout_height="317dp"
+        app:srcCompat="@drawable/scoutfront"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintVertical_chainStyle="packed"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_marginTop="125dp"
+        app:layout_constraintHorizontal_bias="0.502" />
 </android.support.constraint.ConstraintLayout>

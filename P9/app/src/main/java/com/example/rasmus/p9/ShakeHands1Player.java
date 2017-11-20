@@ -4,6 +4,7 @@ package com.example.rasmus.p9;
 import android.content.DialogInterface;
 
 
+import android.content.Intent;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -149,6 +150,7 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
             counter ++;
             middleImage.setImageResource(R.drawable.battery21);
             mediaPlayer.start();
+            victory();
         }
 
         if(counter == 10){
@@ -192,15 +194,10 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
         }, delay);
     }
 
-    public void changeThumbImg() {
-        if (player1Ready == true) {
-            button1.setImageResource(R.drawable.greenthumb);
-        }
 
-        if (player2Ready == true) {
-            button2.setImageResource(R.drawable.greenthumb);
-
-        }
+    public void victory(){
+        Intent intent = new Intent(ShakeHands1Player.this, Victory.class);
+        startActivity(intent);
     }
 
 

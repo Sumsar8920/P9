@@ -91,7 +91,8 @@
         <activity
             android:name=".GameScreen"
             android:screenOrientation="portrait" />
-        <activity android:name=".ShakeHands1Player"></activity>
+        <activity android:name=".ShakeHands1Player" />
+        <activity android:name=".Victory"></activity>
     </application>
 
 </manifest>
