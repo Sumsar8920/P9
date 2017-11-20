@@ -231,6 +231,7 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
         }
 
         if(totalCounter == 10){
+            totalCounter++;
             counter = 11;
             Intent intent = new Intent(Proximity.this, Victory.class);
             startActivity(intent);

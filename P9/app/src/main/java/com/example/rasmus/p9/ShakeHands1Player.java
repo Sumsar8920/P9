@@ -150,7 +150,6 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
             counter ++;
             middleImage.setImageResource(R.drawable.battery21player);
             mediaPlayer.start();
-            victory();
         }
 
         if(counter == 10){
@@ -169,6 +168,7 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
             counter ++;
             middleImage.setImageResource(R.drawable.battery51player);
             mediaPlayer.start();
+            victory();
         }
 
 
