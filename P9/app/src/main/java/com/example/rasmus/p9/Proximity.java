@@ -15,6 +15,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -31,6 +32,11 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
     MediaPlayer mediaPlayer;
     int totalCounter = 0;
 
+    public Handler handler = new Handler();
+    public int delay = 1000; //milliseconds
+    int imageCounter = 0;
+    ImageView proxImage;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -46,9 +52,15 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
         mProximity = mSensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY);
 
         vibration = new Vibration(this);
+
         timer();
 
+
+
         mediaPlayer = MediaPlayer.create(this, R.raw.proximity);
+        proxImage = (ImageView) findViewById(R.id.proxImage);
+
+        changeImage();
 
     }
 
@@ -239,6 +251,40 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
         }
 
 
+    }
+
+    public void changeImage(){
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                //do something
+                imageCounter ++;
+                if (imageCounter == 1) {
+                    proxImage.setImageResource(R.drawable.noglow);
+                }
+                if (imageCounter == 2) {
+                    proxImage.setImageResource(R.drawable.glowleft);
+                }
+                if (imageCounter == 3) {
+                    proxImage.setImageResource(R.drawable.glowright);
+                }
+                if (imageCounter == 4) {
+                    proxImage.setImageResource(R.drawable.together);
+                }
+
+                if (imageCounter == 5) {
+                    proxImage.setImageResource(R.drawable.togethernoglow);
+                }
+                if (imageCounter == 6) {
+                    proxImage.setImageResource(R.drawable.noglow);
+                }
+                if (imageCounter == 7) {
+                    proxImage.setImageResource(R.drawable.completed);
+                    imageCounter = 0;
+                }
+
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
 }
