@@ -7,5 +7,28 @@
     android:layout_height="match_parent"
     tools:context="com.example.rasmus.p9.Proximity">
 
+    <ImageView
+        android:id="@+id/proxImage"
+        android:layout_width="0dp"
+        android:layout_height="324dp"
+        app:srcCompat="@drawable/noglow"
+        android:layout_weight="1"
+        android:layout_alignParentBottom="true"
+        android:layout_centerHorizontal="true"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        android:layout_marginBottom="8dp"
+        app:layout_constraintBottom_toTopOf="@+id/guide" />
+
+    <android.support.constraint.Guideline
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:id="@+id/guideline"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.5"
+        tools:layout_editor_absoluteY="0dp"
+        tools:layout_editor_absoluteX="192dp" />
+
 
 </android.support.constraint.ConstraintLayout>

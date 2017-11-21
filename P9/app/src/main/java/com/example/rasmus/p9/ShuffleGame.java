@@ -6,6 +6,7 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
+import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -27,6 +28,13 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
     ImageView image;
     MediaPlayer mediaPlayer;
 
+    public Handler handler = new Handler();
+    public int delay = 1000; //milliseconds
+    int imageCounter = 0;
+    ImageView shuffleImg;
+
+    public boolean stopAnimation;
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +52,15 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
         // Register sensor listener
         smAccelerometer.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
+        stopAnimation = false;
+
         image = (ImageView) findViewById(R.id.image);
+
+        shuffleImg = (ImageView) findViewById(R.id.shuffleImg);
+
+        if(stopAnimation == false) {
+            changeImage();
+        }
 
     }
 
@@ -66,6 +82,7 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
                                 //Log.d(TAG, "now screen is facing up.");
                                 //Toast toast = Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT);
                                 //toast.show();
+                                stopAnimation = true;
                                 displayImage();
                                 mediaPlayer.start();
 
@@ -188,6 +205,25 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
 
 
 
+    }
+
+    public void changeImage(){
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                //do something
+                imageCounter ++;
+                if (imageCounter == 1) {
+                    shuffleImg.setImageResource(R.drawable.scoutfront);
+                }
+                if (imageCounter == 2) {
+                    shuffleImg.setImageResource(R.drawable.scoutback);
+                    imageCounter = 0;
+                }
+
+
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
 }

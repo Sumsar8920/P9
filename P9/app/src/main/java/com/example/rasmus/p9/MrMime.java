@@ -18,6 +18,7 @@ import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
+import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -63,6 +64,11 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
     int rangePlusZ;
     int counterWin = 0;
 
+    public Handler handler = new Handler();
+    public int delay = 1000; //milliseconds
+    int imageCounter = 0;
+    ImageView mrMimeImage;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -79,12 +85,16 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
             checkMotion();
         }
 
+        mrMimeImage = (ImageView) findViewById(R.id.mrMimeImage);
+
         xList = new ArrayList<>();
         yList = new ArrayList<>();
         zList = new ArrayList<>();
 
-        player1 = (TextView) findViewById(R.id.player1);
-        player2 = (TextView) findViewById(R.id.player2);
+       player1 = (TextView) findViewById(R.id.player1);
+       player2 = (TextView) findViewById(R.id.player2);
+
+        changeImage();
 
 
         button1 = (ImageButton)findViewById(R.id.button1);
@@ -653,6 +663,41 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
 
         }
     }
+
+    public void changeImage(){
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                //do something
+                imageCounter ++;
+                if (imageCounter == 1) {
+                    mrMimeImage.setImageResource(R.drawable.still);
+                }
+                if (imageCounter == 2) {
+                    mrMimeImage.setImageResource(R.drawable.left1);
+                }
+                if (imageCounter == 3) {
+                    mrMimeImage.setImageResource(R.drawable.left2);
+                }
+                if (imageCounter == 4) {
+                    mrMimeImage.setImageResource(R.drawable.still);
+                }
+
+                if (imageCounter == 5) {
+                    mrMimeImage.setImageResource(R.drawable.right1);
+                }
+                if (imageCounter == 6) {
+                    mrMimeImage.setImageResource(R.drawable.right2);
+                }
+                if (imageCounter == 7) {
+                    mrMimeImage.setImageResource(R.drawable.finish);
+                    imageCounter = 0;
+                }
+
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
+    }
+
 
 
 }
