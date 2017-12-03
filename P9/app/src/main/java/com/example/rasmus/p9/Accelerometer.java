@@ -1,78 +1,127 @@
 package com.example.rasmus.p9;
 
-import android.graphics.Color;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
-
-// Imports for TextView
-import android.widget.Button;
-import android.widget.TextView;
-
-// Imports for Sensors
+import android.app.IntentService;
+import android.content.Intent;
 import android.hardware.Sensor;
-import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
+import android.hardware.SensorManager;
+import android.util.Log;
+import android.widget.Toast;
 
-public class Accelerometer extends AppCompatActivity implements SensorEventListener {
+import static com.google.android.gms.internal.zzs.TAG;
 
-    public TextView xText, yText, zText;
-    public Sensor mySensor;
-    public SensorManager SM;
+/**
+ * Created by Rasmus on 02-11-2017.
+ */
 
-    public Button button;
+public class Accelerometer extends IntentService implements SensorEventListener {
+
+    /**
+     * Creates an IntentService.  Invoked by your subclass's constructor.
+     *
+     * @param name Used to name the worker thread, important only for debugging.
+     */
+    SensorManager smAccelerometer;
+    Sensor accelerometer;
+    private float mGZ = 0;//gravity acceleration along the z axis
+    private int mEventCountSinceGZChanged = 0;
+    private static final int MAX_COUNT_GZ_CHANGE = 10;
+    Intent intent;
+    public static Boolean screenUp;
+    public static Boolean screenDown;
+
+    public Accelerometer(String name) {
+        super(name);
+    }
+
+    public Accelerometer(){
+        super("");
+    }
 
     @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_accelerometer);
+    protected void onHandleIntent(Intent workIntent) {
+        // Gets data from the incoming Intent
+        String dataString = workIntent.getDataString();
 
-        // Create sensor manager
-        SM = (SensorManager) getSystemService(SENSOR_SERVICE);
+        intent = new Intent(getApplicationContext(),Flashlight.class);
 
-        // Accelerometer sensor
-        mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-
+        // Do work here, based on the contents of dataString
+        //initialize sensor manager for accelerometer/navigation method
+        smAccelerometer = (SensorManager) getSystemService(SENSOR_SERVICE);
+        // MiniGameDrink sensor
+        accelerometer = smAccelerometer.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         // Register sensor listener
-        SM.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
-
-        // Assign TextViews
-        xText = (TextView) findViewById(R.id.xText);
-        yText = (TextView) findViewById(R.id.yText);
-        zText = (TextView) findViewById(R.id.zText);
-
-        // Assign button
-        button = (Button)findViewById(R.id.button);
-
+        smAccelerometer.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
 
     }
 
+    /*@Override
+    protected void onResume() {
+        super.onResume();
+        smAccelerometer.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
+    }
+    @Override
+    protected void onPause() {
+        super.onPause();
+        //smAccelerometer.unregisterListener(this);
+    } */
+
+
+    @Override
+    public void onSensorChanged (SensorEvent event){
+        try {
+            int type = event.sensor.getType();
+            if (type == Sensor.TYPE_ACCELEROMETER) {
+                float gz = event.values[2];
+                if (mGZ == 0) {
+                    mGZ = gz;
+                } else {
+                    if ((mGZ * gz) < 0) {
+                        mEventCountSinceGZChanged++;
+                        if (mEventCountSinceGZChanged == MAX_COUNT_GZ_CHANGE) {
+                            mGZ = gz;
+                            mEventCountSinceGZChanged = 0;
+                            if (gz > 0) {
+                                Log.d(TAG, "now screen is facing up.");
+                                Toast toast = Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT);
+                                toast.show();
+                                //start flashlight service
+                                //getApplicationContext().startService(intent);
+                                MainActivity.flashlightFrequency();
+                                screenUp = true;
+                                screenDown = false;
+                                MainActivity.changeBrightness(screenDown);
+                                //flashlightFrequency();
+                            } else if (gz < 0) {
+                                Log.d(TAG, "now screen is facing down.");
+                                Toast toast = Toast.makeText(getApplicationContext(), "Down", Toast.LENGTH_SHORT);
+                                toast.show();
+                                screenUp = false;
+                                screenDown = true;
+                                MainActivity.changeBrightness(screenDown);
+                            }
+                        }
+                    } else {
+                        if (mEventCountSinceGZChanged > 0) {
+                            mGZ = gz;
+                            mEventCountSinceGZChanged = 0;
+                        }
+                    }
+                }
+            }
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
+    }
 
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
-
+        // TODO Auto-generated method stub
     }
 
-    @Override
-    public void onSensorChanged(SensorEvent event) {
-
-        xText.setText("X: " + event.values[0]);
-        yText.setText("Y: " + event.values[1]);
-        zText.setText("Z: " + event.values[2]);
-
-        float xFloat = event.values[0];
-        float yFloat = event.values[1];
-        float zFloat = event.values[2];
-
-        if(xFloat> 2.5 || xFloat < -2.5 || yFloat > 2.5 || yFloat < -2.5){
-            button.setBackgroundColor(Color.RED);
-
-        }
-
-        else{
-            button.setBackgroundColor(Color.GREEN);
-        }
 
 
-    }
+
 }

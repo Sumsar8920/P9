@@ -2,13 +2,21 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.rasmus.p9">
 
-    <uses-permission android:name="android.permission.VIBRATE"/>
-    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-permission android:name="android.permission.NFC" />
+    <uses-permission android:name="android.permission.VIBRATE" />
+    <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.CAMERA" />
+    <uses-permission android:name="android.permission.FLASHLIGHT" />
+    <uses-permission android:name="android.permission.RECORD_AUDIO" />
+
+    <uses-feature android:name="android.hardware.camera" />
+    <uses-feature android:name="android.hardware.camera.flash" />
+
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <meta-data
         android:name="com.google.android.gms.version"
         android:value="@integer/google_play_services_version" />
-
 
     <application
         android:allowBackup="true"
@@ -17,19 +25,74 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".MainActivity">
+        <activity
+            android:name=".PlayerRole"
+            android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
-
         </activity>
+        <activity
+            android:name=".MainActivity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MiniGameDrink"
+            android:screenOrientation="portrait" />
 
-      <activity android:name=".Accelerometer"></activity>
-      
-      <service android:name=".GeofenceTransitionsIntentService" />
+        <service android:name=".GeofenceTransitionService" />
+        <service android:name=".Accelerometer" />
+        <service android:name=".Flashlight" />
 
+        <activity
+            android:name=".LiftMeteor"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".ShakeHands"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".SwordFight"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".MrMime"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Countdown"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".NFC"
+            android:screenOrientation="portrait">
+            <intent-filter>
+                <action android:name="android.nfc.action.NDEF_DISCOVERED" />
+
+                <category android:name="android.intent.category.DEFAULT" />
+
+                <data android:mimeType="application/vnd.com.example.android.beam" />
+            </intent-filter>
+        </activity>
+        <activity
+            android:name=".ScoutGame"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BombSquad"
+            android:label="@string/title_activity_bomb_squad"
+            android:screenOrientation="portrait"
+            android:theme="@style/AppTheme.NoActionBar" />
+        <activity
+            android:name=".ShuffleGame"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".BlowMic"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".Proximity"
+            android:screenOrientation="portrait" />
+        <activity
+            android:name=".GameScreen"
+            android:screenOrientation="portrait" />
+        <activity android:name=".ShakeHands1Player" />
+        <activity android:name=".Victory"></activity>
     </application>
 
 </manifest>

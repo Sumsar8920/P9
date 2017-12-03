@@ -1,28 +1,119 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    xmlns:app="http://schemas.android.com/apk/res-auto"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/layout"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@android:color/holo_green_light"
     tools:context="com.example.rasmus.p9.MainActivity">
 
-    <Button
-        android:id="@+id/add_geofences_button"
-        android:layout_width="wrap_content"
+    <!-- Line with Latitude and Longitude -->
+    <LinearLayout
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
-        android:layout_alignParentLeft="true"
-        android:onClick="addGeofencesButtonHandler"
-        android:text="Add GeoFences" />
+        android:orientation="horizontal"
+        android:background="@color/colorPrimaryDark"
+        android:paddingTop="5dp"
+        android:paddingLeft="15dp"
+        android:paddingRight="15dp"
+        android:paddingBottom="5dp">
 
-        
+        <!--Latitude-->
+        <TextView
+            android:id="@+id/lat"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Lat: " />
 
-    <Button
-        android:id="@+id/button2"
-        android:layout_width="wrap_content"
+        <!--Longitude-->
+        <TextView
+            android:id="@+id/lon"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_weight="0.5"
+            android:text="Long: " />
+
+    </LinearLayout>
+
+    <TextView
+        android:id="@+id/distance"
+        android:layout_width="100dp"
         android:layout_height="wrap_content"
-        android:text="Button"
-        android:onClick="Start"
         />
 
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="drinking game"
+        android:onClick="stopLight"/>
 
-</android.support.constraint.ConstraintLayout>
+    <Button
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content"
+    android:text="lift meteor"
+    android:onClick="liftMeteor"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="charge battery"
+        android:onClick="chargeBattery"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="sword fight"
+        android:onClick="swordFight"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mr. Mime"
+        android:onClick="mrMime"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="scout game"
+        android:onClick="scoutGame"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+
+        android:text="Bomb squad"
+        android:onClick="bombSquad"/>
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="shuffle game"
+        android:onClick="shuffleGame"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="blow microphone"
+        android:onClick="blowMic"/>
+
+
+    <Button
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="proximity"
+        android:onClick="proximity"/>
+
+
+    <!--GoogleMap fragment-->
+    <!--
+    <fragment xmlns:android="http://schemas.android.com/apk/res/android"
+        android:name="com.google.android.gms.maps.MapFragment"
+        android:id="@+id/map"
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"/>
+        -->
+
+</LinearLayout>
