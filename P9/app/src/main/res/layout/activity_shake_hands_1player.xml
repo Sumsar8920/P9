@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@color/white"
     android:orientation="horizontal">
 
 
@@ -10,16 +11,17 @@
         android:id="@+id/button1"
         android:layout_width="75dp"
         android:layout_height="150dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="46dp"
         android:background="@drawable/thumb_scanner"
-        android:rotation="270" />
+        android:rotation="90"
+        android:layout_marginStart="41dp"
+        android:layout_alignParentTop="true"
+        android:layout_alignParentStart="true" />
 
     <TextView
         android:id="@+id/txt1"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:rotation="270"
+        android:rotation="90"
         android:textSize="24sp"
         android:layout_alignBottom="@+id/button1"
         android:layout_centerHorizontal="true"
@@ -29,7 +31,7 @@
         android:id="@+id/animationDown"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:rotation="270"
+        android:rotation="90"
         app:srcCompat="@drawable/battery_singleplayerdown"
         android:layout_centerVertical="true"
         android:layout_alignParentStart="true" />
@@ -38,7 +40,7 @@
         android:id="@+id/txt2"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:rotation="270"
+        android:rotation="90"
         android:textSize="24sp"
         android:layout_alignTop="@+id/button2"
         android:layout_alignStart="@+id/txt1"
@@ -52,7 +54,7 @@
         android:layout_alignParentBottom="true"
         android:layout_alignStart="@+id/button1"
         android:background="@drawable/thumb_scanner"
-        android:rotation="270" />
+        android:rotation="90" />
 
 
 </RelativeLayout>

@@ -15,6 +15,8 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -40,7 +42,8 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_proximity);
+        fullscreen();
+        //setContentView(R.layout.activity_proximity);
 
         background = (ConstraintLayout) findViewById(R.id.background);
 
@@ -285,6 +288,14 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
                 handler.postDelayed(this, delay);
             }
         }, delay);
+    }
+
+    public void fullscreen(){
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        setContentView(R.layout.activity_proximity);
     }
 
 }

@@ -19,6 +19,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -43,7 +45,8 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_shake_hands_1player);
+        fullscreen();
+        //setContentView(R.layout.activity_shake_hands_1player);
 
         button1 = (ImageButton)findViewById(R.id.button1);
         button2 = (ImageButton)findViewById(R.id.button2);
@@ -198,6 +201,14 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
     public void victory(){
         Intent intent = new Intent(ShakeHands1Player.this, Victory.class);
         startActivity(intent);
+    }
+
+    public void fullscreen(){
+        requestWindowFeature(Window.FEATURE_NO_TITLE);
+        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
+                WindowManager.LayoutParams.FLAG_FULLSCREEN);
+
+        setContentView(R.layout.activity_shake_hands_1player);
     }
 
 
