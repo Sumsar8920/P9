@@ -31,14 +31,6 @@
         android:layout_width="220dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
-        android:onClick="mrMime"
-        android:text="Mr. Mime"
-        android:layout_marginTop="10dp"/>
-
-    <Button
-        android:layout_width="220dp"
-        android:layout_height="wrap_content"
-        android:layout_gravity="center"
         android:onClick="scoutGame"
         android:text="Sound puzzle"
         android:layout_marginTop="10dp"/>

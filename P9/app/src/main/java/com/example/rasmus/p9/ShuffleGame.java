@@ -1,5 +1,6 @@
 package com.example.rasmus.p9;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -10,9 +11,11 @@ import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
+import android.widget.TextView;
 import android.widget.Toast;
 
 import static com.google.android.gms.internal.zzs.TAG;
@@ -34,6 +37,7 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
     public int delay = 1000; //milliseconds
     int imageCounter = 0;
     ImageView shuffleImg;
+    TextView text;
 
     public boolean stopAnimation;
 
@@ -60,6 +64,8 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
         image = (ImageView) findViewById(R.id.image);
 
         shuffleImg = (ImageView) findViewById(R.id.shuffleImg);
+
+        text = (TextView) findViewById(R.id.textView3);
 
         if(stopAnimation == false) {
             changeImage();
@@ -123,6 +129,8 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
         if(playerRole.equals("1")) {
             if (counter == 1) {
                 image.setBackgroundResource(R.drawable.player1_8);
+                shuffleImg.setVisibility(View.GONE);
+                text.setVisibility(View.GONE);
             }
 
             if (counter == 2) {
@@ -144,6 +152,8 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
         if(playerRole.equals("2")) {
             if (counter == 1) {
                 image.setBackgroundResource(R.drawable.player2_2);
+                shuffleImg.setVisibility(View.GONE);
+                text.setVisibility(View.GONE);
             }
 
             if (counter == 2) {
@@ -165,6 +175,8 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
         if(playerRole.equals("3")) {
             if (counter == 1) {
                 image.setBackgroundResource(R.drawable.player3_5);
+                shuffleImg.setVisibility(View.GONE);
+                text.setVisibility(View.GONE);
             }
 
             if (counter == 2) {
@@ -186,6 +198,8 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
         if(playerRole.equals("4")) {
             if (counter == 1) {
                 image.setBackgroundResource(R.drawable.player4_2);
+                shuffleImg.setVisibility(View.GONE);
+                text.setVisibility(View.GONE);
             }
 
             if (counter == 2) {
@@ -235,6 +249,16 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_shuffle_game);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // your code.
+        mediaPlayer.release();
+        mediaPlayer = null;
+        smAccelerometer.unregisterListener(this);
+        Intent intent = new Intent(ShuffleGame.this, GameScreen.class);
+        startActivity(intent);
     }
 
 }

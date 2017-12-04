@@ -1,5 +1,6 @@
 package com.example.rasmus.p9;
 
+import android.content.Intent;
 import android.content.SharedPreferences;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -78,17 +79,22 @@ public class ScoutGame extends AppCompatActivity implements SensorEventListener 
                                 //toast.show();
 
                                 if (playerRole.equals("1")){
-                                    media = MediaPlayer.create(this, R.raw.first);
+                                    media = MediaPlayer.create(this, R.raw.one);
                                     media.start();
                                 }
 
                                 if (playerRole.equals("2")){
-                                    media = MediaPlayer.create(this, R.raw.second);
+                                    media = MediaPlayer.create(this, R.raw.two);
                                     media.start();
                                 }
 
                                 if (playerRole.equals("3")){
-                                    media = MediaPlayer.create(this, R.raw.third);
+                                    media = MediaPlayer.create(this, R.raw.three);
+                                    media.start();
+                                }
+
+                                if (playerRole.equals("4")){
+                                    media = MediaPlayer.create(this, R.raw.four);
                                     media.start();
                                 }
                             }
@@ -136,6 +142,16 @@ public class ScoutGame extends AppCompatActivity implements SensorEventListener 
                 WindowManager.LayoutParams.FLAG_FULLSCREEN);
 
         setContentView(R.layout.activity_scout_game);
+    }
+
+    @Override
+    public void onBackPressed() {
+        // your code.
+        media.release();
+        media = null;
+        smAccelerometer.unregisterListener(this);
+        Intent intent = new Intent(ScoutGame.this, GameScreen.class);
+        startActivity(intent);
     }
 
 }
