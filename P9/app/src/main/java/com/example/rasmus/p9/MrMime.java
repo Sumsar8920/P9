@@ -17,8 +17,6 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
-import android.view.Window;
-import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -65,6 +63,7 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
     int rangeMinusZ;
     int rangePlusZ;
     int counterWin = 0;
+    ImageButton thumb;
 
     public Handler handler = new Handler();
     public int delay = 1000; //milliseconds
@@ -75,8 +74,7 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fullscreen();
-        //setContentView(R.layout.activity_mr_mime);
+        setContentView(R.layout.activity_mr_mime);
         guide = (TextView) findViewById(R.id.guide);
 
         //get number of player
@@ -89,13 +87,14 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
         }
 
         mrMimeImage = (ImageView) findViewById(R.id.mrMimeImage);
+        thumb = (ImageButton) findViewById(R.id.button1);
 
         xList = new ArrayList<>();
         yList = new ArrayList<>();
         zList = new ArrayList<>();
 
-       player1 = (TextView) findViewById(R.id.player1);
-       player2 = (TextView) findViewById(R.id.player2);
+        player1 = (TextView) findViewById(R.id.player1);
+        player2 = (TextView) findViewById(R.id.player2);
 
         changeImage();
 
@@ -115,65 +114,69 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
                     case MotionEvent.ACTION_DOWN:
                         if (playerRole.equals("1")){
                             // Register sensor listener
+                            thumb.setBackgroundResource(R.drawable.greenthumb);
                             SM.registerListener(MrMime.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
                             guide.setText("Do motion!");
                         }
 
                         if(playerRole.equals("2") && player2Ready == true){
+                            thumb.setBackgroundResource(R.drawable.greenthumb);
                             SM.registerListener(MrMime.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
                         }
                         break;
                     case MotionEvent.ACTION_UP:
                         // End
+                        thumb.setBackgroundResource(R.drawable.thumb_scanner);
                         SM.unregisterListener(MrMime.this);
                         if(playerRole.equals("1")) {
                             new AsyncStoreMotion(String.valueOf(xAverage()), String.valueOf(yAverage()), String.valueOf(zAverage())).execute();
                         }
 
                         if(playerRole.equals("2")){
+                            thumb.setBackgroundResource(R.drawable.thumb_scanner);
+
                             int player2X = xAverage();
                             int player2Y = yAverage();
                             int player2Z = zAverage();
                             player2.setText(String.valueOf(player2X) + " " + String.valueOf(player2Y) + " " + String.valueOf(player2Z));
 
-                           if(player2X > rangeMinusX && player2X < rangePlusX &&
-                                   player2Y > rangeMinusY && player2Y < rangePlusY
-                            && player2Z > rangeMinusZ && player2Z < rangePlusZ){
+                            if(player2X > rangeMinusX && player2X < rangePlusX &&
+                                    player2Y > rangeMinusY && player2Y < rangePlusY
+                                    && player2Z > rangeMinusZ && player2Z < rangePlusZ){
 
-                               counterWin++;
-                               if(counterWin == 3){
-                                   Intent intent = new Intent(MrMime.this, Victory.class);
-                                   startActivity(intent);
-                               }
+                                counterWin++;
+                                Intent intent = new Intent(MrMime.this, Victory.class);
+                                startActivity(intent);
 
-                               Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
-                               toast.show();
 
-                               //delete all from the table after success, so it only gets the new motion from player1
-                               new AsyncDelete().execute();
+                                //Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
+                                //toast.show();
 
-                               player2Ready = false;
-                               SM.unregisterListener(MrMime.this);
+                                //delete all from the table after success, so it only gets the new motion from player1
+                                //new AsyncDelete().execute();
 
-                               //reset Strings
-                               player1X = "";
-                               player1Y = "";
-                               player1Z = "";
+                                player2Ready = false;
+                                SM.unregisterListener(MrMime.this);
 
-                               //clear arraylists
-                               xList.clear();
-                               yList.clear();
-                               zList.clear();
+                                //reset Strings
+                                player1X = "";
+                                player1Y = "";
+                                player1Z = "";
 
-                           }
+                                //clear arraylists
+                                xList.clear();
+                                yList.clear();
+                                zList.clear();
 
-                           else{
-                               Toast toast = Toast.makeText(getApplicationContext(), "Try again", Toast.LENGTH_SHORT);
-                               toast.show();
-                               xList.clear();
-                               yList.clear();
-                               zList.clear();
-                           }
+                            }
+
+                            else{
+                                Toast toast = Toast.makeText(getApplicationContext(), "Try again", Toast.LENGTH_SHORT);
+                                toast.show();
+                                xList.clear();
+                                yList.clear();
+                                zList.clear();
+                            }
                         }
                         counter++;
                         xList.clear();
@@ -245,7 +248,7 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
             public void run(){
                 //do something
                 if(player1X.equals("") && player1Y.equals("") && player1Z.equals("")){
-                new AsyncCheckMotion().execute();
+                    new AsyncCheckMotion().execute();
                 }
                 handler.postDelayed(this, delay);
             }
@@ -435,7 +438,7 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
 
                 // Append parameters to URL
                 Uri.Builder builder = new Uri.Builder()
-                .appendQueryParameter("X", playerRole);
+                        .appendQueryParameter("X", playerRole);
                 String query = builder.build().getEncodedQuery();
 
                 // Open connection for sending data
@@ -701,13 +704,6 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
         }, delay);
     }
 
-    public void fullscreen(){
-        requestWindowFeature(Window.FEATURE_NO_TITLE);
-        getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN,
-                WindowManager.LayoutParams.FLAG_FULLSCREEN);
-
-        setContentView(R.layout.activity_mr_mime);
-    }
 
 
 }
