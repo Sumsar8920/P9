@@ -1,6 +1,7 @@
 package com.example.rasmus.p9;
 
 
+import android.content.Intent;
 import android.media.MediaPlayer;
 import android.os.CountDownTimer;
 import android.support.v7.app.AppCompatActivity;
@@ -28,6 +29,8 @@ public class MiniGameDrink extends AppCompatActivity implements SensorEventListe
     public boolean timerRunning;
     public MediaPlayer drunkMediaPlayer;
     public Toast toast;
+    int counter = 0;
+    boolean isPlaying = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -44,10 +47,10 @@ public class MiniGameDrink extends AppCompatActivity implements SensorEventListe
         SM.registerListener(this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
 
         // Assign TextViews
-        xText = (TextView) findViewById(R.id.xText);
-        yText = (TextView) findViewById(R.id.yText);
-        zText = (TextView) findViewById(R.id.zText);
-        timer = (TextView) findViewById(R.id.timer);
+        //xText = (TextView) findViewById(R.id.xText);
+        //yText = (TextView) findViewById(R.id.yText);
+        //zText = (TextView) findViewById(R.id.zText);
+        //timer = (TextView) findViewById(R.id.timer);
 
         // Set timer to not running
         timerRunning = false;
@@ -58,7 +61,7 @@ public class MiniGameDrink extends AppCompatActivity implements SensorEventListe
         greenbar3 = (TextView) findViewById(R.id.greenbar3);
 
         // Assign sounds
-        drunkMediaPlayer = MediaPlayer.create(this, R.raw.slurpz);
+        drunkMediaPlayer = MediaPlayer.create(this, R.raw.drink1);
 
         // Assign text to toast
         toast = Toast.makeText(getApplicationContext(), "You completed the minigame!", Toast.LENGTH_LONG);
@@ -80,23 +83,36 @@ public class MiniGameDrink extends AppCompatActivity implements SensorEventListe
         float yFloat = event.values[1];
         float zFloat = event.values[2];
 
-        xText.setText("X: " + event.values[0]);
-        yText.setText("Y: " + event.values[1]);
-        zText.setText("Z: " + event.values[2]);
+        //xText.setText("X: " + event.values[0]);
+        //yText.setText("Y: " + event.values[1]);
+        //zText.setText("Z: " + event.values[2]);
 
 
         if(zFloat > 7){
           //  timer.setText("10");
-            /*timerRunning = false;
+            timerRunning = false;
             greenbar1.setVisibility(View.VISIBLE);
             greenbar2.setVisibility(View.VISIBLE);
             greenbar3.setVisibility(View.VISIBLE);
-            cancel(); */
+            cancel();
+            if(isPlaying == true) {
+                drunkMediaPlayer.pause();
+                drunkMediaPlayer.seekTo(0);
+                isPlaying = false;
+            }
+            counter = 0;
+
         }
 
-        else{
+        if(zFloat < 7){
             if(timerRunning == false){
                 startTimer();
+                if(counter == 0) {
+                    isPlaying = true;
+                    drunkMediaPlayer.start();
+                }
+                counter ++;
+
                 }
 
             }
@@ -104,6 +120,7 @@ public class MiniGameDrink extends AppCompatActivity implements SensorEventListe
 
 
     public void startTimer(){
+
         timerRunning = true;
         countDownTimer = new CountDownTimer(10 * 1000, 1000){
         @Override
@@ -112,21 +129,22 @@ public class MiniGameDrink extends AppCompatActivity implements SensorEventListe
 
             if(millisUntilFinished / 1000 == 7) {
                 greenbar1.setVisibility(View.INVISIBLE);
-                drunkMediaPlayer.start();
+
             }
 
            if(millisUntilFinished / 1000 == 4) {
                 greenbar1.setVisibility(View.INVISIBLE);
                 greenbar2.setVisibility(View.INVISIBLE);
-                drunkMediaPlayer.start();
+
             }
 
             if(millisUntilFinished / 1000 == 1) {
                 greenbar1.setVisibility(View.INVISIBLE);
                 greenbar2.setVisibility(View.INVISIBLE);
                 greenbar3.setVisibility(View.INVISIBLE);
-                drunkMediaPlayer.start();
-                toast.show();
+                drunkMediaPlayer.stop();
+                Intent intent = new Intent(MiniGameDrink.this, Victory.class);
+                startActivity(intent);
             }
 
 
@@ -149,7 +167,16 @@ public class MiniGameDrink extends AppCompatActivity implements SensorEventListe
             countDownTimer = null;
         }
 
-    };
+    }
+
+    @Override
+    public void onBackPressed() {
+        // your code.
+        drunkMediaPlayer.stop();
+        Intent intent = new Intent(MiniGameDrink.this, GameScreen.class);
+        startActivity(intent);
+    }
+
 
 
 }
