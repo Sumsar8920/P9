@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Other;
 
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
@@ -6,6 +6,18 @@ import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+
+import com.example.rasmus.p9.Minigames.BlowMic;
+import com.example.rasmus.p9.Minigames.BombSquad;
+import com.example.rasmus.p9.Minigames.ChargeBattery;
+import com.example.rasmus.p9.Minigames.LiftMeteor;
+import com.example.rasmus.p9.Minigames.MiniGameDrink;
+import com.example.rasmus.p9.Minigames.MrMime;
+import com.example.rasmus.p9.Minigames.Proximity;
+import com.example.rasmus.p9.Minigames.SoundPuzzle;
+import com.example.rasmus.p9.Minigames.SwordFight;
+import com.example.rasmus.p9.Minigames.TreasureHunt;
+import com.example.rasmus.p9.R;
 
 public class GameScreen extends AppCompatActivity {
 
@@ -27,7 +39,7 @@ public class GameScreen extends AppCompatActivity {
     }
 
     public void chargeBattery(View v){
-        Intent intent = new Intent(GameScreen.this, ShakeHands.class);
+        Intent intent = new Intent(GameScreen.this, ChargeBattery.class);
         startActivity(intent);
     }
 
@@ -42,7 +54,7 @@ public class GameScreen extends AppCompatActivity {
     }
 
     public void scoutGame(View v){
-        Intent intent = new Intent(GameScreen.this, ScoutGame.class);
+        Intent intent = new Intent(GameScreen.this, SoundPuzzle.class);
         startActivity(intent);
     }
 
@@ -53,7 +65,7 @@ public class GameScreen extends AppCompatActivity {
     }
 
     public void shuffleGame(View v){
-        Intent intent = new Intent(GameScreen.this, ShuffleGame.class);
+        Intent intent = new Intent(GameScreen.this, TreasureHunt.class);
         startActivity(intent);
     }
 

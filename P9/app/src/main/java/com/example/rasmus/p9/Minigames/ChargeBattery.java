@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Minigames;
 
 
 import android.content.DialogInterface;
@@ -10,8 +10,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-
-import android.content.Intent;
 
 import android.support.v7.app.AlertDialog;
 
@@ -27,9 +25,11 @@ import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import java.util.concurrent.TimeUnit;
+import com.example.rasmus.p9.NavigationMethod.Navigation;
+import com.example.rasmus.p9.Other.Victory;
+import com.example.rasmus.p9.R;
 
-public class ShakeHands extends AppCompatActivity implements SensorEventListener {
+public class ChargeBattery extends AppCompatActivity implements SensorEventListener {
 
     public Sensor mySensor;
     public SensorManager SM;
@@ -62,13 +62,11 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                 // the user clicked on colors[which]
                 if(which == 0){
                     //1 player
-                    Intent intent = new Intent(ShakeHands.this, ShakeHands1Player.class);
+                    Intent intent = new Intent(ChargeBattery.this, ShakeHands1Player.class);
                     startActivity(intent);
                 }
                 if (which == 1){
                     // 2 player
-
-
                 }
             }
         });
@@ -105,7 +103,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                         button1.setBackgroundResource(R.drawable.greenthumb);
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
-                            SM.registerListener(ShakeHands.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
+                            SM.registerListener(ChargeBattery.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
                             middleImage.setImageResource(R.drawable.battery11);
                             txt1.setText("SHAKE!");
                             txt2.setText("SHAKE!");
@@ -113,7 +111,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                         return true;
                     case MotionEvent.ACTION_UP:
                         // End
-                        SM.unregisterListener(ShakeHands.this);
+                        SM.unregisterListener(ChargeBattery.this);
                         counter = 0;
                         txt1.setText("");
                         txt2.setText("");
@@ -136,7 +134,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                         button2.setBackgroundResource(R.drawable.greenthumb);
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
-                            SM.registerListener(ShakeHands.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
+                            SM.registerListener(ChargeBattery.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
                             middleImage.setImageResource(R.drawable.battery11);
                             txt1.setText("SHAKE!");
                             txt2.setText("SHAKE!");
@@ -144,7 +142,7 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
                         return true;
                     case MotionEvent.ACTION_UP:
                         // End
-                        SM.unregisterListener(ShakeHands.this);
+                        SM.unregisterListener(ChargeBattery.this);
                         counter = 0;
                         txt1.setText("");
                         txt2.setText("");
@@ -225,8 +223,9 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
 
 
     public void victory(){
-        Intent intent = new Intent(ShakeHands.this, Victory.class);
+        Intent intent = new Intent(ChargeBattery.this, Victory.class);
         startActivity(intent);
+        Navigation.minigame1Done = true;
     }
 
     public void fullscreen(){
@@ -238,4 +237,4 @@ public class ShakeHands extends AppCompatActivity implements SensorEventListener
     }
 
 
-    }
+}

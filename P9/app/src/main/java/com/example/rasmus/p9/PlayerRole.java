@@ -8,13 +8,16 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
+
+import com.example.rasmus.p9.NavigationMethod.Navigation;
+import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
+import com.example.rasmus.p9.Other.GameScreen;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -68,9 +71,9 @@ public class PlayerRole extends AppCompatActivity {
         //new AsyncAddPlayer(strPlayerRole).execute();
 
         //get coordinates
-        new AsyncGetCoordinates().execute();
-        //Intent intent = new Intent(PlayerRole.this, MainActivity.class);
-        //startActivity(intent);
+        //new AsyncGetCoordinates().execute();
+        Intent intent = new Intent(PlayerRole.this, NavigationActivity.class);
+        startActivity(intent);
 
     }
 
@@ -204,7 +207,7 @@ public class PlayerRole extends AppCompatActivity {
                 Toast toast = Toast.makeText(getApplicationContext(), "Player added", Toast.LENGTH_SHORT);
                 toast.show();
 
-                Intent intent = new Intent(PlayerRole.this, MainActivity.class);
+                Intent intent = new Intent(PlayerRole.this, NavigationActivity.class);
                 startActivity(intent);
 
             }

@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Minigames;
 
 
 import android.content.Intent;
@@ -17,6 +17,10 @@ import android.hardware.SensorManager;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.widget.Toast;
+
+import com.example.rasmus.p9.Other.GameScreen;
+import com.example.rasmus.p9.Other.Victory;
+import com.example.rasmus.p9.R;
 
 public class MiniGameDrink extends AppCompatActivity implements SensorEventListener {
 

@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Other;
 
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -14,6 +14,9 @@ import android.os.Bundle;
 import android.os.Parcelable;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.rasmus.p9.R;
+
 import java.nio.charset.Charset;
 
 import static android.nfc.NdefRecord.createMime;

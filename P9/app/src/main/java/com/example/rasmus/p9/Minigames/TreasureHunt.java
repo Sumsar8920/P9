@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Minigames;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,17 +10,18 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import static com.google.android.gms.internal.zzs.TAG;
+import com.example.rasmus.p9.NavigationMethod.Navigation;
+import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
+import com.example.rasmus.p9.Other.GameScreen;
+import com.example.rasmus.p9.R;
 
-public class ShuffleGame extends AppCompatActivity implements SensorEventListener {
+public class TreasureHunt extends AppCompatActivity implements SensorEventListener {
 
     SensorManager smAccelerometer;
     Sensor accelerometer;
@@ -144,7 +145,11 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
 
             if (counter == 4) {
                 image.setBackgroundResource(R.drawable.player1_2);
-                counter = 0;
+                //counter = 0;
+                Intent intent = new Intent(TreasureHunt.this, NavigationActivity.class);
+                startActivity(intent);
+                Navigation.minigame2Done = true;
+                Navigation.gameRunning = false;
 
             }
         }
@@ -257,7 +262,7 @@ public class ShuffleGame extends AppCompatActivity implements SensorEventListene
         mediaPlayer.release();
         mediaPlayer = null;
         smAccelerometer.unregisterListener(this);
-        Intent intent = new Intent(ShuffleGame.this, GameScreen.class);
+        Intent intent = new Intent(TreasureHunt.this, GameScreen.class);
         startActivity(intent);
     }
 

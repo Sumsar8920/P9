@@ -5,6 +5,7 @@
     <uses-permission android:name="android.permission.NFC" />
     <uses-permission android:name="android.permission.VIBRATE" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
+    <uses-permission android:name="android.permission.ACCESS_COARSE_LOCATION" />
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
@@ -34,34 +35,35 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MiniGameDrink"
+            android:name=".Minigames.MiniGameDrink"
             android:screenOrientation="portrait" />
 
-        <service android:name=".GeofenceTransitionService" />
-        <service android:name=".Accelerometer" />
-        <service android:name=".Flashlight" />
+        <service android:name=".Other.GeofenceTransitionService" />
+        <service android:name=".Other.Accelerometer" />
+        <service android:name=".NavigationMethod.Flashlight" />
 
         <activity
-            android:name=".LiftMeteor"
+            android:name=".Minigames.LiftMeteor"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".ShakeHands"
+            android:name=".Minigames.ChargeBattery"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".SwordFight"
+            android:name=".Minigames.SwordFight"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".MrMime"
+            android:name=".Minigames.MrMime"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Countdown"
+            android:name=".Other.Countdown"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".NFC"
+            android:name=".Other.NFC"
             android:screenOrientation="portrait">
             <intent-filter>
                 <action android:name="android.nfc.action.NDEF_DISCOVERED" />
@@ -72,27 +74,35 @@
             </intent-filter>
         </activity>
         <activity
-            android:name=".ScoutGame"
+            android:name=".Minigames.SoundPuzzle"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".BombSquad"
+            android:name=".Minigames.BombSquad"
             android:label="@string/title_activity_bomb_squad"
             android:screenOrientation="portrait"
             android:theme="@style/AppTheme.NoActionBar" />
         <activity
-            android:name=".ShuffleGame"
+            android:name=".Minigames.TreasureHunt"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".BlowMic"
+            android:name=".Minigames.BlowMic"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".Proximity"
+            android:name=".Minigames.Proximity"
             android:screenOrientation="portrait" />
         <activity
-            android:name=".GameScreen"
+            android:name=".Other.GameScreen"
             android:screenOrientation="portrait" />
-        <activity android:name=".ShakeHands1Player" />
-        <activity android:name=".Victory"></activity>
+        <activity android:name=".Minigames.ShakeHands1Player" />
+        <activity android:name=".Other.Victory" />
+        <activity android:name=".NavigationMethod.NavigationActivity">
+
+        </activity>
+
+        <service
+            android:name=".NavigationMethod.UserLocation"
+            android:enabled="true"
+            android:exported="true"></service>
     </application>
 
 </manifest>

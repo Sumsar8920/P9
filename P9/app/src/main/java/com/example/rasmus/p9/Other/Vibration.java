@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Other;
 
 import android.app.Activity;
 import android.content.Context;

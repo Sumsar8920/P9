@@ -1,7 +1,4 @@
-package com.example.rasmus.p9;
-
-
-import android.content.DialogInterface;
+package com.example.rasmus.p9.Minigames;
 
 
 import android.content.Intent;
@@ -10,8 +7,6 @@ import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-
-import android.support.v7.app.AlertDialog;
 
 import android.os.Handler;
 
@@ -24,6 +19,11 @@ import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
+
+import com.example.rasmus.p9.NavigationMethod.Navigation;
+import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
+import com.example.rasmus.p9.Other.Victory;
+import com.example.rasmus.p9.R;
 
 public class ShakeHands1Player extends AppCompatActivity implements SensorEventListener {
 
@@ -199,8 +199,10 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
 
 
     public void victory(){
-        Intent intent = new Intent(ShakeHands1Player.this, Victory.class);
+        Intent intent = new Intent(ShakeHands1Player.this, NavigationActivity.class);
         startActivity(intent);
+        Navigation.minigame1Done = true;
+        Navigation.gameRunning = false;
     }
 
     public void fullscreen(){

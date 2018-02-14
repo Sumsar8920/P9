@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Minigames;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -10,16 +10,14 @@ import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.Toast;
 
-import static android.R.attr.delay;
-import static com.google.android.gms.internal.zzs.TAG;
+import com.example.rasmus.p9.Other.GameScreen;
+import com.example.rasmus.p9.R;
 
-public class ScoutGame extends AppCompatActivity implements SensorEventListener {
+public class SoundPuzzle extends AppCompatActivity implements SensorEventListener {
 
     SensorManager smAccelerometer;
     Sensor accelerometer;
@@ -150,7 +148,7 @@ public class ScoutGame extends AppCompatActivity implements SensorEventListener 
         media.release();
         media = null;
         smAccelerometer.unregisterListener(this);
-        Intent intent = new Intent(ScoutGame.this, GameScreen.class);
+        Intent intent = new Intent(SoundPuzzle.this, GameScreen.class);
         startActivity(intent);
     }
 

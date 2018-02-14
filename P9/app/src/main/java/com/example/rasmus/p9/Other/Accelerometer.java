@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Other;
 
 import android.app.IntentService;
 import android.content.Intent;
@@ -8,6 +8,9 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.util.Log;
 import android.widget.Toast;
+
+import com.example.rasmus.p9.MainActivity;
+import com.example.rasmus.p9.NavigationMethod.Flashlight;
 
 import static com.google.android.gms.internal.zzs.TAG;
 
@@ -49,7 +52,6 @@ public class Accelerometer extends IntentService implements SensorEventListener 
         // Do work here, based on the contents of dataString
         //initialize sensor manager for accelerometer/navigation method
         smAccelerometer = (SensorManager) getSystemService(SENSOR_SERVICE);
-        // MiniGameDrink sensor
         accelerometer = smAccelerometer.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         // Register sensor listener
         smAccelerometer.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);

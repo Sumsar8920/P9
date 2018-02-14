@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Minigames;
 
 import android.app.ProgressDialog;
 import android.content.Context;
@@ -8,19 +8,20 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
 import android.widget.ImageView;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.rasmus.p9.Other.Victory;
+import com.example.rasmus.p9.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -37,7 +38,6 @@ import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class MrMime extends AppCompatActivity implements SensorEventListener {
@@ -85,7 +85,6 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
             guide.setText("Wait for other player");
             checkMotion();
         }
-
         mrMimeImage = (ImageView) findViewById(R.id.mrMimeImage);
         thumb = (ImageButton) findViewById(R.id.button1);
 
@@ -97,14 +96,9 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
         player2 = (TextView) findViewById(R.id.player2);
 
         changeImage();
-
-
         button1 = (ImageButton)findViewById(R.id.button1);
-
         // Create sensor manager
         SM = (SensorManager) getSystemService(SENSOR_SERVICE);
-
-        // MiniGameDrink sensor
         mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
         button1.setOnTouchListener(new View.OnTouchListener() {
@@ -147,13 +141,6 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
                                 counterWin++;
                                 Intent intent = new Intent(MrMime.this, Victory.class);
                                 startActivity(intent);
-
-
-                                //Toast toast = Toast.makeText(getApplicationContext(), "Success", Toast.LENGTH_SHORT);
-                                //toast.show();
-
-                                //delete all from the table after success, so it only gets the new motion from player1
-                                //new AsyncDelete().execute();
 
                                 player2Ready = false;
                                 SM.unregisterListener(MrMime.this);
@@ -199,47 +186,32 @@ public class MrMime extends AppCompatActivity implements SensorEventListener {
 
     @Override
     public void onSensorChanged(SensorEvent event) {
-
         xList.add((int)event.values[0]);
         yList.add((int)event.values[1]);
         zList.add((int)event.values[2]);
-
-        Log.i("X:", String.valueOf(xList));
-        Log.i("Y:", String.valueOf(yList));
-        Log.i("Z:", String.valueOf(zList));
-
     }
 
     public int xAverage(){
-
         for(int i = 0; i < xList.size(); i++){
             sum = sum + xList.get(i);
         }
         average = sum/xList.size();
-
         return average;
     }
-
     public int yAverage(){
-
         for(int i = 0; i < yList.size(); i++){
             sum = sum + yList.get(i);
         }
         average = sum/yList.size();
-
         return average;
     }
-
     public int zAverage(){
-
         for(int i = 0; i < zList.size(); i++){
             sum = sum + zList.get(i);
         }
         average = sum/zList.size();
-
         return average;
     }
-
     public void checkMotion(){
         final Handler handler = new Handler();
         final int delay = 5000; //milliseconds

@@ -1,17 +1,17 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Minigames;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
-import android.renderscript.Float2;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
 import android.widget.ImageButton;
-import android.widget.TextView;
+
+import com.example.rasmus.p9.R;
 
 public class SwordFight extends AppCompatActivity implements SensorEventListener {
 

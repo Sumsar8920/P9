@@ -1,9 +1,8 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Minigames;
 
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.SharedPreferences;
-import android.hardware.SensorManager;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Handler;
@@ -14,6 +13,8 @@ import android.view.View;
 import android.widget.ImageButton;
 import android.widget.TextView;
 import android.widget.Toast;
+
+import com.example.rasmus.p9.R;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -29,7 +30,6 @@ import java.io.OutputStreamWriter;
 import java.net.HttpURLConnection;
 import java.net.MalformedURLException;
 import java.net.URL;
-import java.util.ArrayList;
 
 public class BlowMic extends AppCompatActivity {
 

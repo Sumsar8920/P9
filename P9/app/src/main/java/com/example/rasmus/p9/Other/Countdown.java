@@ -1,10 +1,12 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Other;
 
 import android.media.MediaPlayer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.widget.TextView;
+
+import com.example.rasmus.p9.R;
 
 public class Countdown extends AppCompatActivity {
 

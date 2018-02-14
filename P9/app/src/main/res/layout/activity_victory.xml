@@ -5,7 +5,7 @@
     android:background="@color/white"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    tools:context="com.example.rasmus.p9.Victory">
+    tools:context="com.example.rasmus.p9.Other.Victory">
 
     <ImageView
         android:id="@+id/imageView"

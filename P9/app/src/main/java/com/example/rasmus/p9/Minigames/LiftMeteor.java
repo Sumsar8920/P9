@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Minigames;
 
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
@@ -9,9 +9,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MotionEvent;
 import android.view.View;
-import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.Toast;
+
+import com.example.rasmus.p9.R;
 
 public class LiftMeteor extends AppCompatActivity implements SensorEventListener {
 

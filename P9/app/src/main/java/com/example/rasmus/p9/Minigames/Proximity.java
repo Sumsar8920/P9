@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Minigames;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
@@ -13,13 +13,15 @@ import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.support.v7.app.AppCompatActivity;
-import android.os.Bundle;
 import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageView;
-import android.widget.TextView;
-import android.widget.Toast;
+
+import com.example.rasmus.p9.NavigationMethod.Navigation;
+import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
+import com.example.rasmus.p9.Other.Vibration;
+import com.example.rasmus.p9.Other.Victory;
+import com.example.rasmus.p9.R;
 
 public class Proximity extends AppCompatActivity implements SensorEventListener {
 
@@ -248,8 +250,10 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
         if(totalCounter == 10){
             totalCounter++;
             counter = 11;
-            Intent intent = new Intent(Proximity.this, Victory.class);
+            Intent intent = new Intent(Proximity.this, NavigationActivity.class);
             startActivity(intent);
+            Navigation.minigame3Done = true;
+            Navigation.gameRunning = false;
 
         }
 

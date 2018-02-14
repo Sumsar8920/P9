@@ -1,4 +1,4 @@
-package com.example.rasmus.p9;
+package com.example.rasmus.p9.Other;
 
 /**
  * Created by Rasmus on 25-10-2017.
@@ -16,6 +16,8 @@ import android.support.v4.app.NotificationCompat;
 import android.text.TextUtils;
 import android.util.Log;
 
+import com.example.rasmus.p9.MainActivity;
+import com.example.rasmus.p9.R;
 import com.google.android.gms.location.Geofence;
 import com.google.android.gms.location.GeofenceStatusCodes;
 import com.google.android.gms.location.GeofencingEvent;

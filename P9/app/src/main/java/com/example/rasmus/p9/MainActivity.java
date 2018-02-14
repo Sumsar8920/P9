@@ -10,15 +10,11 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
-import android.hardware.SensorEvent;
-import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
-import android.hardware.camera2.CameraAccessException;
 import android.hardware.camera2.CameraManager;
 import android.location.Location;
 import android.net.Uri;
 import android.os.AsyncTask;
-import android.os.Build;
 import android.os.Handler;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -30,11 +26,14 @@ import android.util.Log;
 import android.view.Menu;
 import android.view.MenuInflater;
 import android.view.MenuItem;
-import android.view.View;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import com.example.rasmus.p9.Minigames.MiniGameDrink;
+import com.example.rasmus.p9.NavigationMethod.Flashlight;
+import com.example.rasmus.p9.NavigationMethod.ScreenBrightness;
+import com.example.rasmus.p9.Other.GeofenceTransitionService;
 import com.google.android.gms.common.ConnectionResult;
 import com.google.android.gms.common.api.GoogleApiClient;
 import com.google.android.gms.common.api.ResultCallback;
@@ -400,12 +399,12 @@ public class MainActivity extends AppCompatActivity
             if (distanceInt < 20) {
                 brightness = 1f;
             }
-            LightSensor obj = new LightSensor(contextTest);
-            obj.lightIntensity(brightness);
+            //ScreenBrightness obj = new ScreenBrightness(contextTest);
+            //obj.lightIntensity(brightness);
         }
         if(screenDown == false){
-            LightSensor obj = new LightSensor(contextTest);
-            obj.lightIntensity(1f);
+            //ScreenBrightness obj = new ScreenBrightness(contextTest);
+            //obj.lightIntensity(1f);
         }
     }
 
