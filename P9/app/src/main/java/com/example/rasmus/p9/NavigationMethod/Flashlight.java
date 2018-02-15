@@ -85,7 +85,7 @@ public class Flashlight extends IntentService {
                 if ((i%2)==0) {
                     try {
                         camManager.setTorchMode(cameraId, true);
-                        if(Navigation.screenDown){
+                        if(Navigation.screenDown || Navigation.gameRunning){
                             camManager.setTorchMode(cameraId, false);
                             stopSelf();
                             return;
@@ -97,7 +97,7 @@ public class Flashlight extends IntentService {
                 else {
                     try {
                         camManager.setTorchMode(cameraId, false);
-                        if(Navigation.screenDown){
+                        if(Navigation.screenDown || Navigation.gameRunning){
                             stopSelf();
                             return;
                         }

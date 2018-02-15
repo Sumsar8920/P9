@@ -72,15 +72,15 @@ public class Navigation implements SensorEventListener {
                                 mGZ = gz;
                                 mEventCountSinceGZChanged = 0;
                                 if (gz > 0) {
-                                    Toast toast = Toast.makeText(context, "Up", Toast.LENGTH_SHORT);
-                                    toast.show();
+                                    //Toast toast = Toast.makeText(context, "Up", Toast.LENGTH_SHORT);
+                                    //toast.show();
                                     screenDown = false;
                                     Intent intent = new Intent(context, Flashlight.class);
                                     intent.putExtra("DISTANCE", distance);
                                     context.startService(intent);
                                 } else if (gz < 0) {
-                                    Toast toast = Toast.makeText(context, "Down", Toast.LENGTH_SHORT);
-                                    toast.show();
+                                    //Toast toast = Toast.makeText(context, "Down", Toast.LENGTH_SHORT);
+                                    //toast.show();
                                     screenDown = true;
                                     screenBrightness.adjustBrightness(distance);
                                 }
@@ -120,12 +120,18 @@ public class Navigation implements SensorEventListener {
         distance = locationA.distanceTo(locationB);
         NavigationActivity.txtDistance.setText(Float.toString(Math.round(distance)));
 
-        //minigame 1
-        if(distance <= 250 && distance > 225 && gameRunning != true && minigame1Done == false){
+        if(distance > 250 && gameRunning != true && minigame1Done == false){
             gameRunning = true;
             Minigame minigame1 = new Minigame();
             minigame1.startGame("1", activity);
         }
+
+        /*//minigame 1
+        if(distance <= 250 && distance > 225 && gameRunning != true && minigame1Done == false){
+            gameRunning = true;
+            Minigame minigame1 = new Minigame();
+            minigame1.startGame("1", activity);
+        } */
 
         //minigame 2
         if(distance <= 125 && distance > 100 && gameRunning != true && minigame2Done == false){

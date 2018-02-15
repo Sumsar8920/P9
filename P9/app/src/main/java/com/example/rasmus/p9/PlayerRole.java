@@ -15,6 +15,8 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.rasmus.p9.Minigames.MetalDetector;
+import com.example.rasmus.p9.Minigames.TreasureHunt;
 import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.Other.GameScreen;
@@ -72,7 +74,7 @@ public class PlayerRole extends AppCompatActivity {
 
         //get coordinates
         //new AsyncGetCoordinates().execute();
-        Intent intent = new Intent(PlayerRole.this, NavigationActivity.class);
+        Intent intent = new Intent(PlayerRole.this, TreasureHunt.class);
         startActivity(intent);
 
     }

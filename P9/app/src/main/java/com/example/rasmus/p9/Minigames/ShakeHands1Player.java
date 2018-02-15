@@ -25,6 +25,9 @@ import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.Other.Victory;
 import com.example.rasmus.p9.R;
 
+import java.util.ArrayList;
+import java.util.List;
+
 public class ShakeHands1Player extends AppCompatActivity implements SensorEventListener {
 
     public Sensor mySensor;
@@ -40,6 +43,12 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
     TextView txt1, txt2;
     public Handler handler = new Handler();
     public int delay = 1000; //milliseconds
+    public float zFloatScore;
+    public float yFloatScore;
+    List<Float> zFloat = new ArrayList<Float>();
+    List<Float> yFloat = new ArrayList<Float>();
+    public boolean givePoint = false;
+
 
 
     @Override
@@ -69,6 +78,8 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
 
         changeImage();
         //changeThumbImg();
+
+        checkValuesInArrays();
 
         button1.setOnTouchListener(new View.OnTouchListener() {
             @Override
@@ -120,7 +131,7 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
                         // End
                         SM.unregisterListener(ShakeHands1Player.this);
                         counter = 0;
-                        txt1.setText("");
+                        //txt1.setText("");
                         txt2.setText("");
                         //so the players can start over if someone fails. They just have to release the button and press it again.
                         //txt2.setText("Place thumb on marker");
@@ -135,6 +146,43 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
 
     }
 
+    public void checkValuesInArrays(){
+        final Handler handler = new Handler();
+        final int delay = 1000; //milliseconds
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                //do something
+
+                for(int i = 0; i < zFloat.size(); i++) {
+                    yFloatScore = yFloat.get(i);
+                    zFloatScore = zFloat.get(i);
+
+                    if (yFloatScore > 10) {
+                        counter = counter + 5;
+                        //givePoint = true;
+                        break;
+                    }
+
+                    if (i == zFloat.size() /*&& givePoint != true*/) {
+                        counter--;
+                        if (counter < 0) {
+                            counter = 0;
+                        }
+                    }
+
+                    givePoint = false;
+
+                }
+                txt1.setText(String.valueOf(counter));
+                zFloat.clear();
+                yFloat.clear();
+
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
+    }
+
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
     }
@@ -142,14 +190,17 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
     @Override
     public void onSensorChanged(SensorEvent event) {
 
-        float yFloat = event.values[1];
-        float zFloat = event.values[2];
+        yFloat.add(event.values[1]);
+        zFloat.add(event.values[2]);
+        //float yFloat = event.values[1];
+        //float zFloat = event.values[2];
 
-        if(zFloat > 16 && yFloat > -2 && yFloat < 2) {
+       /* if(zFloat > 25 && yFloat > -2 && yFloat < 2) {
             counter ++;
-        }
+            txt1.setText(String.valueOf(counter));
+        } */
 
-        if(counter == 4){
+        /*if(counter == 4){
             counter ++;
             middleImage.setImageResource(R.drawable.battery21player);
             mediaPlayer.start();
@@ -172,7 +223,7 @@ public class ShakeHands1Player extends AppCompatActivity implements SensorEventL
             middleImage.setImageResource(R.drawable.battery51player);
             mediaPlayer.start();
             victory();
-        }
+        } */
 
 
     }

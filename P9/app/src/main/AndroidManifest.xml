@@ -35,7 +35,6 @@
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity
             android:name=".MainActivity"
             android:screenOrientation="portrait" />
@@ -95,14 +94,14 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Minigames.ShakeHands1Player" />
         <activity android:name=".Other.Victory" />
-        <activity android:name=".NavigationMethod.NavigationActivity">
-
-        </activity>
+        <activity android:name=".NavigationMethod.NavigationActivity"></activity>
 
         <service
             android:name=".NavigationMethod.UserLocation"
             android:enabled="true"
-            android:exported="true"></service>
+            android:exported="true" />
+
+        <activity android:name=".Minigames.MetalDetector"></activity>
     </application>
 
 </manifest>
