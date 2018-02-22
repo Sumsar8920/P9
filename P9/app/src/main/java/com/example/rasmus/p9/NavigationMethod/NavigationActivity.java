@@ -2,6 +2,7 @@ package com.example.rasmus.p9.NavigationMethod;
 
 import android.Manifest;
 import android.app.Activity;
+import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -11,6 +12,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.Location;
 import android.location.LocationManager;
+import android.os.PowerManager;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -24,7 +26,7 @@ import com.example.rasmus.p9.Minigames.ChargeBattery;
 import com.example.rasmus.p9.Player;
 import com.example.rasmus.p9.R;
 
-public class NavigationActivity extends AppCompatActivity /*implements SensorEventListener*/ {
+public class NavigationActivity extends AppCompatActivity {
 
     public static float distance;
     public String orientation;
@@ -43,6 +45,7 @@ public class NavigationActivity extends AppCompatActivity /*implements SensorEve
     public Flashlight flashlight;
     Player player;
     Event meteor;
+    PowerManager manager;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -50,17 +53,11 @@ public class NavigationActivity extends AppCompatActivity /*implements SensorEve
         setContentView(R.layout.activity_navigation);
         context = this;
 
+        manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
+        PowerManager.WakeLock wl = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Your Tag");
+
         Navigation navigation = new Navigation();
         navigation.activateAccelerometer(this, this);
-
-        /*smAccelerometer = (SensorManager) getSystemService(SENSOR_SERVICE);
-        accelerometer = smAccelerometer.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
-        // Register sensor listener
-        smAccelerometer.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_GAME); */
-
-        //creates Screenbrightness and Flashlight object
-        //brightness = new ScreenBrightness(this);
-        //flashlight = new Flashlight();
 
         //creates player object
         player = new Player();
@@ -79,94 +76,8 @@ public class NavigationActivity extends AppCompatActivity /*implements SensorEve
 
         txtDistance = (TextView)findViewById(R.id.distance);
 
-
     }
 
-    /*@Override
-    public void onSensorChanged (SensorEvent event){
-        try {
-            int type = event.sensor.getType();
-            if (type == Sensor.TYPE_ACCELEROMETER) {
-                float gz = event.values[2];
-                if (mGZ == 0) {
-                    mGZ = gz;
-                } else {
-                    if ((mGZ * gz) < 0) {
-                        mEventCountSinceGZChanged++;
-                        if (mEventCountSinceGZChanged == MAX_COUNT_GZ_CHANGE) {
-                            mGZ = gz;
-                            mEventCountSinceGZChanged = 0;
-                            if (gz > 0) {
-                                //Toast toast = Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT);
-                                //toast.show();
-                                screenDown = false;
-                                Intent intent = new Intent(this,Flashlight.class);
-                                intent.putExtra("DISTANCE",distance);
-                                this.startService(intent);
-                            } else if (gz < 0) {
-                                //Toast toast = Toast.makeText(getApplicationContext(), "Down", Toast.LENGTH_SHORT);
-                                //toast.show();
-                                screenDown = true;
-                                brightness.adjustBrightness(smAccelerometer, accelerometer, distance);
-                            }
-                        }
-                    } else {
-                        if (mEventCountSinceGZChanged > 0) {
-                            mGZ = gz;
-                            mEventCountSinceGZChanged = 0;
-                        }
-                    }
-                }
-            }
-        }
-        catch (Exception e){
-            e.printStackTrace();
-        }
-    }
-    @Override
-    public void onAccuracyChanged(Sensor sensor, int accuracy) {
-        // TODO Auto-generated method stub
-    } */
-
-    /*public static void calculateDistance(Location location){
-        Location locationA = new Location("point A");
-
-        locationA.setLatitude(location.getLatitude());
-        locationA.setLongitude(location.getLongitude());
-
-        Location locationB = new Location("point B");
-
-        locationB.setLatitude(57.043879);
-        locationB.setLongitude(9.937943);
-
-        distance = locationA.distanceTo(locationB);
-
-        txtDistance.setText(Float.toString(Math.round(distance)));
-    } */
-
-    public void startGame(Activity activity , String game){
-        /*
-        Step 1: unregister sensoreventlistener (accelerometer)
-        Step 2: set screen brightness to full
-        Step 3: kill flashlight
-        Step 4: start intent to game
-         */
-        //smAccelerometer.unregisterListener(this);
-        if(game.equals("1")){
-            try {
-                Intent intent = new Intent(activity, ChargeBattery.class);
-                activity.startActivity(intent);
-            }
-            catch (Exception e){
-                e.printStackTrace();
-            }
-
-        }
-    }
-
-    public void stopGame(){
-
-    }
 
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
@@ -242,7 +153,5 @@ public class NavigationActivity extends AppCompatActivity /*implements SensorEve
 
         }
     }
-
-
 
 }

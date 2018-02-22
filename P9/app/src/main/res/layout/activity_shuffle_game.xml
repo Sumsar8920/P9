@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<!--  <android.support.constraint.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/background"
     xmlns:tools="http://schemas.android.com/tools"
@@ -7,20 +7,6 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context="com.example.rasmus.p9.MainActivity">
-
-    <!--<ImageView
-        android:id="@+id/shuffleImg"
-        android:layout_width="188dp"
-        android:layout_height="282dp"
-        android:layout_marginBottom="166dp"
-        android:layout_marginStart="61dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:srcCompat="@drawable/scoutfront"
-        app:layout_constraintLeft_toRightOf="@+id/image"
-        android:layout_marginLeft="0dp"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.229" /> -->
 
     <ImageView
         android:id="@+id/image"
@@ -38,23 +24,30 @@
         tools:layout_editor_absoluteY="0dp"
         tools:layout_editor_absoluteX="192dp" />
 
-    <!--<TextView
-        android:id="@+id/textView3"
-        android:textSize="40dp"
-        android:layout_width="wrap_content"
-        android:textStyle="bold"
-        android:layout_height="wrap_content"
-        android:text="Flip to start"
-        android:textAlignment="center"
-        android:layout_gravity="center"
-        app:layout_constraintTop_toTopOf="parent"
-        android:layout_marginTop="8dp"
-        android:layout_marginBottom="8dp"
-        app:layout_constraintBottom_toTopOf="@+id/shuffleImg"
-        app:layout_constraintVertical_bias="1.0"
-        android:layout_marginLeft="89dp"
-        app:layout_constraintLeft_toLeftOf="parent"
-        android:layout_marginRight="8dp"
-        app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintHorizontal_bias="0.0" /> -->
-</android.support.constraint.ConstraintLayout>
+</android.support.constraint.ConstraintLayout> -->
+
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:id="@+id/background">
+
+    <ImageView
+        android:id="@+id/image"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="10"
+        android:clickable="true"
+        android:onClick="showButton"/>
+
+    <Button
+        android:id="@+id/pinCode"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Enter code"
+        android:onClick="enterCode"/>
+
+
+</LinearLayout>

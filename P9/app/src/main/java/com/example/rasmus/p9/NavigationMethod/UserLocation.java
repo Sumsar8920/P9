@@ -4,6 +4,7 @@ import android.app.Activity;
 import android.app.Service;
 import android.content.Context;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.location.Location;
 import android.location.LocationManager;
 import android.os.Bundle;
@@ -18,6 +19,7 @@ public class UserLocation extends Service {
     public Navigation navigation;
     public Event event;
     public Player player;
+    public String playerRole = "";
 
     public UserLocation() {
 
@@ -54,7 +56,7 @@ public class UserLocation extends Service {
             player.setLongitude(location.getLongitude());
 
             //use navigation object to calculate distance. Pass in the user location and the event object to calculate it
-            navigation.calculateDistance(player, event);
+            navigation.calculateDistance(player, event, playerRole);
         }
 
         @Override
@@ -98,6 +100,9 @@ public class UserLocation extends Service {
     @Override
     public void onCreate()
     {
+        SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
+        playerRole = (shared.getString("PLAYERROLE", ""));
+
         Log.e(TAG, "onCreate");
         initializeLocationManager();
         try {
@@ -127,8 +132,9 @@ public class UserLocation extends Service {
 
         //create object of Event
         event = new Event();
-        event.setLatitude(57.046237);
-        event.setLongitude(9.931792);
+        event.setLatitude(57.044589);
+        event.setLongitude(9.930528);
+
     }
 
     @Override

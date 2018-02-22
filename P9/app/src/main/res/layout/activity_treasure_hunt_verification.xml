@@ -1,0 +1,102 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_height="match_parent"
+    android:layout_width="match_parent"
+    android:gravity="center_vertical"
+    android:paddingStart="10dp"
+    android:paddingEnd="10dp"
+    android:orientation="vertical"
+    >
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="3"></LinearLayout>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Enter code"
+        android:textAlignment="center"
+        android:textStyle="bold"
+        android:textSize="30dip"/>
+
+    <LinearLayout
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="4"
+        android:orientation="horizontal">
+
+        <EditText
+            android:id="@+id/editTxt1"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:background="@drawable/border"
+            android:focusableInTouchMode="true"
+            android:maxLength="1"
+            android:singleLine="true"
+            android:nextFocusDown="@+id/editTxt2"
+            android:textSize="50dip"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            />
+
+        <EditText
+            android:id="@+id/editTxt2"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:background="@drawable/border"
+            android:maxLength="1"
+            android:singleLine="true"
+            android:nextFocusDown="@+id/editTxt3"
+            android:textSize="50dip"
+            android:textAlignment="center"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/editTxt3"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:background="@drawable/border"
+            android:maxLength="1"
+            android:singleLine="true"
+            android:nextFocusDown="@+id/editTxt4"
+            android:textSize="50dip"
+            android:textAlignment="center"
+            android:textStyle="bold"/>
+
+        <EditText
+            android:id="@+id/editTxt4"
+            android:layout_width="0dp"
+            android:layout_height="80dp"
+            android:layout_weight="1"
+            android:inputType="number"
+            android:maxLength="1"
+            android:singleLine="true"
+            android:background="@drawable/border"
+            android:textSize="50dip"
+            android:textAlignment="center"
+            android:textStyle="bold"
+            />
+
+    </LinearLayout>
+
+    <Button
+        android:id="@+id/enterCode"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:text="Enter code"
+        android:onClick="verifyCode"/>
+
+
+
+</LinearLayout>

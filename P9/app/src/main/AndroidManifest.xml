@@ -9,6 +9,7 @@
     <uses-permission android:name="android.permission.CAMERA" />
     <uses-permission android:name="android.permission.FLASHLIGHT" />
     <uses-permission android:name="android.permission.RECORD_AUDIO" />
+    <uses-permission android:name="android.permission.WAKE_LOCK" />
 
     <uses-feature android:name="android.hardware.camera" />
     <uses-feature android:name="android.hardware.camera.flash" />
@@ -94,14 +95,19 @@
             android:screenOrientation="portrait" />
         <activity android:name=".Minigames.ShakeHands1Player" />
         <activity android:name=".Other.Victory" />
-        <activity android:name=".NavigationMethod.NavigationActivity"></activity>
+        <activity android:name=".NavigationMethod.NavigationActivity" />
 
         <service
             android:name=".NavigationMethod.UserLocation"
             android:enabled="true"
             android:exported="true" />
 
-        <activity android:name=".Minigames.MetalDetector"></activity>
+        <activity android:name=".Minigames.MetalDetector" />
+        <activity android:name=".Other.GameIntro" />
+        <activity
+            android:name=".Minigames.TreasureHuntVerification"
+            android:windowSoftInputMode="stateAlwaysVisible" />
+        <activity android:name=".Minigames.SoundPuzzle2"></activity>
     </application>
 
 </manifest>

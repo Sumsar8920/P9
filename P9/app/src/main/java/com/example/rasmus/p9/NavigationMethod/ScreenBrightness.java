@@ -26,8 +26,11 @@ public class ScreenBrightness extends Navigation {
     //method that changes the screen brightness. The maximum value is 1F and minimum is 0.1F
     public void adjustBrightness(Float distance){
 
-        if(distance > 250){
+        if(distance > 275){
             brightness = 0.0F;
+        }
+        if(distance <= 275 && distance > 250){
+            brightness = 0.1F;
         }
         if(distance <= 250 && distance > 225){
             brightness = 0.1F;
@@ -59,6 +62,8 @@ public class ScreenBrightness extends Navigation {
         if(distance <= 25){
             brightness = 1F;
         }
+
+
 
         WindowManager.LayoutParams layout = activity.getWindow().getAttributes();
         layout.screenBrightness = brightness;

@@ -2,28 +2,29 @@ package com.example.rasmus.p9.Minigames;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
-import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
+import android.os.CountDownTimer;
 import android.os.Handler;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
 import android.view.Window;
 import android.view.WindowManager;
+import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.Other.GameScreen;
+import com.example.rasmus.p9.PlayerRole;
 import com.example.rasmus.p9.R;
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
-import java.util.ArrayList;
 import java.util.Locale;
 public class TreasureHunt extends AppCompatActivity implements SensorEventListener {
 
@@ -56,6 +57,8 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
     int imageCounter = 0;
     ImageView shuffleImg;
     TextView text;
+    Button pinCodeButton;
+    int counterShowButton = 0;
 
     public static DecimalFormat DECIMAL_FORMATTER;
     public boolean imageShowing = false;
@@ -67,6 +70,11 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
         super.onCreate(savedInstanceState);
         fullscreen();
         //setContentView(R.layout.activity_shuffle_game);
+
+        pinCodeButton = (Button)findViewById(R.id.pinCode);
+        pinCodeButton.setVisibility(View.GONE);
+
+        startTimer();
 
         arrayImagePlayer1[1] = R.drawable.player1_2; arrayImagePlayer2[1] = R.drawable.player2_3; arrayImagePlayer3[1] = R.drawable.player3_8; arrayImagePlayer4[1] = R.drawable.player4_5;
         arrayImagePlayer1[2] = R.drawable.player1_3; arrayImagePlayer2[2] = R.drawable.player2_5; arrayImagePlayer3[2] = R.drawable.player3_2; arrayImagePlayer4[2] = R.drawable.player4_2;
@@ -257,6 +265,42 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
     @Override
     public void onAccuracyChanged(Sensor sensor, int accuracy) {
         // TODO Auto-generated method stub
+    }
+
+    public void showButton(View view){
+        counterShowButton++;
+        if(counterShowButton == 1){
+           pinCodeButton.setVisibility(View.VISIBLE);
+        }
+
+        if(counterShowButton == 2){
+            counterShowButton = 0;
+            pinCodeButton.setVisibility(View.GONE);
+        }
+    }
+
+    public void enterCode(View view){
+        Intent intent = new Intent(TreasureHunt.this, TreasureHuntVerification.class);
+        startActivity(intent);
+    }
+
+    public void startTimer(){
+        //180000 milliseconds = 3 min
+        new CountDownTimer(180000, 1000) {
+
+            public void onTick(long millisUntilFinished) {
+                //mTextField.setText("seconds remaining: " + millisUntilFinished / 1000);
+            }
+
+            public void onFinish() {
+                //mTextField.setText("done!");
+                //Players "finish" the game when the time runs out
+                Navigation.minigame2Done = true;
+                Navigation.gameRunning = false;
+                Intent intent = new Intent(TreasureHunt.this, NavigationActivity.class);
+                startActivity(intent);
+            }
+        }.start();
     }
 
     public void displayImage(){

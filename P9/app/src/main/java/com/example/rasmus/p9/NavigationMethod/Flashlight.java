@@ -31,8 +31,10 @@ public class Flashlight extends IntentService {
     @Override
     protected void onHandleIntent(@Nullable Intent intent) {
         float distance = intent.getFloatExtra("DISTANCE", 0);
-
-        if(distance > 250){
+        if(distance > 275){
+            frequency = 2800;
+        }
+        if(distance <= 275 && distance > 250){
             frequency = 2200;
         }
         if(distance <= 250 && distance > 225){
@@ -65,6 +67,7 @@ public class Flashlight extends IntentService {
         if(distance <= 25){
             frequency = 200;
         }
+
 
         cameraId ="";
         camManager = (CameraManager) getApplicationContext().getSystemService(Context.CAMERA_SERVICE);

@@ -15,10 +15,14 @@ import android.widget.Button;
 import android.widget.EditText;
 import android.widget.Toast;
 
+import com.example.rasmus.p9.Minigames.ChargeBattery;
 import com.example.rasmus.p9.Minigames.MetalDetector;
+import com.example.rasmus.p9.Minigames.Proximity;
+import com.example.rasmus.p9.Minigames.SoundPuzzle2;
 import com.example.rasmus.p9.Minigames.TreasureHunt;
 import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
+import com.example.rasmus.p9.Other.GameIntro;
 import com.example.rasmus.p9.Other.GameScreen;
 
 import org.json.JSONArray;

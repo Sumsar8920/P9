@@ -5,6 +5,8 @@ import android.content.DialogInterface;
 
 
 import android.content.Intent;
+import android.content.res.ColorStateList;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -23,9 +25,11 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.ImageButton;
 import android.widget.ImageView;
+import android.widget.ProgressBar;
 import android.widget.TextView;
 
 import com.example.rasmus.p9.NavigationMethod.Navigation;
+import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.Other.Victory;
 import com.example.rasmus.p9.R;
 
@@ -40,10 +44,16 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
     int counter = 0;
     int imageCounter = 0;
     ImageView middleImage;
-    MediaPlayer mediaPlayer;
+    MediaPlayer mediaPlayer, mediaDrainBattery;
     TextView txt1, txt2;
     public Handler handler = new Handler();
     public int delay = 1000; //milliseconds
+    int oldNumber = 0;
+    public boolean chargingSound = false;
+    int length = 0;
+    ProgressBar progressBar;
+    int secondTime = 0;
+    int drainBattery = 500;
 
 
     @Override
@@ -51,6 +61,8 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
         super.onCreate(savedInstanceState);
         fullscreen();
         //setContentView(R.layout.activity_shake_hands);
+
+        progressBar = (ProgressBar)findViewById(R.id.progress);
 
         CharSequence colors[] = new CharSequence[] {"1", "2"};
 
@@ -82,7 +94,8 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
 
         middleImage = (ImageView) findViewById(R.id.animationDown);
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.batterycharge);
+        mediaPlayer = MediaPlayer.create(this, R.raw.power_up);
+
 
 
         // Create sensor manager
@@ -91,7 +104,8 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
         // MiniGameDrink sensor
         mySensor = SM.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
 
-        changeImage();
+        //changeImage();
+        drainBattery();
         //changeThumbImg();
 
         button1.setOnTouchListener(new View.OnTouchListener() {
@@ -104,7 +118,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
                             SM.registerListener(ChargeBattery.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
-                            middleImage.setImageResource(R.drawable.battery11);
+                            //middleImage.setImageResource(R.drawable.battery11);
                             txt1.setText("SHAKE!");
                             txt2.setText("SHAKE!");
                         }
@@ -112,7 +126,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
                     case MotionEvent.ACTION_UP:
                         // End
                         SM.unregisterListener(ChargeBattery.this);
-                        counter = 0;
+                        //counter = 0;
                         txt1.setText("");
                         txt2.setText("");
                         //so the players can start over if someone fails. They just have to release the button and press it again.
@@ -135,7 +149,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
                             SM.registerListener(ChargeBattery.this, mySensor, SensorManager.SENSOR_DELAY_NORMAL);
-                            middleImage.setImageResource(R.drawable.battery11);
+                            //middleImage.setImageResource(R.drawable.battery11);
                             txt1.setText("SHAKE!");
                             txt2.setText("SHAKE!");
                         }
@@ -143,7 +157,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
                     case MotionEvent.ACTION_UP:
                         // End
                         SM.unregisterListener(ChargeBattery.this);
-                        counter = 0;
+                        //counter = 0;
                         txt1.setText("");
                         txt2.setText("");
                         //so the players can start over if someone fails. They just have to release the button and press it again.
@@ -169,36 +183,58 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
         float yFloat = event.values[1];
         float zFloat = event.values[2];
 
-        if(zFloat > 16 && yFloat > -2 && yFloat < 2) {
-            counter ++;
+        if(zFloat > 10 && yFloat > -5 && yFloat < 5) {
+            counter = counter + 8;
+            //play charging sound
+            if(chargingSound != true){
+                chargingSound = true;
+                //start long charging sound!!
+                mediaPlayer.start();
+                mediaPlayer.seekTo(length);
+                progressBar.setProgressTintList(ColorStateList.valueOf(Color.GREEN));
+
+            }
         }
 
-        if(counter == 4){
-            counter ++;
-            middleImage.setImageResource(R.drawable.battery21);
-            mediaPlayer.start();
+        if(oldNumber > counter){
+            chargingSound = false;
+            mediaPlayer.pause();
+            mediaPlayer.seekTo(mediaPlayer.getCurrentPosition()-drainBattery);
+            progressBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
+            length = mediaPlayer.getCurrentPosition();
+
+            //pause charging sound and play short draining sound
+            //need to PAUSE charging sound, so the players don't loose progress
+            //mediaPlayer.start();
+        }
+        oldNumber = counter;
+
+        //check if this gets called multiple times so that it's slow starting the intent.
+        if(progressBar.getProgress() == 12){
+            Navigation.minigame1Done = true;
+            Navigation.gameRunning = false;
+            Intent intent = new Intent(this, NavigationActivity.class);
+            this.startActivity(intent);
         }
 
-        if(counter == 10){
-            counter ++;
-            middleImage.setImageResource(R.drawable.battery31);
-            mediaPlayer.start();
-        }
+    }
 
-        if(counter == 20){
-            counter ++;
-            middleImage.setImageResource(R.drawable.battery41);
-            mediaPlayer.start();
-        }
+    public void drainBattery(){
+        final Handler handler = new Handler();
+        final int delay = 1000; //milliseconds
 
-        if(counter == 30){
-            counter ++;
-            middleImage.setImageResource(R.drawable.battery51);
-            mediaPlayer.start();
-            victory();
-        }
+        handler.postDelayed(new Runnable(){
+            public void run(){
 
+                if(counter > 0) {
+                    counter--;
+                    //txt1.setText(String.valueOf(mediaPlayer.getCurrentPosition()/1000));
+                    progressBar.setProgress(mediaPlayer.getCurrentPosition()/1000);
+                }
 
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
     }
 
     public void changeImage(){
@@ -220,7 +256,6 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
             }
         }, delay);
     }
-
 
     public void victory(){
         Intent intent = new Intent(ChargeBattery.this, Victory.class);

@@ -3,7 +3,9 @@ package com.example.rasmus.p9.Minigames;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.graphics.Color;
+import android.media.AudioManager;
 import android.media.MediaPlayer;
+import android.net.Uri;
 import android.os.Handler;
 import android.support.constraint.ConstraintLayout;
 import android.support.v7.app.AppCompatActivity;
@@ -22,6 +24,8 @@ import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.Other.Vibration;
 import com.example.rasmus.p9.Other.Victory;
 import com.example.rasmus.p9.R;
+
+import java.io.IOException;
 
 public class Proximity extends AppCompatActivity implements SensorEventListener {
 
@@ -62,7 +66,20 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
 
 
 
-        mediaPlayer = MediaPlayer.create(this, R.raw.proximity);
+        //mediaPlayer = MediaPlayer.create(this, R.raw.proximity);
+        mediaPlayer = new MediaPlayer();
+        mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+        try {
+            mediaPlayer.setDataSource(this, Uri.parse("android.resource://" + this.getPackageName() + "/raw/one"));
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        try {
+            mediaPlayer.prepare();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+        mediaPlayer.start();
         proxImage = (ImageView) findViewById(R.id.proxImage);
 
         changeImage();
@@ -72,7 +89,7 @@ public class Proximity extends AppCompatActivity implements SensorEventListener 
     @Override
     protected void onResume() {
         super.onResume();
-        mSensorManager.registerListener(this, mProximity, SensorManager.SENSOR_DELAY_NORMAL);
+        mSensorManager.registerListener(this, mProximity, SensorManager.SENSOR_DELAY_GAME);
     }
 
     @Override
