@@ -158,6 +158,7 @@ public class Navigation implements SensorEventListener {
         if(distance <= 250 && distance > 225 && gameRunning != true && minigame1Done == false){
             gameRunning = true;
             Intent intent = new Intent(activity, GameIntro.class);
+            intent.putExtra("GAME","1");
             activity.startActivity(intent);
         }
 
@@ -165,6 +166,7 @@ public class Navigation implements SensorEventListener {
         if(distance <= 125 && distance > 100 && gameRunning != true && minigame2Done == false){
             gameRunning = true;
             Intent intent = new Intent(activity, GameIntro.class);
+            intent.putExtra("GAME","2");
             activity.startActivity(intent);
         }
 
@@ -172,6 +174,7 @@ public class Navigation implements SensorEventListener {
         if(distance <= 25 && gameRunning != true && minigame3Done == false){
             gameRunning = true;
             Intent intent = new Intent(activity, GameIntro.class);
+            intent.putExtra("GAME","3");
             activity.startActivity(intent);
         }
 
