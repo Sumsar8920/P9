@@ -13,6 +13,7 @@ import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.media.MediaPlayer;
 
+import android.os.CountDownTimer;
 import android.support.v7.app.AlertDialog;
 
 import android.os.Handler;
@@ -54,6 +55,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
     ProgressBar progressBar;
     int secondTime = 0;
     int drainBattery = 500;
+    public boolean stopHandler = false;
 
 
     @Override
@@ -170,7 +172,6 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
             }
         });
 
-
     }
 
     @Override
@@ -210,12 +211,12 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
         oldNumber = counter;
 
         //check if this gets called multiple times so that it's slow starting the intent.
-        if(progressBar.getProgress() == 12){
+        /*if(progressBar.getProgress() == 12){
             Navigation.minigame1Done = true;
             Navigation.gameRunning = false;
             Intent intent = new Intent(this, NavigationActivity.class);
             this.startActivity(intent);
-        }
+        } */
 
     }
 
@@ -225,11 +226,18 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
 
         handler.postDelayed(new Runnable(){
             public void run(){
+                if(stopHandler == false) {
 
-                if(counter > 0) {
-                    counter--;
-                    //txt1.setText(String.valueOf(mediaPlayer.getCurrentPosition()/1000));
-                    progressBar.setProgress(mediaPlayer.getCurrentPosition()/1000);
+                    if (progressBar.getProgress() == 12) {
+                        stopHandler = true;
+                        victory();
+                    }
+
+                    if (counter > 0) {
+                        counter--;
+                        //txt1.setText(String.valueOf(mediaPlayer.getCurrentPosition()/1000));
+                        progressBar.setProgress(mediaPlayer.getCurrentPosition() / 1000);
+                    }
                 }
 
                 handler.postDelayed(this, delay);
@@ -258,9 +266,11 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
     }
 
     public void victory(){
-        Intent intent = new Intent(ChargeBattery.this, Victory.class);
-        startActivity(intent);
         Navigation.minigame1Done = true;
+        Navigation.gameRunning = false;
+        Intent intent = new Intent(this, Victory.class);
+        this.startActivity(intent);
+
     }
 
     public void fullscreen(){
