@@ -51,17 +51,19 @@ public class GameIntro extends AppCompatActivity {
 
     public void callCommunicators(){
         mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
-        if(playerRole .equals("1") || playerRole .equals("3")){
+        if(playerRole .equals("1") || playerRole .equals("4")){
             if(game.equals("1")){
-                file = "intro";
+                file = "SoundPuzzle";
                 whichSoundFile();
             }
             if(game.equals("2")){
                 mediaPlayer.reset();
+                file = "ChargeTheBattery";
                 whichSoundFile();
             }
             if(game.equals("3")){
                 mediaPlayer.reset();
+                file = "TreasureHunt";
                 whichSoundFile();
             }
         }
@@ -82,6 +84,7 @@ public class GameIntro extends AppCompatActivity {
             e.printStackTrace();
         }
     }
+
 
     /*public void startCountdown(){
         final Handler handler = new Handler();
