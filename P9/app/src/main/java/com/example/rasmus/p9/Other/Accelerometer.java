@@ -12,7 +12,7 @@ import android.widget.Toast;
 import com.example.rasmus.p9.MainActivity;
 import com.example.rasmus.p9.NavigationMethod.Flashlight;
 
-import static com.google.android.gms.internal.zzs.TAG;
+//import static com.google.android.gms.internal.zzs.TAG;
 
 /**
  * Created by Rasmus on 02-11-2017.
@@ -85,7 +85,7 @@ public class Accelerometer extends IntentService implements SensorEventListener 
                             mGZ = gz;
                             mEventCountSinceGZChanged = 0;
                             if (gz > 0) {
-                                Log.d(TAG, "now screen is facing up.");
+                                //Log.d(TAG, "now screen is facing up.");
                                 Toast toast = Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT);
                                 toast.show();
                                 //start flashlight service
@@ -96,7 +96,7 @@ public class Accelerometer extends IntentService implements SensorEventListener 
                                 MainActivity.changeBrightness(screenDown);
                                 //flashlightFrequency();
                             } else if (gz < 0) {
-                                Log.d(TAG, "now screen is facing down.");
+                                //Log.d(TAG, "now screen is facing down.");
                                 Toast toast = Toast.makeText(getApplicationContext(), "Down", Toast.LENGTH_SHORT);
                                 toast.show();
                                 screenUp = false;

@@ -3,13 +3,20 @@ package com.example.rasmus.p9.Other;
 import android.content.Context;
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.media.AudioManager;
 import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.Handler;
 import android.os.Vibrator;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.view.View;
+import android.widget.Button;
+import android.widget.ImageButton;
+import android.widget.LinearLayout;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 import com.example.rasmus.p9.Minigames.Minigame;
@@ -25,49 +32,90 @@ public class GameIntro extends AppCompatActivity {
     public boolean run = false;
     String playerRole;
     MediaPlayer mediaPlayer;
-    String game;
+    String game = "";
     String file = "one";
+    public ImageButton acceptCall;
+    public RelativeLayout background;
+    public Button startGame;
+    int counterShowButton = 0;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_game_intro);
 
-        Intent intent = new Intent();
-        game = intent.getStringExtra("GAME");
+        txtView = (TextView) findViewById(R.id.txtView);
+        acceptCall = (ImageButton) findViewById(R.id.callButton);
+        background = (RelativeLayout) findViewById(R.id.background);
+        startGame = (Button) findViewById(R.id.moveOn);
+
+        startGame.setVisibility(View.INVISIBLE);
+
+        Bundle extras = getIntent().getExtras();
+        if(extras !=null) {
+            game = extras.getString("GAME");
+        }
 
         SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
         playerRole = (shared.getString("PLAYERROLE", ""));
         mediaPlayer = new MediaPlayer();
         callCommunicators();
 
+    }
+    public void showButton(View view){
+        counterShowButton++;
+        if(counterShowButton == 1){
+            startGame.setVisibility(View.VISIBLE);
+        }
 
-
-        /*txtView = (TextView) findViewById(R.id.countdown);
-
-        startCountdown();*/
-
+        if(counterShowButton == 2){
+            counterShowButton = 0;
+            startGame.setVisibility(View.INVISIBLE);
+        }
     }
 
     public void callCommunicators(){
-        mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+        if(playerRole .equals("1") || playerRole .equals("4")) {
+            txtView.setText("Please accept the call");
+            mediaPlayer = MediaPlayer.create(this, R.raw.ringtone);
+            mediaPlayer.start();
+        }
+        else {
+            txtView.setText("Wait for communicators to finish call");
+            acceptCall.setVisibility(View.INVISIBLE);
+        }
+    }
+
+    public void playSoundfile(View v){
+        background.setBackgroundColor(Color.BLACK);
+        txtView.setVisibility(View.INVISIBLE);
+        acceptCall.setVisibility(View.INVISIBLE);
+        mediaPlayer.stop();
+        mediaPlayer.reset();
+        mediaPlayer.release();
+        mediaPlayer = new MediaPlayer();
+        try {
+            mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
+        }
+        catch (Exception e){
+            e.printStackTrace();
+        }
         if(playerRole .equals("1") || playerRole .equals("4")){
             if(game.equals("1")){
-                file = "SoundPuzzle";
+                file = "sound_puzzle";
                 whichSoundFile();
             }
             if(game.equals("2")){
                 mediaPlayer.reset();
-                file = "ChargeTheBattery";
+                file = "charge_the_battery";
                 whichSoundFile();
             }
             if(game.equals("3")){
                 mediaPlayer.reset();
-                file = "TreasureHunt";
+                file = "treasure_hunt";
                 whichSoundFile();
             }
         }
-        mediaPlayer.start();
     };
 
     public void whichSoundFile(){
@@ -83,49 +131,20 @@ public class GameIntro extends AppCompatActivity {
         } catch (IOException e) {
             e.printStackTrace();
         }
-    }
+        //detect when soundfile is done playing
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
-
-    /*public void startCountdown(){
-        final Handler handler = new Handler();
-        final int delay = 1000; //milliseconds
-
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                //do something
-                if(run != true) {
-                    counter--;
-                    txtView.setText(String.valueOf(counter));
-                    Vibrator v = (Vibrator) getSystemService(Context.VIBRATOR_SERVICE);
-                    // Vibrate for 500 milliseconds
-                    v.vibrate(500);
-                }
-
-                if(counter == 0) {
-                    counter++;
-                    run = true;
-                    if (Navigation.minigame1Done == true) {
-                        //start minigame 2
-                        Minigame minigame2 = new Minigame();
-                        minigame2.startGame("2", GameIntro.this);
-                    }
-
-                    if (Navigation.minigame2Done == true) {
-                        //start minigame 3
-                        Minigame minigame3 = new Minigame();
-                        minigame3.startGame("3", GameIntro.this);
-                    } else {
-                        //start minigame 1
-                        Minigame minigame1 = new Minigame();
-                        minigame1.startGame("1", GameIntro.this);
-                    }
-                }
-
-                handler.postDelayed(this, delay);
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                background.setBackgroundColor(Color.WHITE);
+                acceptCall.setVisibility(View.VISIBLE);
+                txtView.setVisibility(View.VISIBLE);
+                txtView.setText("Play again");
+                acceptCall.setBackgroundResource(R.drawable.play);
             }
-        }, delay);
 
+        });
 
-
-    }*/
+        mediaPlayer.start();
+    }
 }

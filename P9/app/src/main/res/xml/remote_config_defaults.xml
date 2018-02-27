@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- START xml_defaults -->
+<defaultsMap>
+    <entry>
+        <key>start_game_1</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>start_game_2</key>
+        <value>false</value>
+    </entry>
+    <entry>
+        <key>start_game_3</key>
+        <value>false</value>
+    </entry>
+</defaultsMap>
+    <!-- END xml_defaults -->
