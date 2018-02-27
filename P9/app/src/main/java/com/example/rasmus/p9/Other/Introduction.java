@@ -14,7 +14,6 @@ import android.widget.ImageButton;
 import android.widget.TextView;
 
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
-import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.R;
 
 import java.io.IOException;
@@ -30,7 +29,11 @@ public class Introduction extends AppCompatActivity {
     boolean playerRoleReady = false;
     TextView txtView;
     String playerRole;
-    android.support.constraint.ConstraintLayout ralleGoesBlack;
+    android.support.constraint.ConstraintLayout background;
+    int counterShowButton = 0;
+    Button startGame;
+    int counter = 0;
+
 
 
     @Override
@@ -46,12 +49,27 @@ public class Introduction extends AppCompatActivity {
         proceedToNav = (Button) findViewById(R.id.proceedToNav);
         callButton = (ImageButton) findViewById(R.id.callButton);
         txtView = (TextView)findViewById(R.id.txtView);
-        ralleGoesBlack = (android.support.constraint.ConstraintLayout) findViewById(R.id.ralleGoesBlack);
+        background = (android.support.constraint.ConstraintLayout) findViewById(R.id.background);
+        startGame = (Button) findViewById(R.id.startGame);
 
         playAgain.setVisibility(View.GONE);
         proceedToNav.setVisibility(View.GONE);
+        startGame.setVisibility(View.INVISIBLE);
+
 
         callPlayer();
+    }
+
+    public void showButton(){
+        counterShowButton++;
+        if(counterShowButton == 1){
+            startGame.setVisibility(View.VISIBLE);
+        }
+
+        if(counterShowButton == 2){
+            counterShowButton = 0;
+            startGame.setVisibility(View.INVISIBLE);
+        }
     }
 
    public void mediaplayerListen(){
@@ -59,7 +77,19 @@ public class Introduction extends AppCompatActivity {
 
            @Override
            public void onCompletion(MediaPlayer mp) {
-               ralleGoesBlack.setBackgroundColor(Color.WHITE);
+               counter ++;
+               if(counter >= 2){
+                   background.setOnClickListener(new View.OnClickListener()
+                   {
+                       @Override
+                       public void onClick(View v)
+                       {
+                           showButton();
+                       }
+                   });
+
+               }
+               background.setBackgroundColor(Color.WHITE);
                playAgain.setVisibility(View.VISIBLE);
                proceedToNav.setVisibility(View.VISIBLE);
                if(playerRole .equals("2") || playerRole .equals("3")){
@@ -70,9 +100,22 @@ public class Introduction extends AppCompatActivity {
        });
    };
 
+    public void startNavigation(View v){
+        Intent intent = new Intent(Introduction.this, NavigationActivity.class);
+        startActivity(intent);
+    }
+
     public void navigatorRole(){
         txtView.setText("Wait for communicators to finish their call");
         proceedToNav.setVisibility(View.GONE);
+        background.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v)
+            {
+                showButton();
+            }
+        });
     }
 
     public void introFile(View v){
@@ -92,13 +135,13 @@ public class Introduction extends AppCompatActivity {
        if(playerRoleReady == false) {
            mediaplayerListen();
            file = "intro";
-            ralleGoesBlack.setBackgroundColor(Color.BLACK);
+            background.setBackgroundColor(Color.BLACK);
             playAgain.setVisibility(View.GONE);
             proceedToNav.setVisibility(View.GONE);
        }
        else{
            mediaplayerListen();
-           ralleGoesBlack.setBackgroundColor(Color.BLACK);
+           background.setBackgroundColor(Color.BLACK);
            playAgain.setVisibility(View.GONE);
            proceedToNav.setVisibility(View.GONE);
            if(playerRole .equals("1") || playerRole .equals("4")){
