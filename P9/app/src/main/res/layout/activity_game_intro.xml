@@ -1,40 +1,42 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout
+<RelativeLayout
+    android:id="@+id/background"
     xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     xmlns:tools="http://schemas.android.com/tools" android:layout_height="match_parent"
-    android:orientation="vertical">
+    android:orientation="vertical"
+    android:clickable="true"
+    android:onClick="showButton">
 
     <TextView
-        android:id="@+id/te"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center_horizontal"
-        android:layout_weight="1"
-        android:textColor="@color/green"
-        android:textSize="50sp"
+        android:id="@+id/txtView"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text=""
+        android:textSize="50dip"
+        android:layout_above="@+id/callButton"
+        android:layout_centerHorizontal="true"
         />
 
-    <TextView
-        android:id="@+id/text"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:gravity="center_horizontal"
-        android:layout_weight="1"
-        android:text="GAME STARTS IN:"
-        android:textSize="40sp"
+    <ImageButton
+        android:id="@+id/callButton"
+        android:layout_width="75dp"
+        android:layout_height="75dp"
+        android:background="@drawable/acceptcall"
+        android:layout_above="@+id/moveOn"
+        android:layout_centerHorizontal="true"
+        android:onClick="playSoundfile"
+        android:layout_marginTop="75dp"
         />
 
-    <TextView
-        android:id="@+id/countdown"
+    <Button
+        android:id="@+id/moveOn"
         android:layout_width="match_parent"
-        android:layout_height="0dp"
-        android:layout_weight="3"
-        android:gravity="center_horizontal"
-        android:layout_gravity="center_vertical"
-        android:text="TextView"
-        android:textColor="@color/green"
-        android:textSize="40sp"
-        />
+        android:layout_height="wrap_content"
+        android:layout_alignParentBottom="true"
+        android:layout_marginTop="175dp"
+        android:text="start game"
 
-</LinearLayout>
+         />
+
+</RelativeLayout>

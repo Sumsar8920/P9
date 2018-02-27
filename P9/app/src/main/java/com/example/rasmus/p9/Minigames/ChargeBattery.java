@@ -184,7 +184,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
         float yFloat = event.values[1];
         float zFloat = event.values[2];
 
-        if(zFloat > 10 && yFloat > -5 && yFloat < 5) {
+        if(zFloat > 14 && yFloat > -5 && yFloat < 5) {
             counter = counter + 8;
             //play charging sound
             if(chargingSound != true){

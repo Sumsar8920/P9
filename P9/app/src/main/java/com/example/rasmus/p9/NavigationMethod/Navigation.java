@@ -155,7 +155,7 @@ public class Navigation implements SensorEventListener {
         NavigationActivity.txtDistance.setText(Float.toString(Math.round(distance)));
 
         //minigame 1
-        if(distance <= 250 && distance > 225 && gameRunning != true && minigame1Done == false){
+        /*if(distance <= 250 && distance > 225 && gameRunning != true && minigame1Done == false){
             gameRunning = true;
             Intent intent = new Intent(activity, GameIntro.class);
             intent.putExtra("GAME","1");
@@ -176,7 +176,7 @@ public class Navigation implements SensorEventListener {
             Intent intent = new Intent(activity, GameIntro.class);
             intent.putExtra("GAME","3");
             activity.startActivity(intent);
-        }
+        } */
 
 
     }
