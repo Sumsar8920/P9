@@ -59,10 +59,21 @@ public class GameIntro extends AppCompatActivity {
         SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
         playerRole = (shared.getString("PLAYERROLE", ""));
         mediaPlayer = new MediaPlayer();
+        if(playerRole.equals("2")||playerRole.equals("3")){
+            background.setOnClickListener(new View.OnClickListener()
+            {
+                @Override
+                public void onClick(View v)
+                {
+                    showButton();
+                }
+            });
+        }
+
         callCommunicators();
 
     }
-    public void showButton(View view){
+    public void showButton(){
         counterShowButton++;
         if(counterShowButton == 1){
             startGame.setVisibility(View.VISIBLE);
@@ -137,6 +148,15 @@ public class GameIntro extends AppCompatActivity {
 
             @Override
             public void onCompletion(MediaPlayer mp) {
+                background.setOnClickListener(new View.OnClickListener()
+                {
+                    @Override
+                    public void onClick(View v)
+                    {
+                        showButton();
+                    }
+                });
+
                 background.setBackgroundColor(Color.WHITE);
                 acceptCall.setVisibility(View.VISIBLE);
                 txtView.setVisibility(View.VISIBLE);
@@ -147,5 +167,20 @@ public class GameIntro extends AppCompatActivity {
         });
 
         mediaPlayer.start();
+    }
+
+    public void startGame(View v){
+        if(game.equals("1")){
+            Minigame minigame1 = new Minigame();
+            minigame1.startGame("1",this);
+        }
+        if(game.equals("2")){
+            Minigame minigame1 = new Minigame();
+            minigame1.startGame("2",this);
+        }
+        if(game.equals("3")){
+            Minigame minigame1 = new Minigame();
+            minigame1.startGame("3",this);
+        }
     }
 }

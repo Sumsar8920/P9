@@ -18,18 +18,18 @@ public class Minigame {
     public void startGame(String game, Activity activity){
 
         if(game.equals("1")) {
-            Intent intent = new Intent(activity, ChargeBattery.class);
+            Intent intent = new Intent(activity,SoundPuzzle2.class);
             activity.startActivity(intent);
 
         }
 
         if(game.equals("2")) {
-            Intent intent = new Intent(activity, TreasureHunt.class);
+            Intent intent = new Intent(activity, ChargeBattery.class);
             activity.startActivity(intent);
         }
 
         if(game.equals("3")) {
-            Intent intent = new Intent(activity, ChargeBattery.class);
+            Intent intent = new Intent(activity, TreasureHunt.class);
             activity.startActivity(intent);
         }
 

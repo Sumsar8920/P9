@@ -431,7 +431,7 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
         mediaPlayer.release();
         mediaPlayer = null;
         //smAccelerometer.unregisterListener(this);
-        Intent intent = new Intent(TreasureHunt.this, GameScreen.class);
+        Intent intent = new Intent(TreasureHunt.this, NavigationActivity.class);
         startActivity(intent);
     }
 

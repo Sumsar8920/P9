@@ -1,6 +1,7 @@
 package com.example.rasmus.p9.Minigames;
 
 import android.content.Intent;
+import android.media.MediaPlayer;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,6 +17,7 @@ public class TreasureHuntVerification extends AppCompatActivity {
 
     EditText editTxt1, editTxt2, editTxt3, editTxt4;
     String txt1, txt2, txt3, txt4;
+    public MediaPlayer mediaPlayer;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -40,8 +42,18 @@ public class TreasureHuntVerification extends AppCompatActivity {
         if(txt1.equals("2") && txt2.equals("5") && txt3.equals("3") && txt4.equals("8")){
             Navigation.minigame2Done = true;
             Navigation.gameRunning = false;
-            Intent intent = new Intent(TreasureHuntVerification.this, NavigationActivity.class);
-            startActivity(intent);
+            mediaPlayer = MediaPlayer.create(this, R.raw.tada);
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mediaPlayer.release();
+                    mediaPlayer = null;
+                    Intent intent = new Intent(TreasureHuntVerification.this, NavigationActivity.class);
+                    startActivity(intent);
+                }
+            });
         }
 
         else{

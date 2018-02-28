@@ -56,6 +56,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
     int secondTime = 0;
     int drainBattery = 500;
     public boolean stopHandler = false;
+    boolean actionUp = false;
 
 
     @Override
@@ -116,6 +117,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         player1Ready = true;
+                        actionUp = false;
                         button1.setBackgroundResource(R.drawable.greenthumb);
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
@@ -128,6 +130,11 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
                     case MotionEvent.ACTION_UP:
                         // End
                         SM.unregisterListener(ChargeBattery.this);
+                        if(stopHandler == false) {
+                            mediaPlayer.pause();
+                        }
+                        actionUp = true;
+                        actionUp();
                         //counter = 0;
                         txt1.setText("");
                         txt2.setText("");
@@ -147,6 +154,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
                 switch(event.getAction()) {
                     case MotionEvent.ACTION_DOWN:
                         player2Ready = true;
+                        actionUp = false;
                         button2.setBackgroundResource(R.drawable.greenthumb);
                         if (player1Ready == true && player2Ready == true){
                             // Register sensor listener
@@ -159,6 +167,11 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
                     case MotionEvent.ACTION_UP:
                         // End
                         SM.unregisterListener(ChargeBattery.this);
+                        if(stopHandler == false) {
+                            mediaPlayer.pause();
+                        }
+                        actionUp = true;
+                        actionUp();
                         //counter = 0;
                         txt1.setText("");
                         txt2.setText("");
@@ -184,7 +197,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
         float yFloat = event.values[1];
         float zFloat = event.values[2];
 
-        if(zFloat > 14 && yFloat > -5 && yFloat < 5) {
+        if(zFloat > 11 && yFloat > -5 && yFloat < 5) {
             counter = counter + 8;
             //play charging sound
             if(chargingSound != true){
@@ -203,20 +216,10 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
             mediaPlayer.seekTo(mediaPlayer.getCurrentPosition()-drainBattery);
             progressBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
             length = mediaPlayer.getCurrentPosition();
-
-            //pause charging sound and play short draining sound
-            //need to PAUSE charging sound, so the players don't loose progress
-            //mediaPlayer.start();
         }
         oldNumber = counter;
 
-        //check if this gets called multiple times so that it's slow starting the intent.
-        /*if(progressBar.getProgress() == 12){
-            Navigation.minigame1Done = true;
-            Navigation.gameRunning = false;
-            Intent intent = new Intent(this, NavigationActivity.class);
-            this.startActivity(intent);
-        } */
+
 
     }
 
@@ -228,7 +231,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
             public void run(){
                 if(stopHandler == false) {
 
-                    if (progressBar.getProgress() == 12) {
+                    if (progressBar.getProgress() >= 12) {
                         stopHandler = true;
                         victory();
                     }
@@ -236,13 +239,36 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
                     if (counter > 0) {
                         counter--;
                         //txt1.setText(String.valueOf(mediaPlayer.getCurrentPosition()/1000));
+
                         progressBar.setProgress(mediaPlayer.getCurrentPosition() / 1000);
+
                     }
                 }
 
                 handler.postDelayed(this, delay);
             }
         }, delay);
+    }
+
+    public void actionUp(){
+        final Handler handler = new Handler();
+        final int delay = 1000; //milliseconds
+
+        handler.postDelayed(new Runnable(){
+            public void run(){
+                if(actionUp == true) {
+                    if (stopHandler == false) {
+                        mediaPlayer.seekTo(mediaPlayer.getCurrentPosition() - 100);
+                        progressBar.setProgressTintList(ColorStateList.valueOf(Color.RED));
+                        progressBar.setProgress(mediaPlayer.getCurrentPosition() / 1000);
+
+                    }
+                }
+
+                handler.postDelayed(this, delay);
+            }
+        }, delay);
+
     }
 
     public void changeImage(){
@@ -266,10 +292,25 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
     }
 
     public void victory(){
+        SM.unregisterListener(ChargeBattery.this);
         Navigation.minigame1Done = true;
         Navigation.gameRunning = false;
-        Intent intent = new Intent(this, Victory.class);
-        this.startActivity(intent);
+        mediaPlayer.release();
+        mediaPlayer = null;
+        mediaPlayer = MediaPlayer.create(this, R.raw.tada);
+        mediaPlayer.start();
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                mediaPlayer.release();
+                mediaPlayer = null;
+                Intent intent = new Intent(ChargeBattery.this, NavigationActivity.class);
+                startActivity(intent);
+            }
+
+        });
+
 
     }
 
@@ -280,6 +321,17 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
 
         setContentView(R.layout.activity_shake_hands);
     }
+
+    @Override
+    public void onBackPressed() {
+        // your code.
+        mediaPlayer.release();
+        mediaPlayer = null;
+        //smAccelerometer.unregisterListener(this);
+        Intent intent = new Intent(ChargeBattery.this, NavigationActivity.class);
+        startActivity(intent);
+    }
+
 
 
 }

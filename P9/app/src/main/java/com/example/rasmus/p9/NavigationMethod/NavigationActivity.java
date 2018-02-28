@@ -111,7 +111,7 @@ public class NavigationActivity extends AppCompatActivity {
     protected void onResume() {
         //start handler as activity become visible
 
-        h.postDelayed(new Runnable() {
+              h.postDelayed(new Runnable() {
             public void run() {
                 //do something
 
@@ -136,9 +136,9 @@ public class NavigationActivity extends AppCompatActivity {
         long cacheExpiration = 3600; // 1 hour in seconds.
         // If your app is using developer mode, cacheExpiration is set to 0, so each fetch will
         // retrieve values from the service.
-       /* if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
+        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
             cacheExpiration = 0;
-        } */
+        }
         mFirebaseRemoteConfig.fetch(cacheExpiration)
                 .addOnCompleteListener(this, new OnCompleteListener<Void>() {
                     @Override
@@ -163,7 +163,7 @@ public class NavigationActivity extends AppCompatActivity {
     private void startGame() {
 
         //checks whether one of the booleans are set to true and starts the corresponding game.
-        if (mFirebaseRemoteConfig.getBoolean(START_GAME_1)) {
+        if (mFirebaseRemoteConfig.getBoolean(START_GAME_1) == true) {
             Navigation.gameRunning = true;
             Intent intent = new Intent(NavigationActivity.this, GameIntro.class);
             intent.putExtra("GAME","1");
