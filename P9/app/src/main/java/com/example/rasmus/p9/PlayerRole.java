@@ -100,7 +100,7 @@ public class PlayerRole extends AppCompatActivity {
 
         //get coordinates
         //new AsyncGetCoordinates().execute();
-        Intent intent = new Intent(PlayerRole.this, TreasureHunt.class);
+        Intent intent = new Intent(PlayerRole.this, NavigationActivity.class);
         startActivity(intent);
 
     }
@@ -235,7 +235,7 @@ public class PlayerRole extends AppCompatActivity {
                 Toast toast = Toast.makeText(getApplicationContext(), "Player added", Toast.LENGTH_SHORT);
                 toast.show();
 
-                Intent intent = new Intent(PlayerRole.this, TreasureHunt.class);
+                Intent intent = new Intent(PlayerRole.this, NavigationActivity.class);
                 startActivity(intent);
 
             }
