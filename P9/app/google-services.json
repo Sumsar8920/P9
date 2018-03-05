@@ -1,27 +1,27 @@
 {
   "project_info": {
-    "project_number": "315344103547",
-    "firebase_url": "https://p10project-9a857.firebaseio.com",
-    "project_id": "p10project-9a857",
-    "storage_bucket": "p10project-9a857.appspot.com"
+    "project_number": "141210423875",
+    "firebase_url": "https://p10project-1fc98.firebaseio.com",
+    "project_id": "p10project-1fc98",
+    "storage_bucket": "p10project-1fc98.appspot.com"
   },
   "client": [
     {
       "client_info": {
-        "mobilesdk_app_id": "1:315344103547:android:8139f9068b9f5d9b",
+        "mobilesdk_app_id": "1:141210423875:android:8139f9068b9f5d9b",
         "android_client_info": {
           "package_name": "com.example.rasmus.p9"
         }
       },
       "oauth_client": [
         {
-          "client_id": "315344103547-rc7agtvml80u6uf6e5s1hl8v9vdu6ukq.apps.googleusercontent.com",
+          "client_id": "141210423875-quiavi3b1el7vbkq9t1tqmkhn2cqb1me.apps.googleusercontent.com",
           "client_type": 3
         }
       ],
       "api_key": [
         {
-          "current_key": "AIzaSyB-PDzzYukkRrH4uQvd3ZJguFGe3D17bis"
+          "current_key": "AIzaSyBMxDTybDkaKSbz127IFJoPB08FQ96idro"
         }
       ],
       "services": {

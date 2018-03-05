@@ -2,6 +2,7 @@ package com.example.rasmus.p9.Minigames;
 
 import android.content.Intent;
 import android.content.SharedPreferences;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorEvent;
 import android.hardware.SensorEventListener;
@@ -16,13 +17,19 @@ import android.view.Window;
 import android.view.WindowManager;
 import android.widget.Button;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
-import com.example.rasmus.p9.Other.GameScreen;
-import com.example.rasmus.p9.PlayerRole;
+import com.example.rasmus.p9.Other.Database;
 import com.example.rasmus.p9.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
+
 import java.text.DecimalFormat;
 import java.text.DecimalFormatSymbols;
 import java.util.Locale;
@@ -37,7 +44,7 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
     MediaPlayer media;
     int counter = 1;
     String playerRole;
-    ImageView image;
+    ImageView background;
     MediaPlayer mediaPlayer;
     //ArrayList<Integer> arrayImage = new ArrayList<Integer>();
     Integer[] arrayImagePlayer1 = new Integer[5];
@@ -59,16 +66,18 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
     TextView text;
     Button pinCodeButton;
     int counterShowButton = 0;
+    public FirebaseDatabase database;
+    public DatabaseReference rootReference;
 
     public static DecimalFormat DECIMAL_FORMATTER;
     public boolean imageShowing = false;
 
-    public boolean stopAnimation;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
         //fullscreen();
         setContentView(R.layout.activity_shuffle_game);
 
@@ -101,22 +110,44 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
         //sensorManager.registerListener(this, accelerometer, SensorManager.SENSOR_DELAY_NORMAL);
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
-        stopAnimation = false;
-
-        image = (ImageView) findViewById(R.id.image);
-
-        //shuffleImg = (ImageView) findViewById(R.id.shuffleImg);
-
-        //text = (TextView) findViewById(R.id.textView3);
-
-        if(stopAnimation == false) {
-            //changeImage();
-        }
+        background = (ImageView) findViewById(R.id.image);
 
         // define decimal formatter
         DecimalFormatSymbols symbols = new DecimalFormatSymbols(Locale.US);
         symbols.setDecimalSeparator('.');
         DECIMAL_FORMATTER = new DecimalFormat("#.000", symbols);
+
+        rootReference = Database.getDatabaseRootReference();
+        DatabaseReference soundPuzzleReference = rootReference.child("treasurehunt");
+        soundPuzzleReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String key = ds.getKey().toString();
+                    String value = ds.getValue().toString();
+                    if(key.equals("soundfile1") && value.equals("true")){
+                        //play soundfile 1
+                        playSoundfile(key);
+                        break;
+                    }
+                    if(key.equals("soundfile2") && value.equals("true")){
+                        //play soundfile 2
+                        break;
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
 
 
     }
@@ -162,24 +193,14 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
                                     mGZ = gz;
                                     mEventCountSinceGZChanged = 0;
                                     if (gz > 0) {
-                                        //Log.d(TAG, "now screen is facing up.");
-                                        //Toast toast = Toast.makeText(getApplicationContext(), "Up", Toast.LENGTH_SHORT);
-                                        //toast.show();
-                                        stopAnimation = true;
-                                        //displayImage();
-                                        mediaPlayer.start();
-
+                                            mediaPlayer.start();
 
                                     } else if (gz < 0) {
-                                        //Log.d(TAG, "now screen is facing down.");
-                                        //Toast toast = Toast.makeText(getApplicationContext(), "Down", Toast.LENGTH_SHORT);
-                                        //toast.show();
                                         counter++;
-                                        if (counter == 5) {
-                                            counter = 1;
+
+                                            if (counter == 5) {
+                                                counter = 1;
                                         }
-
-
                                     }
                                 }
                             } else {
@@ -209,7 +230,7 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
 
                     if (playerRole.equals("1")) {
                         try {
-                            image.setBackgroundResource(arrayImagePlayer1[counter]);
+                            background.setBackgroundResource(arrayImagePlayer1[counter]);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -217,7 +238,7 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
 
                     if (playerRole.equals("2")) {
                         try {
-                            image.setBackgroundResource(arrayImagePlayer2[counter]);
+                            background.setBackgroundResource(arrayImagePlayer2[counter]);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -225,7 +246,7 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
 
                     if (playerRole.equals("3")) {
                         try {
-                            image.setBackgroundResource(arrayImagePlayer3[counter]);
+                            background.setBackgroundResource(arrayImagePlayer3[counter]);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -233,7 +254,7 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
 
                     if (playerRole.equals("4")) {
                         try {
-                            image.setBackgroundResource(arrayImagePlayer4[counter]);
+                            background.setBackgroundResource(arrayImagePlayer4[counter]);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -243,28 +264,28 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
                     imageShowing = false;
                     if (playerRole.equals("1")) {
                         try {
-                            image.setBackgroundResource(arrayImagePlayer1Blur[counter]);
-                        } catch (Exception e) {
+                            background.setBackgroundResource(arrayImagePlayer1Blur[counter]);
+                        } catch (OutOfMemoryError e) {
                             e.printStackTrace();
                         }
                     }
                     if (playerRole.equals("2")) {
                         try {
-                            image.setBackgroundResource(arrayImagePlayer2Blur[counter]);
+                            background.setBackgroundResource(arrayImagePlayer2Blur[counter]);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                     if (playerRole.equals("3")) {
                         try {
-                            image.setBackgroundResource(arrayImagePlayer3Blur[counter]);
+                            background.setBackgroundResource(arrayImagePlayer3Blur[counter]);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
                     }
                     if (playerRole.equals("4")) {
                         try {
-                            image.setBackgroundResource(arrayImagePlayer4Blur[counter]);
+                            background.setBackgroundResource(arrayImagePlayer4Blur[counter]);
                         } catch (Exception e) {
                             e.printStackTrace();
                         }
@@ -318,118 +339,39 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
         }.start();
     }
 
-    public void displayImage(){
+    public void playSoundfile(String soundfile){
+        mediaPlayer.stop();
+        mediaPlayer.release();
+        if(soundfile.equals("soundfile1")){
+            mediaPlayer = MediaPlayer.create(this, R.raw.tada);
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
-        if(playerRole.equals("1")) {
-            if (counter == 1) {
-                image.setBackgroundResource(R.drawable.player1_8);
-                //shuffleImg.setVisibility(View.GONE);
-                //text.setVisibility(View.GONE);
-            }
-
-            if (counter == 2) {
-                image.setBackgroundResource(R.drawable.player1_5);
-            }
-
-            if (counter == 3) {
-                image.setBackgroundResource(R.drawable.player1_3);
-
-            }
-
-            if (counter == 4) {
-                image.setBackgroundResource(R.drawable.player1_2);
-                counter = 0;
-            }
-        }
-
-        if(playerRole.equals("2")) {
-            if (counter == 1) {
-                image.setBackgroundResource(R.drawable.player2_2);
-                shuffleImg.setVisibility(View.GONE);
-                text.setVisibility(View.GONE);
-            }
-
-            if (counter == 2) {
-                image.setBackgroundResource(R.drawable.player2_5);
-            }
-
-            if (counter == 3) {
-                image.setBackgroundResource(R.drawable.player2_8);
-
-            }
-
-            if (counter == 4) {
-                image.setBackgroundResource(R.drawable.player2_3);
-                counter = 0;
-
-            }
-        }
-
-        if(playerRole.equals("3")) {
-            if (counter == 1) {
-                image.setBackgroundResource(R.drawable.player3_5);
-                shuffleImg.setVisibility(View.GONE);
-                text.setVisibility(View.GONE);
-            }
-
-            if (counter == 2) {
-                image.setBackgroundResource(R.drawable.player3_3);
-            }
-
-            if (counter == 3) {
-                image.setBackgroundResource(R.drawable.player3_2);
-
-            }
-
-            if (counter == 4) {
-                image.setBackgroundResource(R.drawable.player3_8);
-                counter = 0;
-
-            }
-        }
-
-        if(playerRole.equals("4")) {
-            if (counter == 1) {
-                image.setBackgroundResource(R.drawable.player4_2);
-                shuffleImg.setVisibility(View.GONE);
-                text.setVisibility(View.GONE);
-            }
-
-            if (counter == 2) {
-                image.setBackgroundResource(R.drawable.player4_3);
-            }
-
-            if (counter == 3) {
-                image.setBackgroundResource(R.drawable.player4_5);
-
-            }
-
-            if (counter == 4) {
-                image.setBackgroundResource(R.drawable.player4_8);
-                counter = 0;
-
-            }
-        }
-
-    }
-
-    public void changeImage(){
-        handler.postDelayed(new Runnable(){
-            public void run(){
-                //do something
-                imageCounter ++;
-                if (imageCounter == 1) {
-                    shuffleImg.setImageResource(R.drawable.scoutfront);
-                }
-                if (imageCounter == 2) {
-                    shuffleImg.setImageResource(R.drawable.scoutback);
-                    imageCounter = 0;
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer = MediaPlayer.create(TreasureHunt.this, R.raw.shuffle);
                 }
 
+            });
+        }
 
-                handler.postDelayed(this, delay);
-            }
-        }, delay);
+        if(soundfile.equals("soundfile2")){
+            mediaPlayer = MediaPlayer.create(this, R.raw.tada);
+            mediaPlayer.start();
+            mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+
+                @Override
+                public void onCompletion(MediaPlayer mp) {
+                    mediaPlayer.stop();
+                    mediaPlayer.release();
+                    mediaPlayer = MediaPlayer.create(TreasureHunt.this, R.raw.shuffle);
+                }
+
+            });
+
+        }
     }
 
     public void fullscreen(){
