@@ -26,6 +26,7 @@ import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.Other.Database;
 import com.example.rasmus.p9.Other.GameIntro;
+import com.example.rasmus.p9.Other.Victory;
 import com.example.rasmus.p9.R;
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -48,6 +49,7 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
     MediaPlayer mediaPlayer;
     String file = "";
     boolean calling = false;
+    boolean talking = false;
     TextView txtView;
     ImageButton callButton;
     LinearLayout background;
@@ -153,10 +155,12 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
     }
 
     public void playHelpSoundfile1(){
-        mediaPlayer.release();
-        mediaPlayer = null;
-        mediaPlayer = MediaPlayer.create(this, R.raw.tada);
-        mediaPlayer.start();
+        if(calling != true && talking != true) {
+            mediaPlayer.stop();
+            mediaPlayer.release();
+            mediaPlayer = MediaPlayer.create(this, R.raw.sound_puzzle_help);
+            mediaPlayer.start();
+        }
     }
 
     private void stopGame() {
@@ -173,7 +177,7 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
                 public void onCompletion(MediaPlayer mp) {
                     mediaPlayer.release();
                     mediaPlayer = null;
-                    Intent intent = new Intent(SoundPuzzle2.this, NavigationActivity.class);
+                    Intent intent = new Intent(SoundPuzzle2.this, Victory.class);
                     startActivity(intent);
                 }
 
@@ -235,6 +239,7 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
     }
 
     public void playSoundfile(View v){
+        talking = true;
         background.setBackgroundColor(Color.BLACK);
         callButton.setVisibility(View.INVISIBLE);
         mediaPlayer.stop();
@@ -264,6 +269,7 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
             @Override
             public void onCompletion(MediaPlayer mp) {
                 calling = false;
+                talking = false;
                 background.setBackgroundColor(Color.WHITE);
                 txtView.setText("Place phone on a metal object");
 

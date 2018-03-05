@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.Other.Database;
+import com.example.rasmus.p9.Other.GameCompleted;
 import com.example.rasmus.p9.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -75,14 +76,12 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
+        setContentView(R.layout.activity_shuffle_game);
 
         getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
 
         //fullscreen();
-        setContentView(R.layout.activity_shuffle_game);
 
-        pinCodeButton = (Button)findViewById(R.id.pinCode);
-        pinCodeButton.setVisibility(View.GONE);
 
         startTimer();
 
@@ -135,9 +134,31 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
                     }
                     if(key.equals("soundfile2") && value.equals("true")){
                         //play soundfile 2
+                        playSoundfile(key);
                         break;
-
                     }
+
+                    if(key.equals("stop") && value.equals("true")){
+                        //play soundfile 2
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                        mediaPlayer = MediaPlayer.create(TreasureHunt.this, R.raw.tada);
+                        mediaPlayer.start();
+                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                    Intent intent = new Intent(TreasureHunt.this, GameCompleted.class);
+                                    startActivity(intent);
+                                }
+                            });
+
+
+                        break;
+                    }
+
+
 
                 }
             }
@@ -148,8 +169,6 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
 
             }
         });
-
-
     }
 
     @Override
@@ -303,23 +322,6 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
         // TODO Auto-generated method stub
     }
 
-    public void showButton(View view){
-        counterShowButton++;
-        if(counterShowButton == 1){
-           pinCodeButton.setVisibility(View.VISIBLE);
-        }
-
-        if(counterShowButton == 2){
-            counterShowButton = 0;
-            pinCodeButton.setVisibility(View.GONE);
-        }
-    }
-
-    public void enterCode(View view){
-        Intent intent = new Intent(TreasureHunt.this, TreasureHuntVerification.class);
-        startActivity(intent);
-    }
-
     public void startTimer(){
         //180000 milliseconds = 3 min
         new CountDownTimer(180000, 1000) {
@@ -343,7 +345,7 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
         mediaPlayer.stop();
         mediaPlayer.release();
         if(soundfile.equals("soundfile1")){
-            mediaPlayer = MediaPlayer.create(this, R.raw.tada);
+            mediaPlayer = MediaPlayer.create(this, R.raw.treasure_hunt_help_flip);
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
@@ -358,7 +360,7 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
         }
 
         if(soundfile.equals("soundfile2")){
-            mediaPlayer = MediaPlayer.create(this, R.raw.tada);
+            mediaPlayer = MediaPlayer.create(this, R.raw.treasure_hunt_help_metal);
             mediaPlayer.start();
             mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
@@ -368,9 +370,7 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
                     mediaPlayer.release();
                     mediaPlayer = MediaPlayer.create(TreasureHunt.this, R.raw.shuffle);
                 }
-
             });
-
         }
     }
 

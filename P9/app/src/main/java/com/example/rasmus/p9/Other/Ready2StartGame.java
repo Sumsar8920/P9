@@ -7,7 +7,17 @@ import android.view.View;
 import android.widget.Button;
 import android.widget.TextView;
 
+import com.example.rasmus.p9.Minigames.ChargeBattery;
+import com.example.rasmus.p9.Minigames.SoundPuzzle2;
+import com.example.rasmus.p9.Minigames.TreasureHunt;
+import com.example.rasmus.p9.NavigationMethod.Navigation;
+import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 import org.w3c.dom.Text;
 
@@ -16,6 +26,8 @@ public class Ready2StartGame extends AppCompatActivity {
     TextView nameTop;
     TextView nameBottom;
     Button startGame;
+    public FirebaseDatabase database;
+    public DatabaseReference rootReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -26,6 +38,54 @@ public class Ready2StartGame extends AppCompatActivity {
         nameTop = (TextView) findViewById(R.id.nameTop);
         nameBottom = (TextView) findViewById(R.id.nameBottom);
         startGame = (Button) findViewById(R.id.startGame);
+
+        rootReference = Database.getDatabaseRootReference();
+        DatabaseReference gamesReference = rootReference.child("skipintroduction");
+        gamesReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String value = ds.getValue().toString();
+                    if(value.equals("true")) {
+                        String key = ds.getKey().toString();
+                        if (key.equals("minigame1")) {
+                            Navigation.gameRunning = true;
+                            Intent intent = new Intent(Ready2StartGame.this, SoundPuzzle2.class);
+                            startActivity(intent);
+                        }
+                        if (key.equals("minigame2")) {
+                            Navigation.gameRunning = true;
+                            Intent intent = new Intent(Ready2StartGame.this, ChargeBattery.class);
+                            startActivity(intent);
+                        }
+                        if (key.equals("minigame3")) {
+                            Navigation.gameRunning = true;
+                            Intent intent = new Intent(Ready2StartGame.this, TreasureHunt.class);
+                            startActivity(intent);
+                        }
+                        if (key.equals("navigation")) {
+                            Navigation.gameRunning = true;
+                            Intent intent = new Intent(Ready2StartGame.this, NavigationActivity.class);
+                            startActivity(intent);
+                        }
+                        break;
+                    }
+
+
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
+
 
     }
 

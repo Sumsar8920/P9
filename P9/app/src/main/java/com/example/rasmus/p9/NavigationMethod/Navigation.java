@@ -69,7 +69,10 @@ public class Navigation implements SensorEventListener {
         smAccelerometer = (SensorManager) context.getSystemService(SENSOR_SERVICE);
         accelerometer = smAccelerometer.getDefaultSensor(Sensor.TYPE_ACCELEROMETER);
         // Register sensor listener
-        smAccelerometer.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        if(NavigationActivity.playerRole.equals("2") || NavigationActivity.playerRole.equals("3")) {
+            smAccelerometer.registerListener((SensorEventListener) this, accelerometer, SensorManager.SENSOR_DELAY_GAME);
+        }
+
         screenBrightness = new ScreenBrightness(activity);
     }
 
@@ -127,6 +130,7 @@ public class Navigation implements SensorEventListener {
 
     public void calculateDistance(Player player, Event event, String playerRole){
         background = (ConstraintLayout)activity.findViewById(R.id.backgroundActivity);
+
 
         Location locationA = new Location("point A");
 
