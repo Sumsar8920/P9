@@ -31,8 +31,14 @@ import android.widget.TextView;
 
 import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
+import com.example.rasmus.p9.Other.Database;
 import com.example.rasmus.p9.Other.Victory;
 import com.example.rasmus.p9.R;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class ChargeBattery extends AppCompatActivity implements SensorEventListener {
 
@@ -57,6 +63,9 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
     int drainBattery = 500;
     public boolean stopHandler = false;
     boolean actionUp = false;
+    public FirebaseDatabase database;
+    public DatabaseReference rootReference;
+    boolean guideTalking = false;
 
 
     @Override
@@ -64,6 +73,46 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
         super.onCreate(savedInstanceState);
         fullscreen();
         //setContentView(R.layout.activity_shake_hands);
+
+        rootReference = Database.getDatabaseRootReference();
+        DatabaseReference chargethebatteryReference = rootReference.child("chargethebattery");
+        chargethebatteryReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String key = ds.getKey().toString();
+                    String value = ds.getValue().toString();
+                    if(key.equals("soundfile1") && value.equals("true")){
+                        //String key = ds.getKey().toString();
+                        playHelpSoundfile(key);
+                        break;
+                    }
+                    if(key.equals("soundfile2") && value.equals("true")){
+                        //play soundfile1
+                        playHelpSoundfile(key);
+                        break;
+
+                    }
+                    if(key.equals("soundfile3") && value.equals("true")){
+                        //play soundfile1
+                        playHelpSoundfile(key);
+                        break;
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
+
 
         progressBar = (ProgressBar)findViewById(R.id.progress);
 
@@ -200,7 +249,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
         if(zFloat > 11 && yFloat > -5 && yFloat < 5) {
             counter = counter + 8;
             //play charging sound
-            if(chargingSound != true){
+            if(chargingSound != true && guideTalking != true){
                 chargingSound = true;
                 //start long charging sound!!
                 mediaPlayer.start();
@@ -218,9 +267,42 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
             length = mediaPlayer.getCurrentPosition();
         }
         oldNumber = counter;
+    }
 
+    public void playHelpSoundfile(String soundfile){
+        length = mediaPlayer.getCurrentPosition();
+        guideTalking = true;
+        mediaPlayer.release();
+        mediaPlayer = null;
+        if(soundfile.equals("soundfile1")){
+            mediaPlayer = MediaPlayer.create(this, R.raw.tada);
+        }
+        if(soundfile.equals("soundfile2")){
+            mediaPlayer = MediaPlayer.create(this, R.raw.tada);
+        }
+        if(soundfile.equals("soundfile3")){
+            mediaPlayer = MediaPlayer.create(this, R.raw.tada);
+        }
 
+        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
 
+            @Override
+            public void onCompletion(MediaPlayer mp) {
+                guideTalking = false;
+                chargingSound = false;
+                mediaPlayer.release();
+                mediaPlayer = null;
+                createMediaPlayer();
+            }
+
+        });
+
+        mediaPlayer.start();
+    }
+
+    public void createMediaPlayer(){
+        mediaPlayer = MediaPlayer.create(this, R.raw.power_up);
+        mediaPlayer.seekTo(length);
     }
 
     public void drainBattery(){

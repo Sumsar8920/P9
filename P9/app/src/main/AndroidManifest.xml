@@ -24,6 +24,8 @@
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
+        android:hardwareAccelerated="false"
+        android:largeHeap="true"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
@@ -108,7 +110,8 @@
             android:name=".Minigames.TreasureHuntVerification"
             android:windowSoftInputMode="stateAlwaysVisible" />
         <activity android:name=".Minigames.SoundPuzzle2" />
-        <activity android:name=".Other.Introduction"></activity>
+        <activity android:name=".Other.Introduction" />
+        <activity android:name=".Minigames.Gyroscope"></activity>
     </application>
 
 </manifest>

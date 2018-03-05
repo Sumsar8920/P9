@@ -6,6 +6,7 @@ import android.content.Intent;
 import android.content.SharedPreferences;
 import android.net.Uri;
 import android.os.AsyncTask;
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
@@ -16,12 +17,14 @@ import android.widget.EditText;
 import android.widget.Toast;
 
 import com.example.rasmus.p9.Minigames.ChargeBattery;
+import com.example.rasmus.p9.Minigames.Gyroscope;
 import com.example.rasmus.p9.Minigames.MetalDetector;
 import com.example.rasmus.p9.Minigames.Proximity;
 import com.example.rasmus.p9.Minigames.SoundPuzzle2;
 import com.example.rasmus.p9.Minigames.TreasureHunt;
 import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
+import com.example.rasmus.p9.Other.Database;
 import com.example.rasmus.p9.Other.GameIntro;
 import com.example.rasmus.p9.Other.GameScreen;
 import com.example.rasmus.p9.Other.Introduction;
@@ -62,6 +65,8 @@ public class PlayerRole extends AppCompatActivity {
         //Flashlight obj = new Flashlight(this, 1000);
         //obj.startLight();
 
+        Database database = new Database();
+
     }
 
     public void addPlayer(View view){
@@ -79,7 +84,7 @@ public class PlayerRole extends AppCompatActivity {
 
         //get coordinates
         //new AsyncGetCoordinates().execute();
-        Intent intent = new Intent(PlayerRole.this, NavigationActivity.class);
+        Intent intent = new Intent(PlayerRole.this, TreasureHunt.class);
         startActivity(intent);
 
     }

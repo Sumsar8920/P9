@@ -2,7 +2,6 @@ package com.example.rasmus.p9.NavigationMethod;
 
 import android.Manifest;
 import android.app.Activity;
-import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
@@ -12,27 +11,23 @@ import android.location.LocationManager;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
-import android.support.annotation.NonNull;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
-import android.view.View;
 import android.widget.TextView;
-import android.widget.Toast;
 
-import com.example.rasmus.p9.BuildConfig;
 import com.example.rasmus.p9.Event;
-import com.example.rasmus.p9.Minigames.ChargeBattery;
-import com.example.rasmus.p9.Minigames.SoundPuzzle2;
 import com.example.rasmus.p9.Minigames.TreasureHunt;
+import com.example.rasmus.p9.Other.Database;
 import com.example.rasmus.p9.Other.GameIntro;
 import com.example.rasmus.p9.Player;
 import com.example.rasmus.p9.R;
-import com.google.android.gms.tasks.OnCompleteListener;
-import com.google.android.gms.tasks.Task;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
-import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 
 public class NavigationActivity extends AppCompatActivity {
 
@@ -54,7 +49,6 @@ public class NavigationActivity extends AppCompatActivity {
     Player player;
     Event meteor;
     PowerManager manager;
-    private FirebaseRemoteConfig mFirebaseRemoteConfig;
 
     private static final String START_GAME_1 = "start_game_1";
     private static final String START_GAME_2 = "start_game_2";
@@ -63,6 +57,10 @@ public class NavigationActivity extends AppCompatActivity {
     Handler h;
     int delay = 5000;
     Runnable runnable;
+    public FirebaseDatabase database;
+    public DatabaseReference rootReference;
+    public TextView test;
+
 
 
     @Override
@@ -70,20 +68,62 @@ public class NavigationActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_navigation);
         context = this;
+        test = (TextView) findViewById(R.id.test);
 
 
-        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
+        //Firebase.setAndroidContext(this);
+        //database = FirebaseDatabase.getInstance();
+        //rootReference = database.getReference();
+        rootReference = Database.getDatabaseRootReference();
+        DatabaseReference gamesReference = rootReference.child("startgames");
+        gamesReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
 
-        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(BuildConfig.DEBUG)
-                .build();
-        mFirebaseRemoteConfig.setConfigSettings(configSettings);
-        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String value = ds.getValue().toString();
+                    if(value.equals("true")){
+                        String key = ds.getKey().toString();
+                        if(key.equals("minigame1")){
+                            Navigation.gameRunning = true;
+                            Intent intent = new Intent(NavigationActivity.this, GameIntro.class);
+                            intent.putExtra("GAME","1");
+                            startActivity(intent);
+                        }
+                        if(key.equals("minigame2")){
+                            Navigation.gameRunning = true;
+                            Intent intent = new Intent(NavigationActivity.this, GameIntro.class);
+                            intent.putExtra("GAME","2");
+                            startActivity(intent);
+                        }
+                        if(key.equals("minigame3")){
+                            Navigation.gameRunning = true;
+                            Intent intent = new Intent(NavigationActivity.this, GameIntro.class);
+                            intent.putExtra("GAME","3");
+                            startActivity(intent);
+                        }
+                        if(key.equals("minigame3crash")){
+                            Navigation.gameRunning = true;
+                            Intent intent = new Intent(NavigationActivity.this, TreasureHunt.class);
+                            //intent.putExtra("GAME","3");
+                            startActivity(intent);
+                        }
+                        break;
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
 
         h = new Handler();
-
-        manager = (PowerManager) getSystemService(Context.POWER_SERVICE);
-        PowerManager.WakeLock wl = manager.newWakeLock(PowerManager.PARTIAL_WAKE_LOCK, "Your Tag");
 
         Navigation navigation = new Navigation();
         navigation.activateAccelerometer(this, this);
@@ -104,6 +144,7 @@ public class NavigationActivity extends AppCompatActivity {
         }
 
         txtDistance = (TextView)findViewById(R.id.distance);
+        //readFromDatabase();
 
     }
 
@@ -116,7 +157,7 @@ public class NavigationActivity extends AppCompatActivity {
                 //do something
 
                 runnable=this;
-                fetchData();
+                //fetchData();
 
                 h.postDelayed(runnable, delay);
             }
@@ -131,36 +172,29 @@ public class NavigationActivity extends AppCompatActivity {
         super.onPause();
     }
 
+    public void readFromDatabase(){
+        // Read from the database
 
-    public void fetchData() {
-        long cacheExpiration = 3600; // 1 hour in seconds.
-        // If your app is using developer mode, cacheExpiration is set to 0, so each fetch will
-        // retrieve values from the service.
-        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
-            cacheExpiration = 0;
-        }
-        mFirebaseRemoteConfig.fetch(cacheExpiration)
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            //Toast.makeText(NavigationActivity.this, "Fetch Succeeded",
-                                    //Toast.LENGTH_SHORT).show();
+           rootReference.addValueEventListener(new ValueEventListener() {
+               @Override
+               public void onDataChange(DataSnapshot dataSnapshot) {
+                   // This method is called once with the initial value and again
+                   // whenever data at this location is updated.
+                   String value = dataSnapshot.getValue(String.class);
+               }
 
-                            // After config data is successfully fetched, it must be activated before newly fetched
-                            // values are returned.
-                            mFirebaseRemoteConfig.activateFetched();
-                            startGame();
-                        } else {
-                            Toast.makeText(NavigationActivity.this, "Fetch Failed",
-                                    Toast.LENGTH_SHORT).show();
-                        }
+               @Override
+               public void onCancelled(DatabaseError error) {
+                   // Failed to read value
 
-                    }
-                });
-    }
+               }
+           });
+       }
 
-    private void startGame() {
+
+
+
+   /* private void startGame() {
 
         //checks whether one of the booleans are set to true and starts the corresponding game.
         if (mFirebaseRemoteConfig.getBoolean(START_GAME_1) == true) {
@@ -188,7 +222,7 @@ public class NavigationActivity extends AppCompatActivity {
               //      Toast.LENGTH_SHORT).show();
         }
 
-    }
+    } */
 
 
     public boolean checkLocationPermission() {
@@ -267,3 +301,4 @@ public class NavigationActivity extends AppCompatActivity {
     }
 
 }
+

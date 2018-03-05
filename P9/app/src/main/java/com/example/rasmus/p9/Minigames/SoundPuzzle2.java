@@ -24,10 +24,17 @@ import android.widget.Toast;
 import com.example.rasmus.p9.BuildConfig;
 import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
+import com.example.rasmus.p9.Other.Database;
 import com.example.rasmus.p9.Other.GameIntro;
 import com.example.rasmus.p9.R;
+import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
 import com.google.android.gms.tasks.Task;
+import com.google.firebase.database.DataSnapshot;
+import com.google.firebase.database.DatabaseError;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
+import com.google.firebase.database.ValueEventListener;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfig;
 import com.google.firebase.remoteconfig.FirebaseRemoteConfigSettings;
 
@@ -44,24 +51,17 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
     TextView txtView;
     ImageButton callButton;
     LinearLayout background;
-    private FirebaseRemoteConfig mFirebaseRemoteConfig;
     private static final String START_GAME_1 = "start_game_1";
     Handler h;
     int delay = 5000;
     Runnable runnable;
+    public FirebaseDatabase database;
+    public DatabaseReference rootReference;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_sound_puzzle2);
-
-        mFirebaseRemoteConfig = FirebaseRemoteConfig.getInstance();
-
-        FirebaseRemoteConfigSettings configSettings = new FirebaseRemoteConfigSettings.Builder()
-                .setDeveloperModeEnabled(BuildConfig.DEBUG)
-                .build();
-        mFirebaseRemoteConfig.setConfigSettings(configSettings);
-        mFirebaseRemoteConfig.setDefaults(R.xml.remote_config_defaults);
 
         h = new Handler();
 
@@ -80,6 +80,41 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
         sensorManager = (SensorManager) getSystemService(SENSOR_SERVICE);
         magnetometer = sensorManager.getDefaultSensor(Sensor.TYPE_MAGNETIC_FIELD);
 
+        //Firebase.setAndroidContext(this);
+        //database = FirebaseDatabase.getInstance();
+        rootReference = Database.getDatabaseRootReference();
+        DatabaseReference soundPuzzleReference = rootReference.child("soundpuzzle");
+        soundPuzzleReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String key = ds.getKey().toString();
+                    String value = ds.getValue().toString();
+                    if(key.equals("stop") && value.equals("true")){
+                            //String key = ds.getKey().toString();
+                            stopGame();
+                            break;
+                    }
+                    if(key.equals("soundfile1") && value.equals("true")){
+                        //play soundfile1
+                        playHelpSoundfile1();
+                        break;
+
+                    }
+
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
+
     }
 
     protected void onResume() {
@@ -90,7 +125,6 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
                 //do something
 
                 runnable=this;
-                fetchData();
 
                 h.postDelayed(runnable, delay);
             }
@@ -103,38 +137,16 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
         sensorManager.unregisterListener(this);
     }
 
-    public void fetchData() {
-        long cacheExpiration = 3600; // 1 hour in seconds.
-        // If your app is using developer mode, cacheExpiration is set to 0, so each fetch will
-        // retrieve values from the service.
-        if (mFirebaseRemoteConfig.getInfo().getConfigSettings().isDeveloperModeEnabled()) {
-            cacheExpiration = 0;
-        }
-        mFirebaseRemoteConfig.fetch(cacheExpiration)
-                .addOnCompleteListener(this, new OnCompleteListener<Void>() {
-                    @Override
-                    public void onComplete(@NonNull Task<Void> task) {
-                        if (task.isSuccessful()) {
-                            //Toast.makeText(NavigationActivity.this, "Fetch Succeeded",
-                            //Toast.LENGTH_SHORT).show();
-
-                            // After config data is successfully fetched, it must be activated before newly fetched
-                            // values are returned.
-                            mFirebaseRemoteConfig.activateFetched();
-                            stopGame();
-                        } else {
-                            Toast.makeText(SoundPuzzle2.this, "Fetch Failed",
-                                    Toast.LENGTH_SHORT).show();
-                        }
-
-                    }
-                });
+    public void playHelpSoundfile1(){
+        mediaPlayer.release();
+        mediaPlayer = null;
+        mediaPlayer = MediaPlayer.create(this, R.raw.tada);
+        mediaPlayer.start();
     }
 
     private void stopGame() {
 
         //checks whether one of the booleans are set to true and starts the corresponding game.
-        if (mFirebaseRemoteConfig.getBoolean(START_GAME_1) == false) {
             Navigation.gameRunning = false;
             mediaPlayer.release();
             mediaPlayer = null;
@@ -151,11 +163,6 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
                 }
 
             });
-        }
-
-        else {
-
-        }
 
     }
 
