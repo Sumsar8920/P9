@@ -402,7 +402,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
             public void onCompletion(MediaPlayer mp) {
                 mediaPlayer.release();
                 mediaPlayer = null;
-                Intent intent = new Intent(ChargeBattery.this, NavigationActivity.class);
+                Intent intent = new Intent(ChargeBattery.this, Victory.class);
                 startActivity(intent);
             }
 

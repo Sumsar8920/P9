@@ -26,6 +26,7 @@ import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.Other.Database;
 import com.example.rasmus.p9.Other.GameIntro;
+import com.example.rasmus.p9.Other.Victory;
 import com.example.rasmus.p9.R;
 import com.firebase.client.Firebase;
 import com.google.android.gms.tasks.OnCompleteListener;
@@ -176,7 +177,7 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
                 public void onCompletion(MediaPlayer mp) {
                     mediaPlayer.release();
                     mediaPlayer = null;
-                    Intent intent = new Intent(SoundPuzzle2.this, NavigationActivity.class);
+                    Intent intent = new Intent(SoundPuzzle2.this, Victory.class);
                     startActivity(intent);
                 }
 

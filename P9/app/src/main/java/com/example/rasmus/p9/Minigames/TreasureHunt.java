@@ -23,6 +23,7 @@ import android.widget.TextView;
 import com.example.rasmus.p9.NavigationMethod.Navigation;
 import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.Other.Database;
+import com.example.rasmus.p9.Other.GameCompleted;
 import com.example.rasmus.p9.R;
 import com.google.firebase.database.DataSnapshot;
 import com.google.firebase.database.DatabaseError;
@@ -139,6 +140,20 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
 
                     if(key.equals("stop") && value.equals("true")){
                         //play soundfile 2
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                        mediaPlayer = MediaPlayer.create(TreasureHunt.this, R.raw.tada);
+                        mediaPlayer.start();
+                        mediaPlayer.setOnCompletionListener(new MediaPlayer.OnCompletionListener() {
+                                @Override
+                                public void onCompletion(MediaPlayer mp) {
+                                    mediaPlayer.stop();
+                                    mediaPlayer.release();
+                                    Intent intent = new Intent(TreasureHunt.this, GameCompleted.class);
+                                    startActivity(intent);
+                                }
+                            });
+
 
                         break;
                     }
