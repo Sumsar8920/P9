@@ -9,8 +9,7 @@
         android:id="@+id/image"
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:clickable="true"
-        android:onClick="showButton"/>
+        />
 
     <!--<ImageButton
         android:id="@+id/button1"
@@ -20,14 +19,6 @@
         android:background="@drawable/thumb_scanner"
         android:layout_alignBottom="@+id/image"
         android:layout_centerHorizontal="true"/> -->
-
-    <Button
-        android:id="@+id/pinCode"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="Enter code"
-        android:onClick="enterCode"
-        android:layout_alignBottom="@+id/image"/>
 
 
 </RelativeLayout>

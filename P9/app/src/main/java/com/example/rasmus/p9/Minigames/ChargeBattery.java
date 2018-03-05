@@ -119,7 +119,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
 
         CharSequence colors[] = new CharSequence[] {"1", "2"};
 
-        AlertDialog.Builder builder = new AlertDialog.Builder(this);
+        /*AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("How many players?");
         builder.setItems(colors, new DialogInterface.OnClickListener() {
             @Override
@@ -135,7 +135,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
                 }
             }
         });
-        builder.show();
+        builder.show(); */
 
         button1 = (ImageButton)findViewById(R.id.button1);
         button2 = (ImageButton)findViewById(R.id.button2);

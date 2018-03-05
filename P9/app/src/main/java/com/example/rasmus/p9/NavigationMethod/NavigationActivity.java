@@ -4,10 +4,12 @@ import android.Manifest;
 import android.app.Activity;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
+import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
@@ -15,6 +17,7 @@ import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
+import android.view.View;
 import android.widget.TextView;
 
 import com.example.rasmus.p9.Event;
@@ -49,6 +52,7 @@ public class NavigationActivity extends AppCompatActivity {
     Player player;
     Event meteor;
     PowerManager manager;
+    public MediaPlayer mediaPlayer;
 
     private static final String START_GAME_1 = "start_game_1";
     private static final String START_GAME_2 = "start_game_2";
@@ -60,21 +64,20 @@ public class NavigationActivity extends AppCompatActivity {
     public FirebaseDatabase database;
     public DatabaseReference rootReference;
     public TextView test;
-
-
+    public  static String playerRole;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         setContentView(R.layout.activity_navigation);
         context = this;
         test = (TextView) findViewById(R.id.test);
+        mediaPlayer = MediaPlayer.create(NavigationActivity.this, R.raw.nav_closer);
 
+        SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
+        playerRole = (shared.getString("PLAYERROLE", ""));
 
-        //Firebase.setAndroidContext(this);
-        //database = FirebaseDatabase.getInstance();
-        //rootReference = database.getReference();
         rootReference = Database.getDatabaseRootReference();
         DatabaseReference gamesReference = rootReference.child("startgames");
         gamesReference.addValueEventListener(new ValueEventListener() {
@@ -105,12 +108,6 @@ public class NavigationActivity extends AppCompatActivity {
                             intent.putExtra("GAME","3");
                             startActivity(intent);
                         }
-                        if(key.equals("minigame3crash")){
-                            Navigation.gameRunning = true;
-                            Intent intent = new Intent(NavigationActivity.this, TreasureHunt.class);
-                            //intent.putExtra("GAME","3");
-                            startActivity(intent);
-                        }
                         break;
 
                     }
@@ -124,10 +121,44 @@ public class NavigationActivity extends AppCompatActivity {
             }
         });
 
-        h = new Handler();
+        DatabaseReference navigationReference = rootReference.child("navigation");
+        navigationReference.addValueEventListener(new ValueEventListener() {
+            @Override
+            public void onDataChange(DataSnapshot dataSnapshot) {
+                // This method is called once with the initial value and again
+                // whenever data at this location is updated.
+
+                for(DataSnapshot ds : dataSnapshot.getChildren()) {
+                    String key = ds.getKey().toString();
+                    String value = ds.getValue().toString();
+                    if(key.equals("rightway") && value.equals("true")){
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                        mediaPlayer = MediaPlayer.create(NavigationActivity.this, R.raw.nav_closer);
+                        mediaPlayer.start();
+
+                    }
+
+                    if(key.equals("wrongway") && value.equals("true")){
+                        mediaPlayer.stop();
+                        mediaPlayer.release();
+                        mediaPlayer = MediaPlayer.create(NavigationActivity.this, R.raw.nav_wrong_way);
+                        mediaPlayer.start();
+
+                    }
+                }
+            }
+
+            @Override
+            public void onCancelled(DatabaseError error) {
+                // Failed to read value
+
+            }
+        });
 
         Navigation navigation = new Navigation();
         navigation.activateAccelerometer(this, this);
+
 
         //creates player object
         player = new Player();
@@ -165,80 +196,13 @@ public class NavigationActivity extends AppCompatActivity {
 
     @Override
     protected void onResume() {
-        //start handler as activity become visible
-
-              h.postDelayed(new Runnable() {
-            public void run() {
-                //do something
-
-                runnable=this;
-                //fetchData();
-
-                h.postDelayed(runnable, delay);
-            }
-        }, delay);
-
         super.onResume();
     }
 
     @Override
     protected void onPause() {
-        h.removeCallbacks(runnable); //stop handler when activity not visible
         super.onPause();
     }
-
-    public void readFromDatabase(){
-        // Read from the database
-
-           rootReference.addValueEventListener(new ValueEventListener() {
-               @Override
-               public void onDataChange(DataSnapshot dataSnapshot) {
-                   // This method is called once with the initial value and again
-                   // whenever data at this location is updated.
-                   String value = dataSnapshot.getValue(String.class);
-               }
-
-               @Override
-               public void onCancelled(DatabaseError error) {
-                   // Failed to read value
-
-               }
-           });
-       }
-
-
-
-
-   /* private void startGame() {
-
-        //checks whether one of the booleans are set to true and starts the corresponding game.
-        if (mFirebaseRemoteConfig.getBoolean(START_GAME_1) == true) {
-            Navigation.gameRunning = true;
-            Intent intent = new Intent(NavigationActivity.this, GameIntro.class);
-            intent.putExtra("GAME","1");
-            startActivity(intent);
-        }
-        if (mFirebaseRemoteConfig.getBoolean(START_GAME_2)) {
-            Navigation.gameRunning = true;
-            Intent intent = new Intent(NavigationActivity.this, GameIntro.class);
-            intent.putExtra("GAME","2");
-            startActivity(intent);
-        }
-        if (mFirebaseRemoteConfig.getBoolean(START_GAME_3)) {
-            Navigation.gameRunning = true;
-            Intent intent = new Intent(NavigationActivity.this, GameIntro.class);
-            intent.putExtra("GAME","3");
-            startActivity(intent);
-        }
-
-        else {
-            //mWelcomeTextView.setAllCaps(false);
-            //Toast.makeText(NavigationActivity.this, "False",
-              //      Toast.LENGTH_SHORT).show();
-        }
-
-    } */
-
 
     public boolean checkLocationPermission() {
         if (ContextCompat.checkSelfPermission(this,
