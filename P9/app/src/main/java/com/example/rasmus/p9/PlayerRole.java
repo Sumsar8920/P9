@@ -25,6 +25,7 @@ import com.example.rasmus.p9.NavigationMethod.NavigationActivity;
 import com.example.rasmus.p9.Other.GameIntro;
 import com.example.rasmus.p9.Other.GameScreen;
 import com.example.rasmus.p9.Other.Introduction;
+import com.example.rasmus.p9.Other.Ready2StartGame;
 
 import org.json.JSONArray;
 import org.json.JSONException;
@@ -53,8 +54,9 @@ public class PlayerRole extends AppCompatActivity {
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fullscreen();
-        //setContentView(R.layout.activity_player_role);
+        //fullscreen();
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        setContentView(R.layout.activity_player_role);
 
         editPlayerRole = (EditText) findViewById(R.id.playerRole);
         addPlayer = (Button) findViewById(R.id.addPlayer);
@@ -62,6 +64,20 @@ public class PlayerRole extends AppCompatActivity {
         //Flashlight obj = new Flashlight(this, 1000);
         //obj.startLight();
 
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 
     public void addPlayer(View view){
@@ -79,7 +95,7 @@ public class PlayerRole extends AppCompatActivity {
 
         //get coordinates
         //new AsyncGetCoordinates().execute();
-        Intent intent = new Intent(PlayerRole.this, NavigationActivity.class);
+        Intent intent = new Intent(PlayerRole.this, TreasureHunt.class);
         startActivity(intent);
 
     }
@@ -214,7 +230,7 @@ public class PlayerRole extends AppCompatActivity {
                 Toast toast = Toast.makeText(getApplicationContext(), "Player added", Toast.LENGTH_SHORT);
                 toast.show();
 
-                Intent intent = new Intent(PlayerRole.this, Introduction.class);
+                Intent intent = new Intent(PlayerRole.this, TreasureHunt.class);
                 startActivity(intent);
 
             }

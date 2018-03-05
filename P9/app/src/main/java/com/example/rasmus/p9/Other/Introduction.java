@@ -9,6 +9,7 @@ import android.net.Uri;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.View;
+import android.view.ViewGroup;
 import android.widget.Button;
 import android.widget.ImageButton;
 import android.widget.TextView;
@@ -42,6 +43,8 @@ public class Introduction extends AppCompatActivity {
         setContentView(R.layout.activity_introduction);
         mediaPlayer = new MediaPlayer();
 
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+
         SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
         playerRole = (shared.getString("PLAYERROLE", ""));
 
@@ -58,6 +61,20 @@ public class Introduction extends AppCompatActivity {
 
 
         callPlayer();
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 
     public void showButton(){
@@ -78,7 +95,9 @@ public class Introduction extends AppCompatActivity {
            @Override
            public void onCompletion(MediaPlayer mp) {
                counter ++;
-               if(counter >= 2){
+               if(counter >= 2 && playerRoleReady == true){
+                   txtView.setText("Tab the screen and start the game");
+                   proceedToNav.setVisibility(View.GONE);
                    background.setOnClickListener(new View.OnClickListener()
                    {
                        @Override
@@ -89,9 +108,12 @@ public class Introduction extends AppCompatActivity {
                    });
 
                }
+               else{
+                   proceedToNav.setVisibility(View.VISIBLE);
+               }
                background.setBackgroundColor(Color.WHITE);
+               playAgain.setClickable(true);
                playAgain.setVisibility(View.VISIBLE);
-               proceedToNav.setVisibility(View.VISIBLE);
                if(playerRole .equals("2") || playerRole .equals("3")){
                    navigatorRole();
                }
@@ -118,8 +140,8 @@ public class Introduction extends AppCompatActivity {
         });
     }
 
+
     public void introFile(View v){
-       txtView.setText("");
 
        playAgain.setVisibility(View.VISIBLE);
        proceedToNav.setVisibility(View.VISIBLE);
@@ -134,16 +156,23 @@ public class Introduction extends AppCompatActivity {
        mediaPlayer.setAudioStreamType(AudioManager.STREAM_VOICE_CALL);
        if(playerRoleReady == false) {
            mediaplayerListen();
-           file = "intro";
+           if(playerRole .equals("2") || playerRole .equals("3")){
+               file = "intro_navigators";
+           }
+           else{
+               file = "intro_communicators";
+           }
             background.setBackgroundColor(Color.BLACK);
+            playAgain.setClickable(false);
             playAgain.setVisibility(View.GONE);
             proceedToNav.setVisibility(View.GONE);
+            txtView.setText("Listen again or proceed to next call");
        }
        else{
-           mediaplayerListen();
            background.setBackgroundColor(Color.BLACK);
+           playAgain.setClickable(false);
            playAgain.setVisibility(View.GONE);
-           proceedToNav.setVisibility(View.GONE);
+           mediaplayerListen();
            if(playerRole .equals("1") || playerRole .equals("4")){
                file = "after_roles";
            }
@@ -151,7 +180,6 @@ public class Introduction extends AppCompatActivity {
        whichSoundFile();
        mediaPlayer.start();
    }
-
 
 
     public void whichSoundFile(){

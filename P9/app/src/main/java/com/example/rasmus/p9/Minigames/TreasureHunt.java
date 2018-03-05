@@ -68,8 +68,9 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        fullscreen();
-        //setContentView(R.layout.activity_shuffle_game);
+        getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
+        //fullscreen();
+        setContentView(R.layout.activity_shuffle_game);
 
         pinCodeButton = (Button)findViewById(R.id.pinCode);
         pinCodeButton.setVisibility(View.GONE);
@@ -118,6 +119,20 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
         DECIMAL_FORMATTER = new DecimalFormat("#.000", symbols);
 
 
+    }
+
+    @Override
+    public void onWindowFocusChanged(boolean hasFocus) {
+        super.onWindowFocusChanged(hasFocus);
+        if (hasFocus) {
+            getWindow().getDecorView().setSystemUiVisibility(
+                    View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                            | View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                            | View.SYSTEM_UI_FLAG_FULLSCREEN
+                            | View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY);
+        }
     }
 
     protected void onResume() {

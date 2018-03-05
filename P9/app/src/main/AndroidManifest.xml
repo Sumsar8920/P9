@@ -108,7 +108,8 @@
             android:name=".Minigames.TreasureHuntVerification"
             android:windowSoftInputMode="stateAlwaysVisible" />
         <activity android:name=".Minigames.SoundPuzzle2" />
-        <activity android:name=".Other.Introduction"></activity>
+        <activity android:name=".Other.Introduction" />
+        <activity android:name=".Other.Ready2StartGame"></activity>
     </application>
 
 </manifest>
