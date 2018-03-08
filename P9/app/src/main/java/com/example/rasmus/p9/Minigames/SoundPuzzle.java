@@ -87,7 +87,7 @@ public class SoundPuzzle extends AppCompatActivity implements SensorEventListene
                                 }
 
                                 if (playerRole.equals("3")){
-                                    media = MediaPlayer.create(this, R.raw.three);
+                                    media = MediaPlayer.create(this, R.raw.third);
                                     media.start();
                                 }
 
