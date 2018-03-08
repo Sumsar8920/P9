@@ -32,40 +32,40 @@ public class Flashlight extends IntentService {
     protected void onHandleIntent(@Nullable Intent intent) {
         float distance = intent.getFloatExtra("DISTANCE", 0);
         if(distance > 275){
-            frequency = 2800;
+            frequency = 3000;
         }
         if(distance <= 275 && distance > 250){
-            frequency = 2200;
+            frequency = 2500;
         }
         if(distance <= 250 && distance > 225){
-            frequency = 2000;
+            frequency = 2200;
         }
         if(distance <= 225 && distance > 200){
             frequency = 1800;
         }
         if(distance <= 200 && distance > 175){
-            frequency = 1600;
+            frequency = 1500;
         }
         if(distance <= 175 && distance > 150){
-            frequency = 1400;
-        }
-        if(distance <= 150 && distance > 125){
             frequency = 1200;
         }
+        if(distance <= 150 && distance > 125){
+            frequency = 900;
+        }
         if(distance <= 125 && distance > 100){
-            frequency = 1000;
+            frequency = 700;
         }
         if(distance <= 100 && distance > 75){
-            frequency = 800;
+            frequency = 500;
         }
         if(distance <= 75 && distance > 50){
-            frequency = 600;
+            frequency = 300;
         }
         if(distance <= 50 && distance > 25){
-            frequency = 400;
+            frequency = 100;
         }
         if(distance <= 25){
-            frequency = 200;
+            frequency = 50;
         }
 
 

@@ -12,7 +12,10 @@ import android.os.IBinder;
 import android.util.Log;
 
 import com.example.rasmus.p9.Event;
+import com.example.rasmus.p9.Other.Database;
 import com.example.rasmus.p9.Player;
+import com.google.firebase.database.DatabaseReference;
+import com.google.firebase.database.FirebaseDatabase;
 
 public class UserLocation extends Service {
 
@@ -20,6 +23,9 @@ public class UserLocation extends Service {
     public Event event;
     public Player player;
     public String playerRole = "";
+    public FirebaseDatabase database;
+    public DatabaseReference rootReference;
+    DatabaseReference userLocationReference;
 
     public UserLocation() {
 
@@ -54,6 +60,8 @@ public class UserLocation extends Service {
 
             player.setLatitude(location.getLatitude());
             player.setLongitude(location.getLongitude());
+
+            userLocationReference.push().setValue(location.getLatitude() + " , " + location.getLongitude());
 
             //use navigation object to calculate distance. Pass in the user location and the event object to calculate it
             navigation.calculateDistance(player, event, playerRole);
@@ -103,6 +111,11 @@ public class UserLocation extends Service {
         SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
         playerRole = (shared.getString("PLAYERROLE", ""));
 
+        String dbPlayerRole = "player" + playerRole;
+
+        rootReference = Database.getDatabaseRootReference();
+        userLocationReference = rootReference.child(dbPlayerRole);
+
         Log.e(TAG, "onCreate");
         initializeLocationManager();
         try {
@@ -132,8 +145,8 @@ public class UserLocation extends Service {
 
         //create object of Event
         event = new Event();
-        event.setLatitude(57.044589);
-        event.setLongitude(9.930528);
+        event.setLatitude(57.044989);
+        event.setLongitude(9.933316);
 
     }
 

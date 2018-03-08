@@ -156,7 +156,7 @@ public class Navigation implements SensorEventListener {
 
         }
         oldDistance = distance;
-        NavigationActivity.txtDistance.setText(Float.toString(Math.round(distance)));
+        //NavigationActivity.txtDistance.setText(Float.toString(Math.round(distance)));
 
         //minigame 1
         /*if(distance <= 250 && distance > 225 && gameRunning != true && minigame1Done == false){

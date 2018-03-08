@@ -100,7 +100,7 @@ public class PlayerRole extends AppCompatActivity {
 
         //get coordinates
         //new AsyncGetCoordinates().execute();
-        Intent intent = new Intent(PlayerRole.this, NavigationActivity.class);
+        Intent intent = new Intent(PlayerRole.this, Ready2StartGame.class);
         startActivity(intent);
 
     }

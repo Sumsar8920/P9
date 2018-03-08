@@ -6,6 +6,7 @@ import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
 import android.hardware.Sensor;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
@@ -13,6 +14,7 @@ import android.media.MediaPlayer;
 import android.os.Bundle;
 import android.os.Handler;
 import android.os.PowerManager;
+import android.support.constraint.ConstraintLayout;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AlertDialog;
@@ -46,6 +48,8 @@ public class NavigationActivity extends AppCompatActivity {
     static TextView txtDistance;
     public static final int MY_PERMISSIONS_REQUEST_LOCATION = 99;
     private static Activity context = null;
+    public ConstraintLayout background;
+    public TextView text;
 
     public ScreenBrightness brightness;
     public Flashlight flashlight;
@@ -72,11 +76,23 @@ public class NavigationActivity extends AppCompatActivity {
         //getWindow().getDecorView().setSystemUiVisibility(View.SYSTEM_UI_FLAG_HIDE_NAVIGATION);
         setContentView(R.layout.activity_navigation);
         context = this;
-        test = (TextView) findViewById(R.id.test);
         mediaPlayer = MediaPlayer.create(NavigationActivity.this, R.raw.nav_closer);
 
         SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
         playerRole = (shared.getString("PLAYERROLE", ""));
+
+        background = (ConstraintLayout) findViewById(R.id.backgroundActivity);
+        text = (TextView) findViewById(R.id.text);
+
+        if(playerRole.equals("1") || playerRole.equals("4")){
+            background.setBackgroundColor(Color.BLACK);
+            text.setText("Wait for guide to call you");
+            text.setTextColor(Color.WHITE);
+        }
+
+        else{
+            text.setText("Flip the phone around to start navigation");
+        }
 
         rootReference = Database.getDatabaseRootReference();
         DatabaseReference gamesReference = rootReference.child("startgames");
@@ -175,7 +191,6 @@ public class NavigationActivity extends AppCompatActivity {
 
         }
 
-        txtDistance = (TextView)findViewById(R.id.distance);
         //readFromDatabase();
 
     }

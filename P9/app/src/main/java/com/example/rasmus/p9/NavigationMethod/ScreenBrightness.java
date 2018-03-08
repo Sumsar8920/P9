@@ -33,28 +33,28 @@ public class ScreenBrightness extends Navigation {
             brightness = 0.1F;
         }
         if(distance <= 250 && distance > 225){
-            brightness = 0.1F;
-        }
-        if(distance <= 225 && distance > 200){
             brightness = 0.2F;
         }
-        if(distance <= 200 && distance > 175){
+        if(distance <= 225 && distance > 200){
             brightness = 0.3F;
         }
-        if(distance <= 175 && distance > 150){
+        if(distance <= 200 && distance > 175){
             brightness = 0.4F;
         }
-        if(distance <= 150 && distance > 125){
+        if(distance <= 175 && distance > 150){
             brightness = 0.5F;
         }
-        if(distance <= 125 && distance > 100){
+        if(distance <= 150 && distance > 125){
             brightness = 0.6F;
         }
-        if(distance <= 100 && distance > 75){
+        if(distance <= 125 && distance > 100){
             brightness = 0.7F;
         }
-        if(distance <= 75 && distance > 50){
+        if(distance <= 100 && distance > 75){
             brightness = 0.8F;
+        }
+        if(distance <= 75 && distance > 50){
+            brightness = 0.9F;
         }
         if(distance <= 50 && distance > 25){
             brightness = 0.9F;

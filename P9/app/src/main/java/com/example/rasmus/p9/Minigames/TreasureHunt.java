@@ -83,7 +83,7 @@ public class TreasureHunt extends AppCompatActivity implements SensorEventListen
         //fullscreen();
 
 
-        startTimer();
+        //startTimer();
 
         arrayImagePlayer1[1] = R.drawable.player1_2; arrayImagePlayer2[1] = R.drawable.player2_3; arrayImagePlayer3[1] = R.drawable.player3_8; arrayImagePlayer4[1] = R.drawable.player4_5;
         arrayImagePlayer1[2] = R.drawable.player1_3; arrayImagePlayer2[2] = R.drawable.player2_5; arrayImagePlayer3[2] = R.drawable.player3_2; arrayImagePlayer4[2] = R.drawable.player4_2;
