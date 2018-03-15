@@ -96,10 +96,16 @@ public class Navigation implements SensorEventListener {
                                     //toast.show();
 
                                     screenDown = false;
-                                    background.setBackgroundColor(Color.BLACK);
-                                    Intent intent = new Intent(context, Flashlight.class);
-                                    intent.putExtra("DISTANCE", distance);
-                                    context.startService(intent);
+
+                                    if(NavigationActivity.playerRole.equals("2") || NavigationActivity.playerRole.equals("3")) {
+                                        background.setBackgroundColor(Color.BLACK);
+                                        Intent intent = new Intent(context, Flashlight.class);
+                                        intent.putExtra("DISTANCE", distance);
+                                        context.startService(intent);
+                                    }
+
+
+
                                 } else if (gz < 0) {
                                     //Toast toast = Toast.makeText(context, "Down", Toast.LENGTH_SHORT);
                                     //toast.show();
@@ -156,32 +162,6 @@ public class Navigation implements SensorEventListener {
 
         }
         oldDistance = distance;
-        //NavigationActivity.txtDistance.setText(Float.toString(Math.round(distance)));
-
-        //minigame 1
-        /*if(distance <= 250 && distance > 225 && gameRunning != true && minigame1Done == false){
-            gameRunning = true;
-            Intent intent = new Intent(activity, GameIntro.class);
-            intent.putExtra("GAME","1");
-            activity.startActivity(intent);
-        }
-
-        //minigame 2
-        if(distance <= 125 && distance > 100 && gameRunning != true && minigame2Done == false){
-            gameRunning = true;
-            Intent intent = new Intent(activity, GameIntro.class);
-            intent.putExtra("GAME","2");
-            activity.startActivity(intent);
-        }
-
-        //minigame 3
-        if(distance <= 25 && gameRunning != true && minigame3Done == false){
-            gameRunning = true;
-            Intent intent = new Intent(activity, GameIntro.class);
-            intent.putExtra("GAME","3");
-            activity.startActivity(intent);
-        } */
-
 
     }
 

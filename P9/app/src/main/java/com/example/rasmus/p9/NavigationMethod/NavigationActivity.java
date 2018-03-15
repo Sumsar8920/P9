@@ -8,6 +8,7 @@ import android.content.SharedPreferences;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.hardware.Sensor;
+import android.hardware.SensorEventListener;
 import android.hardware.SensorManager;
 import android.location.LocationManager;
 import android.media.MediaPlayer;
@@ -23,6 +24,7 @@ import android.view.View;
 import android.widget.TextView;
 
 import com.example.rasmus.p9.Event;
+import com.example.rasmus.p9.Minigames.ChargeBattery;
 import com.example.rasmus.p9.Minigames.TreasureHunt;
 import com.example.rasmus.p9.Other.Database;
 import com.example.rasmus.p9.Other.GameIntro;
@@ -69,6 +71,7 @@ public class NavigationActivity extends AppCompatActivity {
     public DatabaseReference rootReference;
     public TextView test;
     public  static String playerRole;
+    public static boolean playerRoleChanged = false;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -81,18 +84,32 @@ public class NavigationActivity extends AppCompatActivity {
         SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
         playerRole = (shared.getString("PLAYERROLE", ""));
 
+        if(ChargeBattery.chargeBatteryDone == true){
+            if (playerRole.equals("1") && playerRoleChanged == false) {
+                playerRoleChanged = true;
+                playerRole = "2";
+            }
+            if (playerRole.equals("4") && playerRoleChanged == false) {
+                playerRoleChanged = true;
+                playerRole = "3";
+            }
+            if (playerRole.equals("2") && playerRoleChanged == false) {
+                playerRoleChanged = true;
+                playerRole = "1";
+            }
+            if (playerRole.equals("3") && playerRoleChanged == false) {
+                playerRoleChanged = true;
+                playerRole = "4";
+            }
+
+            SharedPreferences prefs = getSharedPreferences("your_file_name", MODE_PRIVATE);
+            SharedPreferences.Editor editor = prefs.edit();
+            editor.putString("PLAYERROLE", playerRole);
+            editor.commit();
+        }
+
         background = (ConstraintLayout) findViewById(R.id.backgroundActivity);
         text = (TextView) findViewById(R.id.text);
-
-        if(playerRole.equals("1") || playerRole.equals("4")){
-            background.setBackgroundColor(Color.BLACK);
-            text.setText("Wait for guide to call you");
-            text.setTextColor(Color.WHITE);
-        }
-
-        else{
-            text.setText("Flip the phone around to start navigation");
-        }
 
         rootReference = Database.getDatabaseRootReference();
         DatabaseReference gamesReference = rootReference.child("startgames");
@@ -124,6 +141,7 @@ public class NavigationActivity extends AppCompatActivity {
                             intent.putExtra("GAME","3");
                             startActivity(intent);
                         }
+
                         break;
 
                     }
@@ -135,7 +153,18 @@ public class NavigationActivity extends AppCompatActivity {
                 // Failed to read value
 
             }
+
         });
+
+        if(playerRole.equals("1") || playerRole.equals("4")){
+            background.setBackgroundColor(Color.BLACK);
+            text.setText("Wait for guide to call you");
+            text.setTextColor(Color.WHITE);
+        }
+
+        else{
+            text.setText("Flip the phone around to start navigation");
+        }
 
         DatabaseReference navigationReference = rootReference.child("navigation");
         navigationReference.addValueEventListener(new ValueEventListener() {

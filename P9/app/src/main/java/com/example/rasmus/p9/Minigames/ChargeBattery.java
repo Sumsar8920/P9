@@ -66,6 +66,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
     public FirebaseDatabase database;
     public DatabaseReference rootReference;
     boolean guideTalking = false;
+    public static boolean chargeBatteryDone = false;
 
 
     @Override
@@ -261,7 +262,8 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
         float yFloat = event.values[1];
         float zFloat = event.values[2];
 
-        if(zFloat > 11 && yFloat > -5 && yFloat < 5) {
+        //change zFloat back to 11
+        if(zFloat > 1 && yFloat > -5 && yFloat < 5) {
             counter = counter + 8;
             //play charging sound
             if(chargingSound != true && guideTalking != true){
@@ -402,6 +404,7 @@ public class ChargeBattery extends AppCompatActivity implements SensorEventListe
             public void onCompletion(MediaPlayer mp) {
                 mediaPlayer.release();
                 mediaPlayer = null;
+                chargeBatteryDone = true;
                 Intent intent = new Intent(ChargeBattery.this, Victory.class);
                 startActivity(intent);
             }

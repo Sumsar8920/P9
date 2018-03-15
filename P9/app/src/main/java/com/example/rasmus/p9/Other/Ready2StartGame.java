@@ -67,7 +67,6 @@ public class Ready2StartGame extends AppCompatActivity {
                             startActivity(intent);
                         }
                         if (key.equals("navigation")) {
-                            Navigation.gameRunning = true;
                             Intent intent = new Intent(Ready2StartGame.this, NavigationActivity.class);
                             startActivity(intent);
                         }
