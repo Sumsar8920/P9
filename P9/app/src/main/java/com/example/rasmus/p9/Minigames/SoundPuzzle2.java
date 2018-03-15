@@ -72,7 +72,7 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
         callButton = (ImageButton)findViewById(R.id.callButton);
         background = (LinearLayout) findViewById(R.id.background);
 
-        txtView.setText("Place phone on a metal object");
+        txtView.setText("Placer telefonen på et metal objekt");
         callButton.setVisibility(View.INVISIBLE);
 
         SharedPreferences shared = getSharedPreferences("your_file_name", MODE_PRIVATE);
@@ -198,7 +198,7 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
             //value.setText(DECIMAL_FORMATTER.format(magnitude) + " \u00B5Tesla");
 
             if(magnitude > 90){
-                txtView.setText("Please accept the call");
+                txtView.setText("Accepter opkaldet");
                 callButton.setVisibility(View.VISIBLE);
                 if(playerRole.equals("1")){
                     //set data source to mediaplayer
@@ -271,7 +271,7 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
                 calling = false;
                 talking = false;
                 background.setBackgroundColor(Color.WHITE);
-                txtView.setText("Place phone on a metal object");
+                txtView.setText("Placer telefonen på et metal objekt");
 
             }
 

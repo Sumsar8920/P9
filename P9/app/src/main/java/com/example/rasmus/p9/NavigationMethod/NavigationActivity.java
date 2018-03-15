@@ -102,6 +102,7 @@ public class NavigationActivity extends AppCompatActivity {
                 playerRole = "4";
             }
 
+
             SharedPreferences prefs = getSharedPreferences("your_file_name", MODE_PRIVATE);
             SharedPreferences.Editor editor = prefs.edit();
             editor.putString("PLAYERROLE", playerRole);
@@ -110,6 +111,17 @@ public class NavigationActivity extends AppCompatActivity {
 
         background = (ConstraintLayout) findViewById(R.id.backgroundActivity);
         text = (TextView) findViewById(R.id.text);
+
+        if(playerRole.equals("1") || playerRole.equals("4")){
+            background.setBackgroundColor(Color.BLACK);
+            text.setText("Vent på opkald fra guiden");
+            text.setTextColor(Color.WHITE);
+        }
+
+        else{
+            text.setText("Vend telefonen rundt og start navigationen");
+        }
+
 
         rootReference = Database.getDatabaseRootReference();
         DatabaseReference gamesReference = rootReference.child("startgames");
@@ -156,7 +168,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         });
 
-        if(playerRole.equals("1") || playerRole.equals("4")){
+        /*if(playerRole.equals("1") || playerRole.equals("4")){
             background.setBackgroundColor(Color.BLACK);
             text.setText("Wait for guide to call you");
             text.setTextColor(Color.WHITE);
@@ -164,7 +176,7 @@ public class NavigationActivity extends AppCompatActivity {
 
         else{
             text.setText("Flip the phone around to start navigation");
-        }
+        } */
 
         DatabaseReference navigationReference = rootReference.child("navigation");
         navigationReference.addValueEventListener(new ValueEventListener() {
