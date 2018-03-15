@@ -212,7 +212,7 @@ public class SoundPuzzle2 extends AppCompatActivity implements SensorEventListen
                 }
                 if(playerRole.equals("3")){
                     //set data source to mediaplayer
-                    file = "puzzle_player3";
+                    file = "three";
                     callPlayer();
                 }
                 if(playerRole.equals("4")){
