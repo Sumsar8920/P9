@@ -86,12 +86,12 @@ public class NavigationActivity extends AppCompatActivity {
 
         if(playerRole.equals("1") || playerRole.equals("4")){
             background.setBackgroundColor(Color.BLACK);
-            text.setText("Wait for guide to call you");
+            text.setText("Vent på opkald fra guiden");
             text.setTextColor(Color.WHITE);
         }
 
         else{
-            text.setText("Flip the phone around to start navigation");
+            text.setText("Vend telefonen rundt og start navigationen");
         }
 
         rootReference = Database.getDatabaseRootReference();

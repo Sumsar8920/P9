@@ -23,7 +23,7 @@
         android:id="@+id/button3"
         android:layout_width="252dp"
         android:layout_height="49dp"
-        android:text="Proceed"
+        android:text="Fortsæt"
         android:onClick="toMenu"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintRight_toRightOf="parent"
